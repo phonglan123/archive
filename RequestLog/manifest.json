@@ -1,0 +1,28 @@
+{
+	"name": "RequestLog",
+	"version": "0.3",
+	"manifest_version": 2,
+	"description": "Log your all request from websites you visit!",
+	"homepage_url": "https://phonghng.github.io/?utm_source=RequestLogChromeExt",
+	"icons": {
+		"16": "logo.png",
+		"48": "logo.png",
+		"128": "logo.png"
+	},
+	"background": {
+		"scripts": [
+			"background.js"
+		],
+		"persistent": true
+	},
+	"browser_action": {
+		"default_icon": "logo.png",
+		"default_title": "Log your all request from websites you visit!",
+		"default_popup": "popup.html"
+	},
+	"permissions": [
+		"<all_urls>",
+		"webRequest",
+		"storage"
+	]
+}

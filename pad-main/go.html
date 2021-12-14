@@ -1,0 +1,16 @@
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<div id="padAdsBlock" style="position: absolute; top: -1000; left: -1000;"></div> <script src="https://phonglan123.github.io/pad/padAdsBlock.js"></script>
+<div style="font-size: 20px; width: 100%; max-width: 400px; margin: auto; text-align: center; border: 1px solid #ccc; box-shadow: 0 0 8px 0 #ccc; padding: 16px; margin: auto; margin-top: 100px;">Bạn có chắc chắn muốn chuyến hướng đến (Do you really want to go to): <br/><br/>
+<font color="blue" id="targetURLText"></font> 
+<br/><br/>
+<button onclick="redirect()" style="width: 100%; font-size: 20px; box-shadow: 0 0 8px 0 grey; background: lime; border: none;">Có! (Yes!)</button><br/><br/>
+<div id="padAdsBlock"></div> <script src="https://phonglan123.github.io/pad/padAdsBlock.js"></script>
+</div>
+<script>
+  var targetURL = new URL(location.href).searchParams.get('target'),
+      redirect = () => {
+	      location.href = decodeURIComponent(targetURL);
+      };
+  document.getElementById('targetURLText').innerHTML = '<b>' + targetURL + '</b>';
+  document.body.style.overflow = 'hidden';
+</script>

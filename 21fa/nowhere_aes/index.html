@@ -1,0 +1,19 @@
+<div>
+	<h1 style="text-align: center;">NowhereAES</h1>
+	<h3>NowhereAES will assist you in encoding the content into "nowhere". To begin, simply enter something in the boxes below, add some passwords.</h3>
+	<textarea style="resize: none; width: 100%; height: 200px;" id="text" placeholder="Enter the text you need to encrypt, you want to make it secret here..."></textarea>
+	<h3>Set your passwords below (you will use these passwords to decrypt/acess your text/content)!</h3>
+	<textarea style="resize: none; width: 100%; height: 200px;" id="password" placeholder="Enter a password; if you have multiple passwords, each one should be on a separate line (you will need a newline after entering a password)..."></textarea>
+	<h3>Okay! So, now, click this button --> <button onclick="run()">Encrypt!!!</button></h3>
+	<hr/>
+	<h3>Click here for the <a href="./decrypt.html">Decrypt tool</a></h3>
+</div>
+<script type="text/javascript" src="./nowhere_aes.js"></script>
+<script>
+	var text = document.getElementById('text'),
+		password = document.getElementById('password');
+
+	function run() {
+		prompt('Finish! Now, you can copy (Ctrl + A then Ctrl + C) the text below to anywhere... But, do you see any text. Just copy [^^]', nowhereaes_encrypt(text.value, password.value.split('\n')))
+	}
+</script>

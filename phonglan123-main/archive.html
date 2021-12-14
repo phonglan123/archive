@@ -1,0 +1,27 @@
+<style>
+	body {
+		overflow: hidden;
+		user-select: none;
+		filter: blur(4px);
+		-webkit-filter: blur(4px);
+	}
+</style>
+<script>
+	location.href = 'https://phonglan123.github.io/phonglan123/';
+	db = [
+		'<!-- Main content -->',
+		'info | Tìm hiểu về mình | http://phongnguyeninfo.blogspot.com/',
+		'history | Danh sách phiên bản | https://phonglan123.github.io/phonglan123/archive_old',
+		'character | Tạo nhân vật (PowerPoint) | https://blush.design/',
+		'shapes | Hình minh hoạ cho PowerPoint | https://undraw.co/illustrations',
+		'video | Phần mềm edit video | https://www.movavi.com/',
+		'password | Tạo mật khẩu | https://www.w3schools.com/code/tryit.asp?filename=GRIS9ZOGIE9A',
+		'gradient | Bộ màu Gradient | https://cssgradient.io/',
+		'color-picker | Bộ màu HEX | https://coolors.co/',
+		'color-set | Bộ màu cá nhân | https://phonglan123.github.io/phonglan123/color.html',
+		'business | Business, marketing | https://resources.base.vn/',
+		'personal-icon | "Logo" của Phong ^^ | https://phonglan123.github.io/phonglan123/personal-icon.html'
+	]
+	db.slice(1, db.length).forEach((data, index) => db[0] += '<img class="box" onclick="window.open(\'https://phonglan123.github.io/pad/go.html?target=' + data.split(' | ')[2] + '\')" title="' + data.split(' | ')[1] + '" src="./archive_image/' + data.split(' | ')[0] + '.png"/>');
+	document.write('<div style="background: url(\'https://i.pinimg.com/originals/ec/eb/79/eceb7990b39fa62d4189f57f2076712f.png\'); background-repeat: no-repeat; background-size: cover; width: 100%; height: 100%; position: fixed; top: 0; left: 0; z-index: -1;" id="background"></div><center style="position: relative; top: 50%; transform: translateY(-50%);"><h1 style="font-family: Helvetica, Arial, sans-serif; text-align: center">Kho lưu trữ của Nguyễn Hải Phong</h1><div style="background: #ffffffaa; width: fit-content; border-radius: 8px;">' + db[0] + '</div></center><style> .box { width: 60px; height: 60px; margin: 16px; cursor: pointer; opacity: 0.5; transition: all 0.4s; } .box:hover { opacity: 1; } .box:active { transform: scale(0.9); } </style><div id="padAdsBlock" style="position: absolute; top: -1000px; left: -1000px;"></div><script src="https://phonglan123.github.io/pad/padAdsBlock.js"></' + 'script>');
+</script>

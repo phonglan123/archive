@@ -1,0 +1,8 @@
+<input type="text" placeholder="https://www.youtube.com/watch?v=XXXX" style="width: 250px;"/><button onclick="run()">Get video info</button>
+<textarea style="width: 100%; height: calc(100% - 100px);"></textarea>
+<script>
+    function run() {
+        // I public my API key so everyone can use it for free but it may have limit call number!
+        fetch("https://www.googleapis.com/youtube/v3/videos?key=AIzaSyAR3FnU0FNSUs7S6Qr-adhzAjW3wzWkSYU&part=snippet,contentDetails,status,statistics,player,topicDetails,recordingDetails,liveStreamingDetails,localizations&id=" + document.querySelector("input").value.replace("https://www.youtube.com/watch?v=", "")).then(res => res.json()).then(json => document.querySelector("textarea").value = JSON.stringify(json, null, 4));
+    }
+</script>

@@ -1,0 +1,30 @@
+<!-- Reload this page every 10 seconds -->
+<script>
+setTimeout(() => location.reload(), 5000);
+</script>
+
+<!-- Adblock detect -->
+<script>
+async function detectAdBlock() {
+  let adBlockEnabled = false
+  try {
+    await fetch(new Request('https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js')).catch(_ => adBlockEnabled = true)
+  } catch (e) {
+    adBlockEnabled = true
+  } finally {
+    if(adBlockEnabled) {
+	    alert('Vui lòng tắt trình chặn quảng cáo. Thông báo này sẽ hiển thị lại trong 10 giây (Please turn off the Adblock. This alert will show agian in 10 seconds)');
+	    setTimeout(() => location.reload(), 10000);
+    }
+  }
+}
+detectAdBlock()
+</script>
+
+<!-- Adnow & A-ads (embeded from another website) -->
+<iframe src="https://danvietcongtycbcse.wixsite.com/home"></iframe>
+
+<!-- A-ads -->
+<iframe data-aa="1634964" src="//ad.a-ads.com/1634964?size=970x250" scrolling="no" style="width:970px; height:250px; border:0px; padding:0; overflow:hidden" allowtransparency="true"></iframe>
+<iframe data-aa="1634964" src="//ad.a-ads.com/1634964?size=970x250&background_color=000000&text_color=ffffff&title_color=ffffff&title_hover_color=ff0000&link_color=0047ff&link_hover_color=ff0000" scrolling="no" style="width:970px; height:250px; border:0px; padding:0; overflow:hidden" allowtransparency="true"></iframe><br/>
+<a href="https://a-ads.com?partner=1634964">Advertise with Anonymous Ads</a>

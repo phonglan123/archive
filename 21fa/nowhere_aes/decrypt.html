@@ -1,0 +1,22 @@
+<div>
+	<h1 style="text-align: center;">NowhereAES (decrypt tool)</h1>
+	<input type="text" id="text" style="width: 100%" placeholder="Enter the encrypted text here... (um, I hope that you can see that text ^^)" />
+	<br/><br/>
+	<input type="text" id="password" style="width: 100%" placeholder="Enter passwords here... (If you have multiple passwords, please enter ONLY ONE password)" />
+	<h3>Okay! So, now, click this button --> <button onclick="run()">Decrypt!!!</button></h3>
+	<hr/>
+	<h3>Click here for the <a href="./">Encrypt tool</a></h3>
+</div>
+<script type="text/javascript" src="./nowhere_aes.js"></script>
+<script>
+	var text = document.getElementById('text'),
+		password = document.getElementById('password');
+
+	function run() {
+		var original_text = nowhereaes_decrypt(text.value, password.value);
+		if(original_text == '')
+			alert('There\'s something wrong? Because the result is an empty text?');
+		else
+			prompt('Here is the original text:', original_text)
+	}
+</script>

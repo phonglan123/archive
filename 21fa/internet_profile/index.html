@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUSIG sample</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body * {
+            transition: 0.4s;
+        }
+
+        h1,
+        h3 {
+            text-align: center;
+        }
+
+        h2 {
+            display: inline;
+        }
+
+        p {
+            text-align: justify;
+        }
+
+        a {
+            color: blue;
+        }
+
+        button,
+        .input {
+            border: 1px solid #ccc;
+            background: white;
+            padding: 8px;
+            box-sizing: border-box;
+            outline: none;
+            border-radius: 4px;
+            margin-bottom: 16px;
+            width: 100%;
+            resize: none;
+            flex-flow: nowrap;
+            overflow: auto;
+            height: fit-content;
+        }
+
+        button {
+            margin-bottom: 16px;
+            display: inline-block;
+            position: relative;
+            top: -4px;
+            left: 8px;
+            cursor: pointer;
+            width: fit-content
+        }
+
+        button:hover,
+        .input:hover {
+            box-shadow: 0 0 16px 0 #ccc;
+        }
+
+        button:active {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+
+<body onload="init();">
+    <h1>PUSIG sample</h1> 
+
+    <!-- <h3><i>Only a quantum computer can find a PUSIG duplication since the Session ID (made by PUSIG) is entirely unique across the whole "multiverse."</i></h3> -->
+    <!-- <hr style="margin-top: 32px; border: none;" /> -->
+
+    <h2>Your UUID</h2>
+    <button onclick="create_uuid(); window.location.reload()">Click here to recreate</button>
+    <div class="input" id="uuid"></div>
+
+    <h2>Your PUSIG</h2> 
+    <button onclick="document.querySelector('#result').innerHTML = 'Creating your PUSIG...'; generate_new_pusig();">Click here to recreate</button>
+    <p style="margin-top: -8px;"><i>Please maintain your internet connection and refrain from using Adblockers while we're creating your PUSIG; you are free because this is a sample, not the actual tracking system!</i></p>
+    <div class="input" id="result">Creating your PUSIG...</div>
+
+    <h2 style="display: block; margin-top: 0;">Sample code</h2>
+    <p><b style="color: red">ALERT</b>: PUSIG will use APIs to retrieve IP, information, whois, and so on, so you can check <b>"If the Internet is available"</b> <i>(Yep, PUSIG cannot call APIs if the Internet is offline)</i> or <b>"If users are using Adblockers"</b> <i>(Unbelievable?, but that is the case! Some Adblockers, such as AdblockPlus, can prevent us from calling APIs, such as <a href="https://api64.ipify.org/?format=json">this API to get user's IP</a>, thus if users are using Adblockers, PUSIG cannot call the APIs that Adblockers "believe should be banned")</i> before running the code below. &lt;3</p> <br />
+    <div class="input" style="margin-top: -16px;">
+        &lt;script src="https://phonghng.github.io/21fa/internet_profile/pusig.min.js">&lt;/script> &lt;!-- You should self-host this file because it may be change through versions! --><br />
+        &lt;script> <br />
+        &emsp;(async () => { <br />
+        &emsp;&emsp;let my_uuid = crypto.randomUUID(), // Learn more about "window.crypto" here: https://developer.mozilla.org/en-US/docs/Web/API/Window/crypto<br />
+        &emsp;&emsp;&emsp;my_pusig = await PUSIG(my_uuid);<br />
+        &emsp;&emsp;console.log(my_pusig);<br />
+        &emsp;})();<br />
+        &lt;/script>
+    </div>
+
+    <script src="./pusig.min.js"></script>
+    <script>
+        /* [START] Call PUSIG function */
+        async function generate_new_pusig() {
+            let my_pusig = await PUSIG(getCookie("pusig_sample_uuid"));
+            document.querySelector("#result").innerHTML = my_pusig;
+        } /* [END] Call PUSIG function */
+
+        function init() {
+            if (getCookie("pusig_sample_uuid") == "") create_uuid();
+            document.querySelector("#uuid").innerHTML = getCookie("pusig_sample_uuid");
+            generate_new_pusig();
+        }
+
+        function create_uuid() {
+            const uuidv4 = () => {
+                return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c => (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16));
+            };
+            setCookie("pusig_sample_uuid", uuidv4() + "@sample.pusig.phonghng", 365);
+        }
+
+        function setCookie(cname, cvalue, exdays) {
+            const d = new Date();
+            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+            let expires = "expires=" + d.toUTCString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        }
+
+        function getCookie(cname) {
+            let name = cname + "=";
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1);
+                if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+            }
+            return "";
+        }
+    </script>
+</body>
+
+</html>

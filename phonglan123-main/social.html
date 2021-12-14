@@ -1,0 +1,300 @@
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<center class="main">
+	<h2 style="margin-bottom: 4px">{infoPage}</h2>
+	<i>{pageGuide}</i>
+
+	<div class="box">
+		<img src="http://tiengnhat.minder.vn/wp-content/uploads/2017/09/Google-Translate-icon.png" />
+		<div class="content">
+			<select id="selectLang" style="border: 1px solid #ccc; outline: none; font-size: 20px; width: calc(100% + 25px)" onchange="changeLang(this.value)">
+				<option value="vi">{selectLang.vie} (Tiếng Việt)</option>
+				<option value="en">{selectLang.eng} (English)</option>
+			</select>
+		</div>
+	</div>
+	<div class="box">
+		<img src="https://icons-for-free.com/iconfiles/png/512/timeline-131964753327864360.png" />
+		<div class="content collapse">
+			<span onclick="toggleCollapsible(this, document.getElementById('timelineContent'))" class="makeLink">{timeline}</span>
+			<div class="collapseContent" id="timelineContent">{timelineContent}</div>
+		</div>
+	</div>
+	<div class="box">
+		<img src="https://www.iconpacks.net/icons/1/free-certificate-icon-1356-thumb.png" />
+		<div class="content collapse">
+			<span onclick="toggleCollapsible(this, document.getElementById('skillContent'))" class="makeLink">{skill}</span>
+			<div class="collapseContent" id="skillContent">{skillContent}</div>
+		</div>
+	</div>
+
+	<div style="margin-top: 32px"></div>
+	<hr style="border: none; border-top: 1px solid #ccc; margin-top: 16px;"/>
+	<div class="splitDiv">{contact}</div>
+
+	<div class="box">
+		<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Facebook_Logo_%282019%29.png/1024px-Facebook_Logo_%282019%29.png" />
+		<div class="content"><a href="https://www.facebook.com/phong8420">Facebook</a></div>
+	</div>
+	<div class="box">
+		<img src="https://cdn.iconscout.com/icon/free/png-256/gmail-2981844-2476484.png" />
+		<div class="content"><span onclick="prompt('Email:', 'phonghng8420@gmail.com')" class="makeLink">Email</span></div>
+	</div>
+	<div class="box">
+		<img src="https://seeklogo.com/images/Z/zalo-logo-B0A0B2B326-seeklogo.com.png" />
+		<div class="content"><a href="https://zalo.me/0562165940">Zalo</a></div>
+	</div>
+	<div class="box">
+		<img src="https://fptcantho.net.vn/wp-content/uploads/2017/09/MetroUI-Other-Phone-icon.png" />
+		<div class="content"><i>{updating}...</i></div>
+	</div>
+
+	<div style="margin-top: 32px"></div>
+	<hr style="border: none; border-top: 1px solid #ccc; margin-top: 16px;"/>
+	<div class="splitDiv">{transaction}</div>
+
+	<div class="box">
+		<img src="https://cdn.icon-icons.com/icons2/2104/PNG/512/bank_icon_129525.png" />
+		<div class="content"><i>{updating}...</i></div>
+		<!-- Ghi theo dạng: <tên-ngân-hàng> chi nhánh <chi-nhánh> - <chủ-tài-khoản> - <số-tài-khoản>-->
+	</div>
+	<div class="box">
+		<img src="https://i0.wp.com/www.deadairdennis.com/wp-content/uploads/2020/03/paypal-logo-png-71.png?fit=512%2C512&ssl=1" />
+		<div class="content"><a href="https://www.paypal.com/paypalme/pnh8420">Paypal</a></div>
+	</div>
+	<div class="box">
+		<img src="https://wp.decrypt.co/wp-content/uploads/2019/03/bitcoin-logo-bitboy.png" />
+		<div class="content collapse">
+			<span onclick="toggleCollapsible(this, document.getElementById('bitcoinContent'))" class="makeLink">{bitcoin}</span>
+			<div class="collapseContent" id="bitcoinContent"><p>
+				<b>ID</b>: 1PgokaGj7ZWreyhFSWQQBQQ83uLTXu4dNX<br/>
+				<b>QR Code</b>: <br/>
+				<img src="https://phonglan123.github.io/phonglan123/bitcoinQR.png" style="width: 250px; height: 250px !important"/>
+			</p></div>
+		</div>
+	</div>
+
+	<div style="margin-top: 32px"></div>
+	<hr style="border: none; border-top: 1px solid #ccc; margin-top: 16px;"/>
+	<div class="splitDiv">{it}</div>
+
+	<div class="box">
+		<img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" />
+		<div class="content"><a href="https://github.com/phonglan123/">Github</a></div>
+	</div>
+	<div class="box">
+		<img src="https://codelearn.io/CodeCamp/CodeCamp/Upload/49df4968e49a4e5ba2c4cb94393104fb.png" />
+		<div class="content"><a href="https://codelearn.io/profile/8788862">Codelearn</a></div>
+	</div>
+	<div class="box">
+		<img src="https://scontent.fhan3-2.fna.fbcdn.net/v/t1.6435-9/184313324_315495243319535_6881769139735515701_n.png?_nc_cat=1&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=oOWFDVKB76wAX88PmVo&_nc_ht=scontent.fhan3-2.fna&oh=2ec706a33a93655aff2e8795bcbd2987&oe=60E094FB" />
+		<div class="content"><a href="https://www.steamforvietnam.org/steamese/phonglan123">Steam for Vietnam</a></div>
+	</div>
+
+	<div style="margin-top: 32px"></div>
+	<hr style="border: none; border-top: 1px solid #ccc; margin-top: 16px;"/>
+	<div class="splitDiv">{other}</div>
+
+	<div class="box">
+		<img src="https://www.thoughtco.com/thmb/pWJbWbP7SLDF67R5ojaY3uJ6vHQ=/2000x2000/smart/filters:no_upscale()/Blogger.svg-57f268d63df78c690fe5d003.png" />
+		<div class="content"><a href="http://phongnguyenhai8420.blogspot.com/">Blog</a></div>
+	</div>
+	<div class="box">
+		<img src="https://avato.vn/wp-content/uploads/2018/06/ads-icon-1-280x280.png" />
+		<div class="content collapse">
+			<span onclick="toggleCollapsible(this, document.getElementById('adsContent'))" class="makeLink">{ads}</span>
+			<div class="collapseContent" id="adsContent"><p>{myDIYAds}</p><div id="padAdsBlock" style="margin-bottom: 8px"></div></div>
+		</div>
+	</div>
+</center>
+
+<style>
+	body {
+		overflow: hidden;
+	    user-select: none;
+    	filter: blur(4px);
+	    -webkit-filter: blur(4px);
+	}
+	.main {
+		width: 500px;
+		margin: 16px;
+		margin: 0 auto;
+	}
+
+	.splitDiv {
+		position: inherit;
+    	margin-top: -24px;
+    	background: white;
+    	width: fit-content;
+    	padding: 4px;
+    	border: 1px solid #ccc
+	}
+
+	.splitDiv:hover {
+		box-shadow: 0 0 8px 0 grey
+	}
+
+	.box {
+		margin: 16px;
+		width: calc(100% - 48px);
+		padding: 8px;
+		border: 1px solid #ccc;
+		box-shadow: 0 0 4px 0 #ccc;
+		text-align: justify;
+		font-size: 20px;
+		min-height: 40px
+	}
+
+	.box img {
+		height: 40px;
+	}
+
+	.box .content {
+		margin-left: 50px;
+		margin-top: -35px;
+		width: calc(100% - 80px);
+		vertical-align: auto;
+	}
+
+	.box:hover {
+		box-shadow: 0 0 8px 0 grey
+	}
+
+	.clickable {
+		cursor: pointer;
+	}
+
+	.clickable:active {
+		background: #ccc;
+	}
+
+	.makeLink, a {
+		color: -webkit-link;
+    	cursor: pointer;
+    	text-decoration: none;
+    	color: blue;
+	}
+
+	.makeLink:active, a:active {
+		color: -webkit-activelink;
+	}
+
+	.collapse {
+		cursor: pointer;
+		outline: none;
+	}
+
+	.collapseContent {
+		padding: 0 18px;
+		max-height: 0;
+		overflow: hidden;
+		transition: max-height 0.2s ease-out;
+		background-color: #f1f1f1;
+		margin: 4px;
+		margin-left: -58px;
+	    margin-bottom: -8px;
+	    margin-right: -38px;
+	    margin-top: 16px;
+	    box-shadow: 0 0 8px 0 #ccc;
+	    cursor: default;
+	}
+</style>
+ 
+<script src="https://phonglan123.github.io/pad/padAdsBlock.js"></script>
+<script>
+	location.href = "https://phongnguyeninfo.blogspot.com";
+	var languageDb = {
+		'{timelineContent}': [			
+			`<p>
+				- <b>Năm 2008</b>: Sinh ra tại TP. Thái Nguyên<br/>
+				- <b>Năm 2010 - 2014</b>: Học sinh trường Mầm non Tân Thành (TP. Thái Nguyên)</br>
+				- <b>Năm 2014 - 2019</b>: Học sinh trường Tiểu học Tân Thành 1 (TP. Thái Nguyên)</br>
+				- <b>Năm 2019 - hiện tại</b>: Học sinh khoá 48, trường THCS Tân Thành (TP. Thái Nguyên)
+			</p>`,
+			`<p>
+				- <b>2008</b>: Born in Thai Nguyen City<br/>
+				- <b>2010 - 2014</b>: Students of Tan Thanh Kindergarten (Thai Nguyen City)</br>
+				- <b>Year 2014 - 2019</b>: Students of Tan Thanh 1 Primary School (Thai Nguyen City)</br>
+				- <b>2019 - Present</b>: Student of Tan Thanh Secondary School (Thai Nguyen City) 
+			</p>`
+		],
+		'{skillContent}': [
+			`<p>
+				<b>Kĩ năng chuyên môn</b>: <br/>
+				- Thành thạo kĩ năng gõ 10 ngón, trung bình 90 WPM (<a href="https://10fastfingers.com/user/1752957/">Xem tại 10FastFingers</a>)<br/>
+				- Kiến thức cơ bản về lập trình Javascript, Python,...<br/>
+				<b>Khả năng ngôn ngữ</b>: <br/>
+				- <i>Tiếng Việt</i>: Ngôn ngữ mẹ đẻ<br/>
+				- <i>Tiếng Anh</i>: Trình độ B1 (theo CEFR)<br/>
+				<b>Hoạt động</b>: <br/>
+				- Hè năm 2021: Tham gia khoá học "CS 201 - Nhập môn Thiết kế và Lập trình Robotics với VEX IQ" do Steam for Vietnam tổ chức (<a href="https://www.steamforvietnam.org/courses/robotics">Xem tại Steam for Vietnam</a>)<br/>
+				<b>Giải thưởng/chứng chỉ</b>: <i>{updating}...</i>
+			</p>`,
+			`<p>
+				<b>Skills</b>: <br/>
+				- Proficient in 10-finger typing, average 90 WPM (<a href="https://10fastfingers.com/user/1752957/">See at 10FastFingers</a>)<br/>
+				- Basic knowledge of Javascript, Python,...<br/>
+				<b>Language ability</b>: <br/>
+				- <i>Vietnamese</i>: Mother tongue<br/>
+				- <i>English</i>: Level B1 (according to CEFR)<br/>
+				<b>Activity</b>: <br/>
+				- Summer 2021: Join the course "CS 201 - Introduction to Robotics Design and Programming with VEX IQ" organized by Steam for Vietnam (<a href="https://www.steamforvietnam.org/courses/robotics) ">Watch at Steam for Vietnam</a>)<br/>
+				<b>Awards/certificates</b>: <i>{updating}...</i>
+			</p>`
+		],
+		'{selectLang.vie}': ['Tiếng Việt', 'Vietnamese'],
+		'{selectLang.eng}': ['Tiếng Anh', 'English'],
+		'{updating}': ['Đang cập nhật', 'Updating...'],
+		'{contact}': ['Liên lạc', 'Contact infomation'],
+		'{transaction}': ['Giao dịch', 'Transaction infomation'],
+		'{bitcoin}': ['Ví Bitcoin', 'Bicoin wallet'],
+		'{it}': ['CNTT', 'IT'],
+		'{other}': ['Khác', 'Other'],
+		'{ads}': ['Quảng cáo', 'Advertisement'],
+		'{other}': ['Khác', 'Other'],
+		'{infoPage}': ['Trang thông tin của Nguyễn Hải Phong', 'Phong Nguyen\'s infomation'],
+		'{timeline}': ['Dòng thời gian', 'Timeline'],
+		'{skill}': ['Các kĩ năng', 'Skills'],
+		'{myDIYAds}': ['Đây là hệ thống quảng cáo mình tự tạo (với mục đích vui là chính ^^). Các bạn có thể xem code ở đây: <a href="https://github.com/phonglan123/pad">https://github.com/phonglan123/pad</a>', 'This is the advertising system I created myself (for the main purpose of fun ^^). You can see the code here: <a href="https://github.com/phonglan123/pad">https://github.com/phonglan123/pad</a>'],
+		'{pageGuide}': ['Bấm vào tên các mục để truy cập thông tin của mục đó!', 'Click on the item name to access the item\'s information!']
+	}, 
+	languageIndex = {
+		'vi': 0,
+		'en': 1
+	}, 
+	userLang = localStorage.getItem('phongInfoPageLang') || 'en',
+	changeLang = newLang => {
+		localStorage.setItem('phongInfoPageLang', newLang);
+		location.reload();
+	},
+	toggleCollapsible = (elm, content) => {
+	    if (content.style.maxHeight)
+	    	content.style.maxHeight = null;
+	    else
+	    	content.style.maxHeight = content.scrollHeight + "px";
+	};
+
+	Object.keys(languageDb).forEach(key => {
+		var userLangIndex = languageIndex[userLang];
+		document.body.innerHTML = document.body.innerHTML.replace(new RegExp(key, "g"), languageDb[key][userLangIndex]);
+	});
+
+	document.getElementById('selectLang').value = userLang; 
+</script>
+<!--
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js" integrity="sha512-nOQuvD9nKirvxDdvQ9OMqe2dgapbPB7vYAMrzJihw5m+aNcf0dX53m6YxM4LgA9u8e9eg9QX+/+mPu8kCNpV2A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+	var protect = {
+		'email': 'U2FsdGVkX1+wtLK/aaIWqRPnHI4OcuhACYDw/45w0EfjFxh5fjNDAPCi5J2qmI3u9bSzzbwMaQUAXFD9GxndHg==',
+		'facebook': 'U2FsdGVkX1+B11bVejj2D2+URwDehrlCdCWDox1tLG4rjqnBNithfBE0T+cH/EwXHweKam5H7IsCQ44SJJLvjw==',
+	} //CryptoJS.AES.encrypt(message, key).toString()
+
+	function getInfo(type, callback) {
+		var key = document.getElementById(type + 'Protect').value.toLowerCase(),
+			message = CryptoJS.AES.decrypt(protect[type], key).toString(CryptoJS.enc.Utf8);
+		if (message.startsWith('http'))
+			message = 'https://phonglan123.github.io/pad/go.html?target=' + message
+		callback(message)
+	}
+</script>
+-->

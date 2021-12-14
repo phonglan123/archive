@@ -1,0 +1,147 @@
+<!doctype HTML>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body style="background: white">
+    <center class="main">
+        <span style="margin-bottom: 8px">{alert}</span><br /><br />
+        <div class="box">
+            <img src="./001-check.png" />
+            <div class="content">{okay}</div>
+        </div>
+        <div class="box" onclick="window.open('https://www.google.com/search?q={searchQuery}')">
+            <img src="./003-magnifying-glass.png" />
+            <div class="content">{searchForGuide}</div>
+        </div>
+        <div class="box">
+            <img src="./002-translate.png" />
+            <div class="content">
+                <select id="selectLang" style="border: 1px solid #ccc; outline: none; font-size: 20px; width: calc(100% + 25px)" onchange="changeLang(this.value)">
+                    <option value="vi">{selectLang.vie} (Tiếng Việt)</option>
+                    <option value="en">{selectLang.eng} (English)</option>
+                </select>
+            </div>
+        </div>
+    </center>
+    <style>
+        .main {
+            max-width: 500px;
+            margin: 16px;
+            margin: 0 auto;
+            font-family: Helvetica, Arial, sans-serif;
+        }
+
+        .splitDiv {
+            position: inherit;
+            margin-top: -24px;
+            background: white;
+            width: fit-content;
+            padding: 4px;
+            border: 1px solid #ccc
+        }
+
+        .splitDiv:hover {
+            box-shadow: 0 0 8px 0 grey
+        }
+
+        .box {
+            margin: 16px;
+            width: calc(100% - 48px);
+            padding: 8px;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 4px 0 #ccc;
+            text-align: justify;
+            font-size: 20px;
+            min-height: 40px;
+            cursor: pointer;
+        }
+
+        .box img {
+            height: 40px;
+        }
+
+        .box .content {
+            margin-left: 50px;
+            margin-top: -38px;
+            width: calc(100% - 80px);
+            vertical-align: auto;
+        }
+
+        .box:hover {
+            box-shadow: 0 0 8px 0 grey
+        }
+
+        .makeLink,
+        a {
+            color: -webkit-link;
+            cursor: pointer;
+            text-decoration: none;
+            color: blue;
+        }
+
+        .makeLink:active,
+        a:active {
+            color: -webkit-activelink;
+        }
+
+        .collapse {
+            cursor: pointer;
+            outline: none;
+        }
+
+        .collapseContent {
+            padding: 0 18px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.2s ease-out;
+            background-color: #f1f1f1;
+            margin: 4px;
+            margin-left: -58px;
+            margin-bottom: -8px;
+            margin-right: -38px;
+            margin-top: 16px;
+            box-shadow: 0 0 8px 0 #ccc;
+            cursor: default;
+        }
+
+    </style>
+    <script>
+        var languageDb = {
+                '{selectLang.vie}': ['Tiếng Việt', 'Vietnamese'],
+                '{selectLang.eng}': ['Tiếng Anh', 'English'],
+                '{alert}': ['<b>Xin chào.</b><br/><br/>Có vẻ như bạn đang sử dụng trình chặn quảng cáo? Ừm, ai mà chả dùng nó chứ!<br/><br/>Nhưng có lẽ chúng tôi sẽ cần một nguồn thu nhập từ quảng cáo này để <b>duy trì trang web, khiến nó trở nên tuyệt vời!</b><br/><br/>Chúng tôi cam kết, các <a href="https://github.com/phonglan123/pad#%C4%91%C4%83ng-k%C3%AD-qu%E1%BA%A3ng-c%C3%A1o">quảng cáo của PadAds</a> sẽ <b>không phải là các quảng cáo gây phiền nhiễu, ảnh hưởng nội dung bạn đang theo dõi!</b>', '<b>Hello.</b><br/><br/>Looks like you\'re using an ad blocker ? Um, who doesn\'t use it!<br/><br/>But we\'ll probably need a source of income from this ad to <b>maintain the site, make it great!</b><br/><br/>We are committed, the <a href="https://github.com/phonglan123/pad#%C4%91%C4%83ng-k%C3%AD-qu% E1%BA%A3ng-c%C3%A1o">Ads by PadAds</a> will <b>not be annoying ads that affect the content you are following!</b>'],
+                '{okay}': ['Okay, bạn có thể tải lại (F5 - reload) trang web này nếu bạn đã tắt trình chặn quảng cáo', 'Okay, you can reload (F5) this page if you have your ad blocker turned off'],
+                '{searchForGuide}': ['Bấm vào đây để xem cách tắt trình chặn quảng cáo', 'Click here to see how to disable ad blocker'],
+                '{searchQuery}': ['cách tắt adblock', 'turn off the adblock']
+            },
+            languageIndex = {
+                'vi': 0,
+                'en': 1
+            },
+            userLang = localStorage.getItem('phongInfoPageLang') || 'en',
+            changeLang = newLang => {
+                localStorage.setItem('phongInfoPageLang', newLang);
+                location.reload();
+            },
+            toggleCollapsible = (elm, content) => {
+                if (content.style.maxHeight)
+                    content.style.maxHeight = null;
+                else
+                    content.style.maxHeight = content.scrollHeight + "px";
+            },
+            redirectLink = ((false) ? 'http://phonglan123.github.io/pad/go.html?target=' : '');
+
+        Object.keys(languageDb).forEach(key => {
+            var userLangIndex = languageIndex[userLang];
+            document.body.innerHTML = document.body.innerHTML.replace(new RegExp(key, "g"), languageDb[key][userLangIndex]);
+        });
+
+        document.getElementById('selectLang').value = userLang;
+
+    </script>
+</body>
+
+</html>

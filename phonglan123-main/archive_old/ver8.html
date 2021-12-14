@@ -1,0 +1,8 @@
+<script>
+    ggSheetCb = json => {
+        db = Array.from(json.feed.entry, entry => entry.content.$t.split(' | '));
+        db.slice(3, db.length).forEach((data, index) => db[(data[0] == 'left') ? 0 : 1] += (data[2] != undefined) ? ('<div class="box" onclick="window.open(\'https://phonglan123.github.io/pad/go.html?target=' + data[2] + '\')">' + data[1] + '</div>') : ('<div class="box" style="opacity: 1; cursor: default; background: fixed; transform: scale(1);"><b>' + data[1].toUpperCase() + '</b></div>') + ((index % 7 == 1) ? ('<div class="box"><div id="padAdsBlock" style="margin-right: 1px"></div></div>') : ''));
+        document.write('<div style="background: url(\'' + db[2] + '\'); background-repeat: no-repeat; background-size: cover; width: 100%; height: 100%; position: fixed; top: 0; left: 0; z-index: -1; " id="background"></div><center><center class="mainContent"> ' + db[0] + '</center><center class="mainContent"> ' + db[1] + '</center></center><style> * { border-radius: 4px; } .mainContent { max-width: 300px; width: 100%; display: inline-block; font-family: Helvetica, Arial, sans-serif; vertical-align: top; margin-left: 16px; margin-right: 16px; } .box { margin: 8px; padding: 8px; cursor: pointer; background: #ffffff; user-select: none; opacity: 0.8; transition: all 0.4s; } .box:hover { opacity: 1; } .box:active { opacity: 1; transform: scale(0.97); } </style><script src="https://phonglan123.github.io/pad/padAdsBlock.js"></' + 'script>');
+    }
+</script>
+<script src="https://spreadsheets.google.com/feeds/cells/1yK15jiEM7ZALyaVxVEsrMHaWf-ng62PSMfqTLz0Dn-k/1/public/values?alt=json-in-script&callback=ggSheetCb"></script>

@@ -1,0 +1,28 @@
+{
+  "name": "node-js-getting-started",
+  "version": "0.3.0",
+  "description": "A sample Node.js app using Express 4",
+  "engines": {
+    "node": "14.x"
+  },
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.15.2",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "morgan": "~1.9.1",
+    "phonghng-url-kw-extractor": "^1.1.4",
+    "jsdom": "^16.7.0",
+    "jquery": "^3.6.0",
+    "puppeteer": "^10.2.0",
+    "@babel/core": "^7.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/phonglan123/uke-api.git"
+  },
+  "license": "MIT"
+}

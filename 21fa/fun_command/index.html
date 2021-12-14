@@ -1,0 +1,32 @@
+<html>
+	<head>
+		<script src="./jquery-3.3.1.min.js"></script>
+		<script src="./jquery.terminal.min.js"></script>
+		<link rel="stylesheet" href="./jquery.terminal.min.css"/>
+	</head>
+	<body>
+		<script>
+			$('body').terminal({
+				help: () => '\nmeow: See a fun fact about the cats\ndog_img: Cheer yourself up with random dog images\nbored: Find something to do by getting suggestions for random activities\nguess_age "<your name>": Predict the age of a person based on their name\nguess_gender "<your name>": Predict the gender of a person based on their name\nguess_nationality "<your name>": Predict the nationality of a person based on their name\nrandom_user: Get information about a random fake user, including gender, name, email, address, etc\n\nE.g: guess_age "Phong Nguyen"\n',
+			    meow: () => get_data('https://catfact.ninja/fact'),
+			    dog_img: async function() {
+			    	var json = await get_data('https://dog.ceo/api/breeds/image/random');
+			    	return $('<br/><img src="' + JSON.parse(json).message + '" /><br/>');
+			    },
+			    bored: () => get_data('https://www.boredapi.com/api/activity'),
+			    guess_age: (name) => get_data('https://api.agify.io/?name=' + name),
+			    guess_gender: (name) => get_data('https://api.genderize.io?name=' + name),
+			    guess_nationality: (name) => get_data('https://api.nationalize.io?name=' + name),
+			    random_user: () => get_data('https://randomuser.me/api/')
+			}, {
+			    greetings: 'FUN COMMAND\nType "help" to see the command list\n'
+			});
+
+			async function get_data(url) {
+			        var result = '';
+					await $.getJSON(url, data => result = '\n' + JSON.stringify(data) + '\n');
+					return result;
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,124 @@
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<div class="code">
+    <button class="code-copy-button" copied-text="Đã sao chép!">Sao chép</button>
+    <div class="code-content linkify">
+        &lt;link rel="stylesheet" type="text/css" href="https://phonghng.github.io/phn-style/phn-style.css"><br />
+        &lt;script src="https://phonghng.github.io/phn-style/phn-style.js">&lt;/script>
+    </div>
+</div>
+
+<div class="collapse active" style="margin-top: var(--general-padding);">
+    <div class="collapse-button">Make-table "cho và chỉ cho" thẻ UL</div>
+    <div class="collapse-content middle">
+        <ul class="make-table" style="max-width: 400px; width: 90%;"> <!-- Class "can-hover" hoặc "can-active" có thể được đặt luôn tại thẻ UL -->
+            <li class="can-hover">Make-table chỉ có tác dụng cho thẻ &lt;UL><div class="badge bg-red">LƯU Ý NÈ!</div></li>
+            <li class="can-active">Ở đây có một thẻ DIV được áp dụng class "middle"</li>
+            <li class="can-hover can-active">
+                <div class="bg-l-red" style="padding: var(--general-padding); border-radius: var(--border-radius-1);">Class "middle" để căn "trung tâm" cho mọi đối tượng ở cấp đầu tiên của đối tượng đó (lằng nhằng ha ^^)</div>
+                <div class="bg-l-blue" style="margin-top: var(--general-padding); padding: var(--general-padding); border-radius: var(--border-radius-1);">Ngoài "middle" để căn trung tâm, ta còn có class "center" để căn giữa (nhưng không ở trung tâm - tức chỉ căn giữa theo chiều ngang, không theo chiều dọc)</div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="collapse" style="margin-top: var(--general-padding);">
+    <div class="collapse-button">Toast (thông báo đẩy - push message) / Popup (modal)</div>
+    <div class="collapse-content center">
+        <button onclick="phn_show(document.getElementById('first-toast'));">Bấm vào đây để hiện Toast nè</button>
+        <button onclick="document.getElementById('embed').innerHTML = ''; this.style.display = 'none'; alert('Đã xoá toàn bộ style ^^. Reload lại trang để xem lại style nhé!');" style="margin-left: var(--general-padding);">Hoặc bấm vào đây thử đê!</button>
+        <button onclick="phn_show(document.getElementById('first-popup'));" style="margin-left: var(--general-padding);">Hoặc bấm vào đây để thử popup nè!</button>
+    </div>
+</div>
+
+<div class="collapse" style="margin-top: var(--general-padding);">
+    <div class="collapse-button">Grid cho responsive</div>
+    <div class="collapse-content">
+        <style>
+            .grid div {
+                border: var(--general-border);
+                border-radius: var(--border-radius-1);
+                text-align: center;
+                padding: var(--general-padding);
+                user-select: none;
+            }
+        </style>
+        <div class="grid" style="--gap: 16px; --min-width: 160px; margin: auto var(--medium-padding);">
+            <div>1</div>
+            <div>2</div>
+            <div>3</div>
+            <div>4</div>
+            <div>5</div>
+            <div>6</div>
+            <div>7</div>
+            <div>8</div>
+            <div>9</div>
+            <div>10</div>
+            <div>11</div>
+            <div>12</div>
+            <div>13</div>
+            <div>14</div>
+            <div>15</div>
+            <div>16</div>
+        </div>
+    </div>
+</div>
+
+<div class="collapse" style="margin-top: var(--general-padding);">
+    <div class="collapse-button">Các cải tiến sắp tới</div>
+    <div class="collapse-content">
+        <ul>
+            <li>Tab</li>
+            <li>Sidebar (hide/show button/function)</li>
+            <li>Hoạt hình (spinner, fly in/out,...)</li>
+            <li>Tooltip</li>
+            <li>Menu (+ dropdown)</li>
+            <li>Bật Darkmode (bằng JS)</li>
+            <li>Làm việc với Date() - Xử lí ngày/tháng, cộng/trừ, chuyển đổi giữa các đơn vị, chuyển đổi giữa các cách ghi ngày tháng, chuyển sang Date(),...</li>
+            <li><a href="https://viblo.asia/p/gioi-thieu-ve-media-css-trong-responsive-4dbZNDEL5YM">Ứng dụng @media</a></li>
+            <li><a href="javascript:phn_show(document.getElementById('new-homepage-toast'));">Trang chủ của PHN Style</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="toast bg-l-green hide" id="new-homepage-toast" style="bottom: 16px; left: 16px; max-width: 500px; width: calc(100% - 32px)">
+    <div class="toast-header">
+        Giao diện mới cho trang chủ của PHN Style là sao?
+        <button class="toast-close-button">Ok, đã hỉu</button>
+    </div>
+    <div class="toast-body">Chúng mình sẽ cải tiến trang chủ của PHN Style! Không phải để giới thiệu code rồi các tính năng của PHN Style một cách nhàm chán. Trang chủ của PHN Style sẽ như một ví dụ cho một website hoàn chỉnh sử dụng PHN Style! Cảm ơn bạn đã quan tâm nhé <3.</div>
+</div>
+
+<div class="toast bg-l-blue hide" id="first-toast" style="bottom: 16px; left: 16px; max-width: 400px; width: calc(100% - 32px)">
+    <div class="toast-header">
+        phonghng.github.io
+        <button class="toast-close-button bg-l-blue">Đóng</button>
+    </div>
+    <div class="toast-body">Đây là thông báo đẩy (toast - push message) thứ nhất nè! Bấm <a href="javascript:phn_show(document.getElementById('second-toast'), 5);">vào đây</a> để hiện thông báo đẩy thứ 2!</div>
+</div>
+
+<div class="toast bg-blue hide" id="second-toast" style="bottom: 16px; right: 16px; max-width: 400px; width: calc(100% - 32px)">
+    <button class="toast-close-button transparent">✕</button>
+    <div class="toast-body">Thông báo này sẽ tự động đóng sau 5 giây</div>
+</div>
+
+<div class="popup hide middle" id="first-popup" style="--zindex: 4444;">
+    <div class="popup-outer"></div>
+    <div class="popup-inner" style="width: 50%; height: 50%;">
+        <div class="popup-title">Chương trình test thử popup!</div>
+        <button class="popup-close-button transparent">✕</button>
+        <div class="popup-content">Bấm <a href="javascript:phn_show(document.getElementById('second-popup'), 10);">vào đây</a> để hiện popup thứ 2 nhé!</div>
+    </div>
+</div>
+<div class="popup hide middle" id="second-popup" style="--zindex: 9999;">
+    <div class="popup-outer"></div>
+    <div class="popup-inner bg-l-blue" style="width: 80%; height: 80%;">
+        <button class="popup-close-button bg-l-blue">Đóng</button>
+        <div class="popup-content">Lưu ý, khi set Z-index (variable) thì popup sẽ chiếm 2 Z-index. Tức là nếu set <div class="code inline">--zindex: 1</div> thì popup sẽ chiếm Z-index 1 và 2. Nên hãy đặt --zindex cho popup nào đó tiếp theo là 3 (popup sẽ lấy Z-index là 3 và 4). Popup này có tính năng tự động tắt, nó sẽ tự tắt trong 10 giây nữa!</div>
+    </div>
+</div>
+
+<div id="embed">
+	<link rel="stylesheet" type="text/css" href="./phn-style.css">
+	<script src="./phn-style.js"></script>
+</div>

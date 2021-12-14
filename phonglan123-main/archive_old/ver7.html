@@ -1,0 +1,20 @@
+<script>
+    ggSheetCb = data => {
+        db = [];
+        data.feed.entry.forEach(entry => db.push(entry.content['$t']));
+
+        db.slice(1, db.length).forEach((data, index) => {
+            if (data.split(' | ')[1] != undefined)
+                db[0] += '<div class="box" onclick="window.open(\'https://phonglan123.github.io/pad/go.html?target=' + data.split(' | ')[1] + '\')">' + data.split(' | ')[0] + '</div>';
+            else if (data.split(' | ')[0] == data.split(' | ')[0].toUpperCase())
+                db[0] += '<div class="box" style="transform: scale(1); text-align: center; cursor: default !important; background: fixed; box-shadow: none;"><b>' + data.split(' | ')[0].toUpperCase() + '</b></div>';
+            else
+                db[0] += '<div class="box" style="cursor: default !important; background: white !important; user-select: auto;">' + data.split(' | ')[0] + '</div>';
+            db[0] += ((index + 1) % 8 == 0) ? ('<div class="box" style="cursor: default !important;"><div id="padAdsBlock" style="margin-right: 1px"></div></div>') : '';
+        });
+
+        document.write('<div style="background-color: #00c9ff; background: linear-gradient(to top right, #00c9ff, #92fe9d); width: 100%; height: 100%; position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.4;"></div> <center style="max-width: 600px; margin: 0 auto; font-family: Helvetica, Arial, sans-serif;">' + db[0] + '</center> <style> .box { margin: 8px; width: calc(100% - 70px); padding: 8px; font-size: 18px; cursor: pointer; text-align: justify; background: #ffffff; padding-left: 8px; text-align: justify; user-select: none; } .box:hover { box-shadow: 0 0 8px 0 grey; } .box:active { background: #ededed; } .box, .box div, .box img, .box iframe, .box video, .box button { border-radius: 4px; } </style>');
+    };
+
+    document.write('<meta name="viewport" content="width=device-width, initial-scale=1.0"> <script src="https://phonglan123.github.io/pad/padAdsBlock.js"></' + 'script> <script src="https://spreadsheets.google.com/feeds/cells/124rAUW5Otq5e6VyCA5tUuaE_9_MbHmRfwyIFLI3QUJE/1/public/values?alt=json-in-script&callback=ggSheetCb"></' + 'script>');
+</script>

@@ -1,0 +1,30 @@
+<script>
+    db = [
+        '<!-- The main content of this website will be here -->',
+        'prt | GIỚI THIỆU | blue',
+        'lnk | Đây là kho lưu trữ của <b>Nguyễn Hải Phong</b>. Hãy bấm vào một trong các mục kiểu như này để truy cập nội dung lưu trữ! | http://phongnguyeninfo.blogspot.com/',
+        'lnk | Tìm hiểu về cái trang web này! | http://phongnguyeninfo.blogspot.com/',
+        'txt | Dành cho Dev của trang web này! Dưới đây là cách thêm mục mới trong trang này:<br/> - <b>Link</b>: lnk &#124; &#60;title> &#124; &#60;url><br/> - <b>Text (or HTML)</b>: txt &#124; &#60;content><br/> - <b>Image</b>: img &#124; &#60;image url> &#124; &#60;image height> &#124; &#60;link url><br/> - <b>Video (YouTube)</b>: ytb &#124; &#60;video id><br/> - <b>Video (HTML tag)</b>: vid &#124; &#60;video url> &#124; &#60;height><br/> - <b>Iframe</b>: ifr &#124; &#60;url> &#124; &#60;height><br/> - <b>Part header</b>: prt &#124; &#60;title> &#124; &#60;background color>',
+        'prt | STEAM FOR VIETNAM (CS 201) | red',
+        'lnk | Thông tin về khoá học CS 201 của nhóm Tech4Brains | https://phongnguyenhai8420.blogspot.com/2021/06/thong-tin-ve-khoa-hoc-cs-201-cua-nhom.html',
+        'lnk | Sách của nhóm Tech4Brains về học Python và VEX IQ (Ebook - miễn phí) | https://phongnguyenhai8420.blogspot.com/2021/06/sach-cua-nhom-tech4brains-ve-hoc-python.html',
+        'txt | TÀI KHOẢN STEAM (bao gồm Email và Mật khẩu sẽ dùng để đăng nhập vào tất cả các trang web học)<br/>- <b>Đại Lâm</b>: Email có đuôi là 332k8 - lam03032008<br/>- <b>Hiếu</b>: Email của Hằng - hieu1805<br/>- <b>Hoàng Anh</b>: Email của Facebook - vuhoanganh@1',
+        'lnk | Steam for Vietnam - Live app (Học ở trên này, tương tác với thầy cô trực tiếp trong buổi học - Lưu ý, live app chỉ mở trước giờ học 60 phút) | https://live.steamforvietnam.org/',
+        'lnk | Steam for Vietnam - LMS (Trước và sau khi vào học - bằng Live app - thì có thể trao đổi, ôn tập, thảo luận tại đây. Ngoài ra, đây cũng là nơi nộp bài tập, xem điểm, kết quả của bản thân) | https://courses.steamforvietnam.org/dashboard',
+        'lnk | Steam for Vietnam - Steamese Profile (Mạng xã hội của khoá học, có thể chia sẻ dự án và kết bạn) | https://www.steamforvietnam.org/steamese'
+    ];
+
+    db.slice(1, db.length).forEach((data, index) => {
+        db[0] += (data.split(' | ')[0] == 'lnk') ? ('<div class="box" onclick="window.open(' + "'https://phonglan123.github.io/pad/go.html?target=" + data.split(' | ')[2] + "'" + ')">' + data.split(' | ')[1] + '</div>') : '';
+        db[0] += (data.split(' | ')[0] == 'prt') ? ('<div class="box" style="text-align: center; cursor: default !important; background: ' + data.split(' | ')[2] + '; color: white;">' + data.split(' | ')[1] + '</div>') : '';
+        db[0] += (data.split(' | ')[0] == 'img') ? ('<div class="box" onclick="window.open(' + "'" + data.split(' | ')[3] + "'" + ')"><img src="' + data.split(' | ')[1] + '" height="' + data.split(' | ')[2] + '" width="100%"/></div>') : '';
+        db[0] += (data.split(' | ')[0] == 'ytb') ? ('<div class="box"><iframe width="100%" height="198px" src="https://www.youtube.com/embed/' + data.split(' | ')[1] + '" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>') : '';
+        db[0] += (data.split(' | ')[0] == 'vid') ? ('<div class="box"><video width="100%" height="' + data.split(' | ')[2] + '" src="' + data.split(' | ')[1] + '" controls></video></div>') : '';
+        db[0] += (data.split(' | ')[0] == 'txt') ? ('<div class="box" style="cursor: default !important;">' + data.split(' | ')[1] + '</div>') : '';
+        db[0] += (data.split(' | ')[0] == 'ifr') ? ('<div class="box"><iframe width="100%" height="' + data.split(' | ')[2] + '" src="' + data.split(' | ')[1] + '"></iframe></div>') : '';
+        db[0] += ((index + 1) % 8 == 0) ? ('<div class="box" style="cursor: default !important;"><div id="padAdsBlock" style="margin-right: 1px"></div></div>') : '';
+    });
+
+    document.write('<meta name="viewport" content="width=device-width, initial-scale=1.0"> <script src="https://phonglan123.github.io/pad/padAdsBlock.js"></' + 'script> <center style="max-width: 600px; margin: 0 auto; font-family: Helvetica, Arial, sans-serif;">' + db[0] + '</center> <style> .box { margin: 8px; width: calc(100% - 70px); padding: 8px; font-size: 18px; cursor: pointer; text-align: justify; background: white; padding-left: 8px; border: 1px solid #ccc; text-align: justify; } .box, .box div, .box img, .box iframe, .box video, .box button { border-radius: 8px; } </style>');
+
+</script>

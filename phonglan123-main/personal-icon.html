@@ -1,0 +1,44 @@
+<img src="https://phonglan123.github.io/phonglan123/archive_image/personal-icon.png" style="margin: -8px; max-width: 80px; width: calc(100% + 16px);"/>
+<div class="block trans1s" styledata="20, 40, left, #4285F4, 0, 0" onclick="prompt('Hú! Copy code dưới đây để dán logo vào trang web khác:', '&lt;iframe src=&quot;https://phonglan123.github.io/phonglan123/personal-icon.html&quot; style=&quot;width: 80px; height: 80px; border: none;&quot;>&lt;/iframe>')"></div>
+<div class="block trans2s" styledata="20, 40, left, #34A853, 0, 40"></div>
+<div class="block trans3s" styledata="35, 20, top, #FBBC05, 20, 0"></div>
+<div class="block trans1s" styledata="35, 20, top, #EA4335, 20, 20"></div>
+<div class="block trans2s" styledata="20, 20, right, #842010, 60, 0"></div>
+<div class="block trans3s" styledata="20, 50, right, #191107, 60, 30"></div>
+
+<style>
+  body {
+  	overflow: hidden;
+  }
+   
+  .block { 
+    border-radius: 8px;
+    position: absolute; 
+    display: inline-block;
+    width: 0;
+    height: 0;
+    background: #FFFFFF;
+  }
+  
+  .block:hover {
+  	transform: scale(0.8);
+  	box-shadow: 0 0 8px 0 grey;
+    transition: all 1s;
+  }
+  
+  .trans1s { transition: all 1s; left: 400px; top: 600px; }
+  .trans2s { transition: all 2s; left: 600px; top: 400px; }
+  .trans3s { transition: all 3s; left: 800px; top: 200px; }
+</style>
+
+<script>
+function format_block(data) {
+	return 'display: inline-block; width: ' + data[0] + 'px; height: ' + data[1] + 'px; background: linear-gradient(to ' + data[2] + ', ' + data[3] + ', ' + data[3] + '88); left: ' + (parseInt(data[4]) + 8) + 'px; top: ' + (parseInt(data[5]) + 100) + 'px;';
+}
+
+setTimeout(() => {
+  var blocks = document.getElementsByClassName('block');
+  for(var i = 0; i < blocks.length; i++)
+      blocks[i].style = format_block(blocks[i].getAttribute("styledata").split(', '))
+}, 400)
+</script>

@@ -1,0 +1,38 @@
+Click one the screen...<br />
+
+<span id="cps">0</span> Clicks Per Second (CPS)<br />
+
+<span id="clicks">0</span> total clicks
+
+<style>
+    * {
+        user-select: none;
+    }
+    
+    span {
+        pointer-events: none;
+    }
+</style>
+
+<script>
+    var cps = document.getElementById("cps");
+    var clicks = document.getElementById("clicks");
+    var count = 0;
+    var numSec = 1;
+    var start = 0;
+    window.addEventListener("click", function () {
+        count++;
+        start++;
+        clicks.innerHTML = start;
+    });
+
+    getCPS();
+
+    function getCPS() {
+        setTimeout(function () {
+            cps.innerHTML = count;
+            count = 0;
+            getCPS();
+        }, numSec * 1000);
+    }
+</script>

@@ -1,0 +1,31 @@
+<b>Note: </b> Firefox and Safari don't support input tag for date and time picker. So you should use Chromium-based
+browser to use this feature!
+<h2>Datetime --> PHNTime</h2>
+<input type="datetime-local" id="datetime-local1" /> <button onclick="encode()">--></button> <input type="text" id="text1" />
+<h2>PHNTime --> Datetime</h2>
+<input type="text" id="text2" /> <button onclick="decode()">--></button> <input type="datetime-local" id="datetime-local2" />
+<script>
+    function encode() {
+        let value = new Date(document.querySelector("#datetime-local1").value);
+        document.querySelector("#text1").value = get_timestamp(value);
+    }
+
+    function decode() {
+        let value = document.querySelector("#text2").value,
+            time = parse_timestamp(value);
+        document.querySelector("#datetime-local2").value = time.getFullYear() + "-" + (time.getMonth() + 1) + "-" + time.getDate() + "T" + time.getHours() + ":" + time.getMinutes();
+    }
+
+    function get_timestamp(date_obj = new Date()) {
+        let timestamp = new Date(date_obj.toISOString().replace("Z", "")).getTime();
+        if (timestamp < 0)
+            return timestamp.toString(35).replace("-", "z");
+        else
+            return timestamp.toString(35)
+    }
+
+    function parse_timestamp(encoded_string) {
+        const miliseconds_offset = new Date().getTimezoneOffset() * 60000;
+        return new Date(parseInt(encoded_string.replace("z", "-"), 35) - miliseconds_offset);
+    }
+</script>

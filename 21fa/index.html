@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<link rel="icon" href="./logo.svg">
+	<title>21FA - Twenty-one fun apps</title>
+	<style>
+		:root {
+			--scroll-width: 16px;
+		}
+
+		* {
+			font-family: Arial, sans-serif;
+		}
+
+		.app-bar {
+			height: calc(100% - 16px);
+			max-height: calc(100% - 16px);
+			width: calc(219px + var(--scroll-width));
+			padding: 8px 4px 8px 4px;
+			position: absolute;
+			top: -1px;
+			left: -1px;
+			background: white;
+			z-index: 1;
+		    transition: all 1s;
+			overflow-y: scroll;
+		}
+
+		.app-bar-btn {
+			width: 28px;
+			padding: 8px 4px 8px 4px;
+			position: absolute;
+			top: calc(50% - 14px);
+			left: calc(205px + var(--scroll-width));
+			background: white;
+			z-index: 1;
+		    cursor: pointer;
+		    font-size: 20px;
+		    text-align: center;
+		    border-radius: 100%;
+		    border: 1px solid #ccc;
+		    transition: all 1s;
+		    height: 20px;
+		    z-index: 2;
+		}
+
+		.app-bar-btn:active {
+			background: #ccc;
+		}
+
+		.app-box {
+			font-size: 14px;
+			cursor: pointer;
+			height: 90px;
+			width: 60px;
+			border-radius: 8px;
+			user-select: none;
+			transition: all 1s;
+			margin: 4px 4px 16px 4px;
+			background: white;
+			display: inline-block;
+			text-align: center;
+			transition: 0.4s;
+		}
+
+		.app-box:active {
+			transform: scale(0.8);
+		}
+
+		.app-logo {
+			font-size: 30px;
+			padding: 8px;
+			height: 30px;
+			width: 44px;
+			padding-top: 15px;
+			padding-bottom: 15px;
+			text-align: center;
+			border-radius: 8px;
+			color: white;
+			display: inline-block;
+			margin-right: 8px;
+			margin-bottom: 4px;
+			transition: 0.4s;
+		}
+
+		.app-logo.active {
+			-webkit-background-clip: text !important; 
+			-webkit-text-fill-color: transparent !important;
+		}
+
+		.app-frame {
+			position: absolute;
+		    top: 0;
+		    border: none;
+		    left: calc(226px + var(--scroll-width));
+		    width: calc(100% - 227px - var(--scroll-width));
+		    height: 100%;
+		    z-index: 1;
+		    background: white;
+		    border-left: 1px solid #ccc;
+		}
+	</style>
+</head>
+<body>
+	<div class="app-bar">		
+		<h2 style="text-align: center; margin-top: 8px; margin-bottom: 16px; width: 219px;" onclick="change_box_gradient_boolen = true">Apps/Tools</h2>
+		<!-- <div class="app-box" title="Coming soon..." onclick="open_app(this)"><div style="background: linear-gradient(45deg, #bdc3c7 0%, #2c3e50 100%);" class="app-logo"><i class="fas fa-question-circle"></i></div>Coming soon</div> -->
+		<div class="app-box" title="Coming soon..." onclick="open_app(this)"><div style="background: linear-gradient(45deg, #bdc3c7 0%, #2c3e50 100%);" class="app-logo"><i class="fas fa-question-circle"></i></div>Coming soon</div>
+		<div class="app-box" title="Coming soon..." onclick="open_app(this)"><div style="background: linear-gradient(45deg, #bdc3c7 0%, #2c3e50 100%);" class="app-logo"><i class="fas fa-question-circle"></i></div>Coming soon</div>
+		<div class="app-box" title="Coming soon..." onclick="open_app(this)"><div style="background: linear-gradient(45deg, #bdc3c7 0%, #2c3e50 100%);" class="app-logo"><i class="fas fa-question-circle"></i></div>Coming soon</div>
+		<div class="app-box" title="Get YouTube video info" onclick="open_app(this)"><div style="background: linear-gradient(45deg, #ffbebe 0%, #ff0048 100%);" class="app-logo"><i class="fab fa-youtube"></i></div>YouTube info</div>
+		<div class="app-box" title="Shot your browser screen" onclick="open_app(this)"><div style="background: linear-gradient(45deg, #C6FFDD 0%, #FBD786 50%, #FBD786 100%);" class="app-logo"><i class="fas fa-crop-alt"></i></div>Screen shot</div>
+		<div class="app-box" title="Count your CPS - clicks per second" onclick="open_app(this)"><div style="background: linear-gradient(45deg, #8E2DE2 0%, #4A00E0 100%);" class="app-logo"><i class="fas fa-mouse"></i></div>CPS Measure</div>
+		<div class="app-box" title="Encode/Decode PHNTime easily" onclick="open_app(this)"><div style="background: linear-gradient(45deg, #FF0099 0%, #493240 100%);" class="app-logo"><i class="fas fa-clock"></i></div>PHNTime tool</div>
+		<div class="app-box" title="Encode/Decode Base64 easily" onclick="open_app(this)"><div style="background: linear-gradient(45deg, #eaafc8 0%, #654ea3 100%);" class="app-logo"><i class="fas fa-lock"></i></div>Base64 tool</div>
+		<div class="app-box" title="Chemical equation balancer (Copied from Nayuki, just add UI ^^)" onclick="open_app(this)"><div style="background: linear-gradient(45deg, #55d284 0%, #f2cf07 100%);" class="app-logo"><i class="fas fa-atom"></i></div>Chemical balancer</div>
+		<div class="app-box" title="Parse Vietjack for ??? purpose!" onclick="open_app(this)"><div style="background: linear-gradient(45deg, #fdc830 0%, #f37335 100%);" class="app-logo"><i class="fas fa-user-graduate"></i></div>Vietjack parse</div>
+		<div class="app-box" title="A sh*t tool to parse your Trello board" onclick="open_app(this)"><div style="background: linear-gradient(45deg, #009ffd 0%, #2a2a72 100%);" class="app-logo"><i class="fab fa-trello"></i></div>Trello parser</div>
+		<div class="app-box" title="Like Anscon, this is anonymous webchat for everyone" onclick="open_app(this)"><div style="background: linear-gradient(45deg, #12c2e9 0%, #c471ed 50%, #f64f59 100%);" class="app-logo"><i class="fas fa-comments"></i></div>Anony Chat</div>
+		<div class="app-box" title="A simple text editor in right your browser" onclick="open_app(this)"><div style="background: linear-gradient(45deg, #ef32d9 0%, #89fffd 100%);" class="app-logo"><i class="fas fa-paragraph"></i></div>Paioe editor</div>
+		<div class="app-box" title="This is everything ONLY from your IP and UA!" onclick="open_app(this)"><div style="background: linear-gradient(45deg, #ff9966, #ff5e62);" class="app-logo"><i class="fas fa-address-card"></i></div>Internet profile</div>
+		<div class="app-box" title="Confession anonymously for everyone" onclick="open_app(this)"><div style="background: linear-gradient(45deg, #f12711 0%, #f5af19 100%);" class="app-logo"><i class="fas fa-question-circle"></i></div>Anscon (forum)</div>
+		<div class="app-box" title="Some interesting console commands" onclick="open_app(this)"><div style="background: linear-gradient(45deg, #AD5389 0%, #3C1053 100%);" class="app-logo"><i class="fas fa-terminal"></i></div>Fun command</div>
+		<div class="app-box" title="Encoding anything into 'nowhere'" onclick="open_app(this)"><div style="background: linear-gradient(45deg, #00C9FF 0%, #92FE9D 100%);" class="app-logo"><i class="fas fa-user-secret"></i></div>Nowhere AES</div>
+		<div class="app-box" title="Summon a random meme, joke and many fun things" onclick="open_app(this)"><div style="background: linear-gradient(45deg, #FC466B 0%, #3F5EFB 100%);" class="app-logo"><i class="fas fa-laugh-squint"></i></div>Fun meme</div>
+		<div class="app-box" title="Extract keywords from URL in NodeJS. Support over 60 languages and if you want to add more language, just add their stopwords in stopwords.json. We ceased developing it in August of 2021!" onclick="open_app(this)"><div style="background: linear-gradient(45deg, #ff416c 0%, #ff4b2b 100%);" class="app-logo"><i class="fas fa-key"></i></div>Keyword Extractor</div>
+		<div class="app-box" title="Tracking and analytics your action, visit when you visit my infomation page (this page). This tool will collect your IP, UA, URL, Date(), site activites. From 01-Oct-2021, this feature has been disabled!" onclick="open_app(this)"><div style="background: linear-gradient(45deg, #e3f3dc 0%, #00b712 100%);" class="app-logo"><i class="fas fa-chart-pie"></i></div>PHN Analytics</div>
+		<div class="app-box" title="PadAds is a advertising system for websites. Its old version is AdsFrame. On July 4, 2021, the project officially stopped developing indefinitely!" onclick="open_app(this)"><div style="background: linear-gradient(45deg, #dd3e54 0%, #6be585 100%);" class="app-logo"><i class="fas fa-ad"></i></div>PAD Advertise</div>
+	</div>
+	<div class="app-bar-btn" title="Close/open Apps/Tools sidebar" onclick="toggle_app_bar(true)"><i class="fas fa-arrow-left"></i></div>
+	<iframe src="./default-app.html" class="app-frame" id="app-frame"></iframe>
+
+	<script>
+		let change_box_gradient_boolen = false;
+
+		function change_box_gradient() {
+			if(change_box_gradient_boolen)
+			document.querySelectorAll(".app-box .app-logo").forEach(box => {
+				box.style.background = "#00C9FF"; // #92FE9D
+				// setTimeout(() => box.style.background = "#00C9FF", 1000);
+			});
+		}
+
+		function open_app(app_box) {
+			var open_index_file = true,
+				apps = document.getElementsByClassName("app-box");
+			for(var i = 0; i < apps.length; i++) {
+				apps[i].getElementsByClassName("app-logo")[0].classList.remove("active")
+				if(app_box == apps[i])
+				apps[i].getElementsByClassName("app-logo")[0].classList.add("active")
+			}
+			let frame_src = "./" + app_box.innerText.toLowerCase().replace(/ /g, "_") + "/" + (open_index_file ? "index.html" : "");
+			if(frame_src == "./phn_analytics/index.html")
+				frame_src="https://glitch.com/edit/#!/phn-pageanalytics?path=README.md%3A1%3A0";
+			else if(frame_src == "./keyword_extractor/index.html") {
+				frame_src="./default-app.html";
+				window.open("https://www.npmjs.com/package/phonghng-url-kw-extractor");
+			} else if(frame_src == "./pad_advertise/index.html") {
+				frame_src="./default-app.html";
+				window.open("https://github.com/phonglan123/pad");
+			}
+			document.getElementById("app-frame").src = frame_src;
+			document.title = app_box.innerText + " - 21FA";
+		}
+
+		function toggle_app_bar(from_btn = false) {
+			if(app_frame.style.left == "-1px") {
+				if(from_btn) change_box_gradient();
+				app_frame.style.left = "calc(" + (app_bar_width + 7) + "px + var(--scroll-width))";
+				app_frame.style.width = "calc(100% - " + (app_bar_width + 8) + "px - var(--scroll-width))";
+				app_bar_btn.style.transform = "rotate(0deg)";
+				app_bar_btn.style.left = "calc(" + (app_bar_width - 14) + "px + var(--scroll-width))";
+			} else {
+				app_frame.style.left = "-1px";
+				app_frame.style.width = "100%";
+				app_bar_btn.style.transform = "rotate(180deg)";
+				app_bar_btn.style.left = "-16px";
+			}
+		}
+
+		function sidebar_default_display(hide_condition) {
+			if(hide_condition) {
+				app_bar.style.display = "none";
+				app_frame.style.left = "-1px";
+				app_frame.style.width = "100%";
+				app_bar_btn.style.display = "none";
+			} else {
+				app_bar.style.transition = "all 1s";
+				app_frame.style.transition = "all 1s";
+			}
+		}
+
+		const app_bar = document.getElementsByClassName("app-bar")[0],
+			app_bar_btn = document.getElementsByClassName("app-bar-btn")[0],
+			app_frame = document.getElementsByClassName("app-frame")[0],
+			app_bar_width = parseInt(window.getComputedStyle(app_bar).width.replace("px", ""));
+
+		var app_from_param = new URL(window.location.href).searchParams.get("app_iconname"),
+			hide_sidebar_from_param = new URL(window.location.href).searchParams.get("hidesidebar");
+		if(app_from_param != undefined)
+			open_app(document.querySelector(".fa-" + app_from_param).parentElement.parentElement);
+		sidebar_default_display(true ? app_from_param != undefined : hide_sidebar_from_param == "1");
+	</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vietjack Parse</title>
+    <script src="./index.js"></script>
+</head>
+<body>
+    <img src="./banner.png" style="width: 10%;">
+    <h2>Vietjack Parse - <span onclick="run(true);">Tổng hợp</span> đáp án về một nơi từ Vietjack</h2>
+    <i>Viết bởi <a href="phonghng.github.io">phonghng.github.io</a>, nội dung bản quyền hoàn toàn thuộc về Vietjack, chúng tôi không chịu bất cứ trách nhiệm nào khi các ông mang nội dung từ đây đi đâu, đặc biệt là vào vở của các ông =))</i>
+    <h3>Đây, giờ nhé, các ông dán cái link Vietjack vào ô dưới:</h3>
+    <input type="text" placeholder="https://vietjack.com/giai-bai-tap-tin-hoc-8/bai-6-cau-lenh-dieu-kien.jsp..." style="width: calc(100% - 8px);" id="vj_url" />
+    <button onclick="run();" style="width: 100%; margin-top: 4px;">Rồi giờ bấm vô đây nè</button>
+    <h3>Xong rồi, thì chờ cái thanh dưới đây chạy hết nhé! (Nhớ đảm bảo Internet đấy nhé)</h3>
+    <progress id="progress" value="0" max="0" style="width: 100%;">Thanh tiến trình</progress>
+</body>
+</html>

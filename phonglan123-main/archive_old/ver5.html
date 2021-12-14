@@ -1,0 +1,169 @@
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<center class="main" id="mainContent">
+	<!-- <div class="box" onclick="blurMe()">
+		<div class="boxID" style="background: lime">FUN</div>
+		<div id="memeImg">Đừng có bấm vào nút này nhé =))</div>
+	</div> -->
+</center>
+<style>
+:root {
+	--border-radius-general: 8px;
+}
+
+.main {
+	max-width: 600px;
+	margin: 0 auto;
+	font-family: Helvetica, Arial, sans-serif;
+}
+
+.openBlur {
+	filter: blur(4px);
+	transition: filter 0.4s;
+}
+
+.closeBlur {
+	filter: blur(0px);
+	transition: filter 0.4s;
+}
+
+.box {
+	margin: 8px;
+	width: calc(100% - 132px);
+	padding: 8px;
+	font-size: 18px;
+	cursor: pointer;
+	text-align: justify;
+	background: white;
+	padding-left: 70px;
+}
+
+.boxID {
+	position: absolute;
+	width: 35px;
+	padding: 2px;
+	padding-left: 9px;
+	padding-right: 10px;
+	margin-left: -64px;
+	font-weight: bold;
+	font-size: 18px;
+	margin-top: -3px;
+	background: black;
+	color: white;
+	user-select: none;
+	text-align: center;
+	border-radius: var(--border-radius-general);
+}
+	
+.noBoxID {
+	width: calc(100% - 70px); 
+	padding-left: 8px;
+}
+
+.box button {
+	outline: none;
+	border: 1px solid #ccc;
+	font-size: 18px;
+}
+
+.box button:active {
+	background: grey;
+}
+
+.box,
+.box div,
+.box img,
+.box iframe,
+.box video,
+.box button {
+	border-radius: var(--border-radius-general);
+}
+
+.box:hover {
+	box-shadow: 0 0 8px 0 grey;
+}
+
+.collapse {
+	cursor: pointer;
+	outline: none;
+}
+
+.collapseContent {
+	padding: 0 18px;
+	max-height: 0;
+	overflow: hidden;
+	transition: max-height 0.2s ease-out;
+	background-color: #f1f1f1;
+	margin: 4px;
+	margin-left: -58px;
+	margin-bottom: -8px;
+	margin-right: -38px;
+	margin-top: 16px;
+	box-shadow: 0 0 8px 0 #ccc;
+	cursor: default;
+}
+</style>
+<script>
+	function blurMe() {
+		var element = document.getElementById("mainContent"),
+			borderRadiusProp = document.documentElement.style.getPropertyValue('--border-radius-general');
+		element.classList.remove("closeBlur");
+		element.classList.add("openBlur");
+		setTimeout(() => {
+			if (borderRadiusProp == '8px' || borderRadiusProp == '') {
+				document.documentElement.style.setProperty('--border-radius-general', '0px')
+				document.getElementById('memeImg').innerHTML = 'Bảo không cơ mà! Bấm lại nút này đê! <br/><br/> <img src="./image/memeBackground.png" width="100%"/>';
+			} else {
+				document.documentElement.style.setProperty('--border-radius-general', '8px')
+				document.getElementById('memeImg').innerHTML = 'Đừng có bấm vô nút này nhé =))';
+			}
+		}, 400);
+		setTimeout(() => element.classList.add("closeBlur"), 500);
+		setTimeout(() => {
+			element.classList.remove("closeBlur");
+			element.classList.remove("addBlur");
+		}, 400);
+	}
+
+	var links = [
+    	'Đây là kho lưu trữ của <b>Nguyễn Hải Phong</b>. Hãy bấm vào (tiêu đề hoặc số thứ tự) các mục kiểu như này để truy cập nội dung lưu trữ! | https://phonglan123.github.io/pad/go.html?target=http://phongnguyeninfo.blogspot.com/',
+        'Tìm hiểu về cái trang web này! | https://phonglan123.github.io/pad/go.html?target=http://phongnguyeninfo.blogspot.com/',
+        'part | STEAM FOR VIETNAM (CS 201)',
+        'Thông tin về khoá học CS 201 của nhóm Tech4Brains | https://phonglan123.github.io/pad/go.html?target=https://phongnguyenhai8420.blogspot.com/2021/06/thong-tin-ve-khoa-hoc-cs-201-cua-nhom.html',
+        'Sách của nhóm Tech4Brains về học Python và VEX IQ (Ebook - miễn phí) | https://phonglan123.github.io/pad/go.html?target=https://phongnguyenhai8420.blogspot.com/2021/06/sach-cua-nhom-tech4brains-ve-hoc-python.html',
+	'text | TÀI KHOẢN STEAM (bao gồm Email và Mật khẩu sẽ dùng để đăng nhập vào tất cả các trang web học)<br/>- <i>Đại Lâm</i>: Email có đuôi là 332k8 - lam03032008<br/>- <i>Hiếu</i>: Email của Hằng - hieu1805<br/>- <i>Hoàng Anh</i>: Email của Facebook - vuhoanganh@1 | justify',
+	'Steam for Vietnam - Live app (Học ở trên này, tương tác với thầy cô trực tiếp trong buổi học - Lưu ý, live app chỉ mở trước giờ học 60 phút) | https://live.steamforvietnam.org/',
+	'Steam for Vietnam - LMS (Trước và sau khi vào học - bằng Live app - thì có thể trao đổi, ôn tập, thảo luận tại đây. Ngoài ra, đây cũng là nơi nộp bài tập, xem điểm, kết quả của bản thân) | https://courses.steamforvietnam.org/dashboard',
+	'Steam for Vietnam - Steamese Profile (Mạng xã hội của khoá học, có thể chia sẻ dự án và kết bạn) | https://www.steamforvietnam.org/steamese'
+    ];
+    
+    /*
+    	Link: <title> | <url>
+        Text - content: text | <content> | <text-align>
+        Image: img | <img url> | <height> | <link url>
+        Video (YouTube): ytb | <video id>
+        Video (HTML tag): vid | <video url> | <height>
+        Iframe: ifr | <url> | <height>
+        Part header: part | <title>
+    */
+
+    links.forEach((link, index) => {
+        if (link.split(' | ')[0] == 'img')
+    		document.getElementById('mainContent').innerHTML += '<div class="box" onclick="window.open(' + "'" + link.split(' | ')[3] + "'" + ')"><div class="boxID">' + ("000" + (index + 1)).substr(("000" + (index + 1)).length-3) + '</div><img src="' + link.split(' | ')[1] + '" height="' + link.split(' | ')[2] + '" width="100%"/></div>';
+        else if (link.split(' | ')[0] == 'ytb')
+    		document.getElementById('mainContent').innerHTML += '<div class="box"><div class="boxID">' + ("000" + (index + 1)).substr(("000" + (index + 1)).length-3) + '</div><iframe width="100%" height="198px" src="https://www.youtube.com/embed/' + link.split(' | ')[1] + '" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>';
+        else if (link.split(' | ')[0] == 'vid')
+    		document.getElementById('mainContent').innerHTML += '<div class="box"><div class="boxID">' + ("000" + (index + 1)).substr(("000" + (index + 1)).length-3) + '</div><video width="100%" height="' + link.split(' | ')[2] + '" src="' + link.split(' | ')[1] + '" controls></video></div>';
+        else if (link.split(' | ')[0] == 'ifr')
+    		document.getElementById('mainContent').innerHTML += '<div class="box"><div class="boxID">' + ("000" + (index + 1)).substr(("000" + (index + 1)).length-3) + '</div><iframe width="100%" height="' + link.split(' | ')[2] + '" src="' + link.split(' | ')[1] + '"></iframe></div>';
+        else if (link.split(' | ')[0] == 'text')
+    		document.getElementById('mainContent').innerHTML += '<div class="box" style="cursor: default !important;"><div class="boxID">' + ("000" + (index + 1)).substr(("000" + (index + 1)).length-3) + '</div><div style="text-align: ' + link.split(' | ')[2] + '">' + link.split(' | ')[1] + '</div></div>';
+        else if (link.split(' | ')[0] == 'part')
+    		document.getElementById('mainContent').innerHTML += '<div class="box noBoxID" style="text-align: center; cursor: default !important; background: red; color: white;">' + link.split(' | ')[1] + '</div>';
+        else
+    		document.getElementById('mainContent').innerHTML += '<div class="box" onclick="window.open(' + "'" + link.split(' | ')[1] + "'" + ')"><div class="boxID">' + ("000" + (index + 1)).substr(("000" + (index + 1)).length-3) + '</div>' + link.split(' | ')[0] + '</div>';
+        
+	if (index % 7 == 0 && index > 0)
+        	document.getElementById('mainContent').innerHTML += '<div class="box noBoxID" style="cursor: default !important;"><div id="padAdsBlock" style="margin-right: 1px"></div></div>';
+    });
+</script>
+<script src="https://phonglan123.github.io/pad/padAdsBlock.js"></script>

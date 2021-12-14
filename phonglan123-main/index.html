@@ -1,0 +1,255 @@
+<!doctype HTML>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="./image/user.png" />
+    <meta http-equiv="refresh" content="0;url=http://phonghng.github.io/phonghng/" />
+</head>
+
+<body>
+    <center class="main">
+        <h2 style="margin-bottom: 4px">{infoPage}</h2>
+        <div class="box">
+            <img src="./image/translate.png" />
+            <div class="content">
+                <select id="selectLang" style="border: 1px solid #ccc; outline: none; font-size: 20px; width: calc(100% + 25px)" onchange="changeLang(this.value)">
+                    <option value="vi">{selectLang.vie} (Tiếng Việt)</option>
+                    <option value="en">{selectLang.eng} (English)</option>
+                </select>
+            </div>
+        </div>
+        <div class="box" onclick="toggleCollapsible(this, document.getElementById('timelineContent'))">
+            <img src="./image/timeline.png" />
+            <div class="content collapse"> <span class="makeLink">{timeline}</span>
+                <div class="collapseContent" id="timelineContent">{timelineContent}</div>
+            </div>
+        </div>
+        <div class="box" onclick="toggleCollapsible(this, document.getElementById('skillContent'))">
+            <img src="./image/skills.png" />
+            <div class="content collapse"> <span class="makeLink">{skill}</span>
+                <div class="collapseContent" id="skillContent">{skillContent}</div>
+            </div>
+        </div>
+        <div style="margin-top: 32px"></div>
+        <hr style="border: none; border-top: 1px solid #ccc; margin-top: 16px;" />
+        <div class="splitDiv">{contact}</div>
+        <div class="box" onclick="window.open(redirectLink + 'https://www.facebook.com/phong8420')">
+            <img src="./image/facebook.png" />
+            <div class="content"><span class="makeLink">Facebook</span>
+            </div>
+        </div>
+        <div class="box" onclick="prompt('Email:', 'phonghng8420@gmail.com')">
+            <img src="./image/gmail.png" />
+            <div class="content"><span class="makeLink">Email</span>
+            </div>
+        </div>
+        <div class="box" onclick="window.open(redirectLink + 'https://zalo.me/0562165940')">
+            <img src="./image/zalo.png" />
+            <div class="content"><span class="makeLink">Zalo</span>
+            </div>
+        </div>
+        <div class="box">
+            <img src="./image/smartphone.png" />
+            <div class="content"><i>{updating}...</i>
+            </div>
+        </div>
+        <div style="margin-top: 32px"></div>
+        <hr style="border: none; border-top: 1px solid #ccc; margin-top: 16px;" />
+        <div class="splitDiv">{transaction}</div>
+        <div class="box">
+            <img src="./image/credit-card.png" />
+            <div class="content"><i>{updating}...</i>
+            </div>
+            <!-- Ghi theo dạng: <tên-ngân-hàng> chi nhánh <chi-nhánh> - <chủ-tài-khoản> - <số-tài-khoản>-->
+        </div>
+        <div class="box" onclick="window.open(redirectLink + 'https://www.paypal.com/paypalme/pnh8420')">
+            <img src="./image/paypal.png" />
+            <div class="content"><span class="makeLink">Paypal</span>
+            </div>
+        </div>
+        <div class="box" onclick="toggleCollapsible(this, document.getElementById('bitcoinContent'))">
+            <img src="./image/bitcoin.png" />
+            <div class="content collapse"> <span class="makeLink">{bitcoin}</span>
+                <div class="collapseContent" id="bitcoinContent">
+                    <p> <b>ID</b>: 1PgokaGj7ZWreyhFSWQQBQQ83uLTXu4dNX
+                        <br /> <b>QR Code</b>:
+                        <br />
+                        <img src="./image/bitcoinQR.png" style="width: 250px; height: 250px !important" />
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div style="margin-top: 32px"></div>
+        <hr style="border: none; border-top: 1px solid #ccc; margin-top: 16px;" />
+        <div class="splitDiv">{otherAcc}</div>
+        <div class="box" onclick="window.open(redirectLink + 'https://github.com/phonglan123/')">
+            <img src="./image/github.png" />
+            <div class="content"><span class="makeLink">Github</span>
+            </div>
+        </div>
+        <div class="box" onclick="window.open(redirectLink + 'https://stackoverflow.com/users/16319071/phong-nguy%E1%BB%85n-h%E1%BA%A3i')">
+            <img src="./image/stackoverflow.png" />
+            <div class="content"><span class="makeLink">Stack Overflow</span>
+            </div>
+        </div>
+        <div style="margin-top: 32px"></div>
+        <hr style="border: none; border-top: 1px solid #ccc; margin-top: 16px;" />
+        <div class="splitDiv">{other}</div>
+        <div class="box" onclick="toggleCollapsible(this, document.getElementById('adsContent'))">
+            <img src="./image/advertising.png" />
+            <div class="content collapse"> <span class="makeLink">{ads}</span>
+                <div class="collapseContent" id="adsContent">
+                    <p>{myDIYAds}</p>
+                    <div id="padAdsBlock" style="margin-bottom: 8px"></div>
+                </div>
+            </div>
+        </div>
+    </center>
+    <style>
+        .main {
+            max-width: 500px;
+            margin: 16px;
+            margin: 0 auto;
+            font-family: Helvetica, Arial, sans-serif;
+        }
+
+        .splitDiv {
+            position: inherit;
+            margin-top: -24px;
+            background: white;
+            width: fit-content;
+            padding: 4px;
+            border: 1px solid #ccc
+        }
+
+        .splitDiv:hover {
+            box-shadow: 0 0 8px 0 grey
+        }
+
+        .box {
+            margin: 16px;
+            width: calc(100% - 48px);
+            padding: 8px;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 4px 0 #ccc;
+            text-align: justify;
+            font-size: 20px;
+            min-height: 40px;
+            cursor: pointer;
+        }
+
+        .box img {
+            height: 40px;
+        }
+
+        .box .content {
+            margin-left: 50px;
+            margin-top: -38px;
+            width: calc(100% - 80px);
+            vertical-align: auto;
+        }
+
+        .box:hover {
+            box-shadow: 0 0 8px 0 grey
+        }
+
+        .makeLink,
+        a {
+            color: -webkit-link;
+            cursor: pointer;
+            text-decoration: none;
+            color: blue;
+        }
+
+        .makeLink:active,
+        a:active {
+            color: -webkit-activelink;
+        }
+
+        .collapse {
+            cursor: pointer;
+            outline: none;
+        }
+
+        .collapseContent {
+            padding: 0 18px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.2s ease-out;
+            background-color: #f1f1f1;
+            margin: 4px;
+            margin-left: -58px;
+            margin-bottom: -8px;
+            margin-right: -38px;
+            margin-top: 16px;
+            box-shadow: 0 0 8px 0 #ccc;
+            cursor: default;
+        }
+    </style>
+    <script src="https://phonglan123.github.io/pad/padAdsBlock.js"></script>
+    <script>
+        var languageDb = {
+                '{timelineContent}': [`<p><i>{updating}...</i></p>`, `<p><i>{updating}...</i></p>`], // Chỗ này sẽ chỉ ghi khoảng thời gian đáng chú ý như trường ĐH, công ty,...
+                '{skillContent}': [`<p><i>{updating}...</i></p>`, `<p><i>{updating}...</i></p>`], // Chỗ này sẽ ghi  kĩ năng chuyên môn, ngôn ngữ, hoạt động, giải thưởng/chứng chỉ
+                '{selectLang.vie}': ['Tiếng Việt', 'Vietnamese'],
+                '{selectLang.eng}': ['Tiếng Anh', 'English'],
+                '{updating}': ['Đang cập nhật', 'Updating...'],
+                '{contact}': ['Liên lạc', 'Contact infomation'],
+                '{transaction}': ['Giao dịch', 'Transaction infomation'],
+                '{bitcoin}': ['Ví Bitcoin', 'Bicoin wallet'],
+                '{otherAcc}': ['Các tài khoản khác', 'Other accounts'],
+                '{other}': ['Khác', 'Other'],
+                '{ads}': ['Quảng cáo', 'Advertisement'],
+                '{other}': ['Khác', 'Other'],
+                '{infoPage}': ['Trang thông tin của Nguyễn Hải Phong', 'Phong Nguyen\'s infomation'],
+                '{timeline}': ['Dòng thời gian', 'Timeline'],
+                '{skill}': ['Các kĩ năng', 'Skills'],
+                '{myDIYAds}': ['Đây là hệ thống quảng cáo mình tự tạo (với mục đích vui là chính ^^). Các bạn có thể xem code ở đây: <a href="https://github.com/phonglan123/pad">https://github.com/phonglan123/pad</a>', 'This is the advertising system I created myself (for the main purpose of fun ^^). You can see the code here: <a href="https://github.com/phonglan123/pad">https://github.com/phonglan123/pad</a>']
+            },
+            languageIndex = {
+                'vi': 0,
+                'en': 1
+            },
+            userLang = localStorage.getItem('phongInfoPageLang') || 'en',
+            changeLang = newLang => {
+                localStorage.setItem('phongInfoPageLang', newLang);
+                location.reload();
+            },
+            toggleCollapsible = (elm, content) => {
+                if (content.style.maxHeight)
+                    content.style.maxHeight = null;
+                else
+                    content.style.maxHeight = content.scrollHeight + "px";
+            },
+            redirectLink = ((false) ? 'http://phonglan123.github.io/pad/go.html?target=' : '');
+
+        Object.keys(languageDb).forEach(key => {
+            var userLangIndex = languageIndex[userLang];
+            document.body.innerHTML = document.body.innerHTML.replace(new RegExp(key, "g"), languageDb[key][userLangIndex]);
+        });
+
+        document.getElementById('selectLang').value = userLang;
+        document.title = languageDb['{infoPage}'][languageIndex[userLang]];
+	parent.postMessage(languageDb['{infoPage}'][languageIndex[userLang]], 'https://phongnguyeninfo.blogspot.com');
+    </script>
+    <!--
+         <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js" integrity="sha512-nOQuvD9nKirvxDdvQ9OMqe2dgapbPB7vYAMrzJihw5m+aNcf0dX53m6YxM4LgA9u8e9eg9QX+/+mPu8kCNpV2A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+         <script>
+         	var protect = {
+         		'email': 'U2FsdGVkX1+wtLK/aaIWqRPnHI4OcuhACYDw/45w0EfjFxh5fjNDAPCi5J2qmI3u9bSzzbwMaQUAXFD9GxndHg==',
+         		'facebook': 'U2FsdGVkX1+B11bVejj2D2+URwDehrlCdCWDox1tLG4rjqnBNithfBE0T+cH/EwXHweKam5H7IsCQ44SJJLvjw==',
+         	} //CryptoJS.AES.encrypt(message, key).toString()
+         
+         	function getInfo(type, callback) {
+         		var key = document.getElementById(type + 'Protect').value.toLowerCase(),
+         			message = CryptoJS.AES.decrypt(protect[type], key).toString(CryptoJS.enc.Utf8);
+         		if (message.startsWith('http'))
+         			message = 'https://phonglan123.github.io/pad/go.html?target=' + message
+         		callback(message)
+         	}
+         </script>
+         -->
+</body>
+
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Fun meme - PhongHNg's project</title>
+    <link rel="icon" type="image/png" href="./icon.png" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="./jquery-3.6.0.min.js"></script>
+    <script src="./get_item.js"></script>
+    <script src="./index.js"></script>
+
+    <style>
+        .tab-pane {
+            padding: 16px;
+        }
+
+        .nav {
+            margin-top: -1px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="false">Home</button>
+            <button class="nav-link" id="nav-jokes-tab" data-bs-toggle="tab" data-bs-target="#nav-jokes" type="button" role="tab" aria-controls="nav-jokes" aria-selected="false" onclick="view_item('jokes', 0)">Joke</button>
+            <button class="nav-link" id="nav-memes-tab" data-bs-toggle="tab" data-bs-target="#nav-memes" type="button" role="tab" aria-controls="nav-memes" aria-selected="true" onclick="view_item('memes', 0)">Meme</button>
+            <button class="nav-link" id="nav-orimemes-tab" data-bs-toggle="tab" data-bs-target="#nav-orimemes" type="button" role="tab" aria-controls="nav-orimemes" aria-selected="false" onclick="view_item('orimemes', 0)">Original meme</button>
+            <button class="nav-link" id="nav-vnmemes-tab" data-bs-toggle="tab" data-bs-target="#nav-vnmemes" type="button" role="tab" aria-controls="nav-vnmemes" aria-selected="false" onclick="view_item('vnmemes', 0)">Vietnamese meme</button>
+            <button class="nav-link" id="nav-yourbirth-tab" data-bs-toggle="tab" data-bs-target="#nav-yourbirth" type="button" role="tab" aria-controls="nav-yourbirth" aria-selected="false">Your birthday! <span class="badge bg-danger">NEW</span></button>
+            <button class="nav-link" id="nav-randomsearch-tab" data-bs-toggle="tab" data-bs-target="#nav-randomsearch" type="button" role="tab" aria-controls="nav-randomsearch" aria-selected="false">I'm feeling double lucky! <span class="badge bg-danger">NEW</span></button>
+        </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+            <figure class="text-center" style="margin-top: 16px;">
+                <blockquote class="blockquote">
+                    <p>"Một nụ cười bằng mười thang thuốc bổ"</p>
+                </blockquote>
+                <figcaption class="blockquote-footer">Vietnamese idioms</figcaption>
+            </figure>
+            <h2>Tiếng Việt</h2>
+            <ul>
+                <li><b>Fun meme</b> là một sản phẩm nho nhỏ của mình với mục đích tổng hợp các meme (từ tiếng Anh đến tiếng Việt). Sản phẩm có sử dụng nhiều API từ nhiều nguồn khác nhau (xem cụ thể tại file <a href="./README.md">README.md</a>). Giao diện sử dụng framework Bootstrap v5.0.2. Phần code chính là ở file <a href="./get_item.js">get_item.js</a> cho bạn nào cần nhé ^^.</li>
+                <li>Sử dụng các tab phía trên để truy cập nội dung. Lần đầu truy cập thì có thể mất khoảng 1 phút để tải nội dung đấy ^^. Nếu không tải được nội dung, hãy thử kiểm tra lại Internet nhé!</li>
+                <li>Cảm ơn các bạn! Thân chào <3< /li>
+            </ul>
+            <h2>English</h2>
+            <ul>
+                <li><b>Fun meme</b> is a my "mini product" with the purpose of synthesizing memes (from English to Vietnamese). This product uses many APIs from many different sources (see details at file <a href="./README.md">README.md</a>). The interface uses the framework Bootstrap v5.0.2. The main code is in the file <a href="./get_item.js">get_item.js</a> for anyone who needs it ^^.</li>
+                <li>Use the tabs above to access content. It may take about 1m to load for the first time ^^. If you can't download the content, try checking the Internet connection!</li>
+                <li>Thank you guys! Best regards <3< /li>
+            </ul>
+        </div>
+        <div class="tab-pane fade" id="nav-jokes" role="tabpanel" aria-labelledby="nav-jokes-tab"></div>
+        <div class="tab-pane fade" id="nav-memes" role="tabpanel" aria-labelledby="nav-memes-tab"></div>
+        <div class="tab-pane fade" id="nav-orimemes" role="tabpanel" aria-labelledby="nav-orimemes-tab"></div>
+        <div class="tab-pane fade" id="nav-vnmemes" role="tabpanel" aria-labelledby="nav-vnmemes-tab"></div>
+        <div class="tab-pane fade" id="nav-yourbirth" role="tabpanel" aria-labelledby="nav-yourbirth-tab">
+        	<div class="input-group mb-3">
+				<input type="date" class="form-control border border-primary" placeholder="Enter your birthday..." aria-label="Your birthday" aria-describedby="yourbirth-btn" id="yourbirth-date" value="1989-03-12">
+				<button class="btn btn-outline-primary" type="button" id="yourbirth-btn" onclick="get_yourbirth_data()">See what's happened on your birthday!</button>
+			</div>
+			<div id="yourbirth-content" class="border border-primary rounded" style="padding: 16px; display: none;">
+				<h4 class="text-center">Hey, your birthday is definitely a very meaningful day. Let's make it more meaningful by discovering more about it. You can choose the tabs below <3</h4>
+				<div class="nav nav-tabs me-3" id="birthday-tab" role="tablist" aria-orientation="vertical">
+					<button class="nav-link active" id="birthday-births" data-bs-toggle="tab" data-bs-target="#birthday-births-tab" type="button" role="tab" aria-controls="birthday-births-tab" aria-selected="true">Births</button>
+					<button class="nav-link" id="birthday-deaths" data-bs-toggle="tab" data-bs-target="#birthday-deaths-tab" type="button" role="tab" aria-controls="birthday-deaths-tab" aria-selected="false">Deaths</button>
+					<button class="nav-link" id="birthday-events" data-bs-toggle="tab" data-bs-target="#birthday-events-tab" type="button" role="tab" aria-controls="birthday-events-tab" aria-selected="false">Events</button>
+					<button class="nav-link" id="birthday-holidays" data-bs-toggle="tab" data-bs-target="#birthday-holidays-tab" type="button" role="tab" aria-controls="birthday-holidays-tab" aria-selected="false">Holidays</button>
+					<button class="nav-link" id="birthday-selected" data-bs-toggle="tab" data-bs-target="#birthday-selected-tab" type="button" role="tab" aria-controls="birthday-selected-tab" aria-selected="false">Selected</button>
+				</div>
+				<div class="tab-content" id="birthday-tabContent">
+					<div class="tab-pane fade show active" id="birthday-births-tab" role="tabpanel" aria-labelledby="birthday-births">Can't get content :((</div>
+					<div class="tab-pane fade" id="birthday-deaths-tab" role="tabpanel" aria-labelledby="birthday-deaths">Can't get content :((</div>
+					<div class="tab-pane fade" id="birthday-events-tab" role="tabpanel" aria-labelledby="birthday-events">Can't get content :((</div>
+					<div class="tab-pane fade" id="birthday-holidays-tab" role="tabpanel" aria-labelledby="birthday-holidays">Can't get content :((</div>
+					<div class="tab-pane fade" id="birthday-selected-tab" role="tabpanel" aria-labelledby="birthday-selected">Can't get content :((</div>
+				</div>
+			</div>
+			<button class="btn btn-primary position-absolute top-50 start-50 translate-middle" type="button" disabled id="yourbirth-loading" style="display: none;"> <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading content! Please don't close this tab! </button>
+        </div>
+        <div class="tab-pane fade" id="nav-randomsearch" role="tabpanel" aria-labelledby="nav-randomsearch-tab">
+        	<div class="alert alert-primary" role="alert">
+				<h4 class="alert-heading">What's this?</h4>
+				<p>"I'm feeling lucky" is a feature of the Google search engine. When you feel "lucky" and... click that button (yep, it's the "I'm feeling lucky" button), you'll be taken straight to the first search result. Here, we improve it in a very... "mixed" way. You won't just take you to the "first search result" on Google, we'll take you to Google and... DuckDuckGo. And it's hundred percent random, depends on your lucky. Okay, let's try your luck!</p>
+			</div>
+			<div class="input-group mb-3">
+				<input type="text" class="form-control border border-primary" placeholder="Enter anything here..." aria-label="Query:" aria-describedby="random_search_btn" id="random_search_query">
+				<button class="btn btn-outline-primary" type="button" id="random_search_btn" onclick="random_search()">I'm feeling double lucky</button>
+			</div>
+        </div>
+    </div>
+
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div class="toast align-items-center text-white bg-primary border-0" id="alert_box" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body" id="alert_content"></div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+	<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="myModalLabel">{modal_title}</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body" id="myModalBody">{modal_body}</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary" id="myModalSecondBtn">{second_button_text}</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+    <div id="image_storage" style="width: 0; height: 0;"></div>
+</body>
+
+</html>

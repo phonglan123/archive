@@ -1,0 +1,8 @@
+<script src="https://phonghng.github.io/21fa/paioe_editor/paioe-core/js/jquery-3.6.0.js"></script>
+<script src="./api.js"></script>
+Paste your board link here: 
+<input type="url" id="board_link" placeholder="https://trello.com/b/XXXXXXXX/XXXX" style="width: 100%; margin: 4px;">
+Then <button onclick="open_json_link()">click here</button> I'll open a new tab that includes your board's data. Copy it and paste below:
+<textarea id="trello_json" style="width: 100%; height: 400px; margin: 4px;"></textarea>
+Okay, finally, click this button:
+<button onclick="parse()" style="width: 100%; margin: 4px;">Parse</button>

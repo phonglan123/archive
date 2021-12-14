@@ -1,0 +1,43 @@
+<h2>Encode</h2>
+<textarea id="encode" style="width: 100%; height: 200px;" onkeydown="update_encode()" onkeyup="update_encode()" onkeypress="update_encode()"></textarea>
+<h2>Decode</h2>
+<textarea id="decode" style="width: 100%; height: 200px;" onkeydown="update_decode()" onkeyup="update_decode()" onkeypress="update_decode()"></textarea>
+<script>
+    function update_encode() {
+        let encode_string = document.querySelector("#encode").value;
+        document.querySelector("#decode").value = to_base64(encode_string);
+    }
+    
+    function update_decode() {
+        let decode_string = document.querySelector("#decode").value;
+        document.querySelector("#encode").value = from_base64(decode_string);
+    }
+
+    function to_base64(string) {
+        const codeUnits = new Uint16Array(string.length);
+        for (let i = 0; i < codeUnits.length; i++)
+            codeUnits[i] = string.charCodeAt(i);
+
+        const charCodes = new Uint8Array(codeUnits.buffer);
+        let result = '';
+        for (let i = 0; i < charCodes.byteLength; i++)
+            result += String.fromCharCode(charCodes[i]);
+
+        return btoa(result);
+    }
+
+    function from_base64(string) {
+        let binary = atob(string);
+
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < bytes.length; i++)
+            bytes[i] = binary.charCodeAt(i);
+
+        const charCodes = new Uint16Array(bytes.buffer);
+        let result = '';
+        for (let i = 0; i < charCodes.length; i++)
+            result += String.fromCharCode(charCodes[i]);
+
+        return result;
+    }
+</script>

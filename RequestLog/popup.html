@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Requestlog Popup</title>
+    <script src="./popup.js"></script>
+    <style>
+        * {
+            transition: .25s;
+        }
+
+        body {
+            min-width: 320px;
+            user-select: none;
+            font-size: 14px;
+        }
+
+        h2 {
+            margin-block-start: 4px;
+            margin-block-end: 4px;
+        }
+
+        .counter {
+            padding: 0 4px 0 4px;
+            border-radius: 4px;
+            margin: -1px 0 0 0;
+            border: 1px solid #0d6efd;
+            background-color: white;
+            color: #0d6efd;
+        }
+
+        .counter:hover {
+            background-color: #0d6efd;
+            color: white;
+        }
+
+        .counter:active {
+            box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 50%);
+        }
+
+        .container {
+            margin: 4px 0 4px 0;
+        }
+
+        .container b {
+            color: #0d6efd;
+        }
+
+        .container .counter {
+            background-color: #0d6efd;
+            color: white;
+            box-shadow: none;
+            float: right;
+        }
+
+        .container.sort b {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            width: calc(100% - 41px);
+            display: inline-block;
+        }
+
+        .container.sort .counter {
+            max-width: 32px;
+            display: inline-block;
+        }
+
+        .counter#cleanlog {
+            display: block;
+            margin: 16px 0 0 0;
+            font-size: 16px;
+            padding: 4px;
+            text-align: center;
+        }
+
+        p {
+            text-align: justify;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>TOTAL: <span class="counter" id="total">0</span></h2>
+
+    <br />
+
+    <h2>RECENTLY REQUESTED</h2>
+    <div class="container">
+        <b>Request time</b>: <span id="recent-time">...</span><br />
+        <b>Method</b>: <span id="recent-method">...</span><br />
+        <b>Type</b>: <span id="recent-type">...</span><br />
+        <b>From</b>: <span id="recent-fromweb">...</span><br />
+        <b>To</b>: <span id="recent-toweb">...</span><br />
+    </div>
+
+    <br />
+
+    <h2>SORT BY DATES</h2>
+    <div id="dates"></div>
+
+    <br />
+
+    <h2>SORT BY METHODS</h2>
+    <div id="methods"></div>
+
+    <br />
+
+    <h2>SORT BY TYPES</h2>
+    <div id="types"></div>
+
+    <br />
+
+    <h2>SORT BY WEBSITE SEND REQUEST</h2>
+    <div id="from_websites"></div>
+
+    <br />
+
+    <h2>SORT BY WEBSITE RECIVE REQUEST</h2>
+    <div id="to_websites"></div>
+
+    <br />
+
+    <h2>MEMORY SPACE</h2>
+    Using memory space: <b><span id="log-memory-size">0</span> byte(s)</b><br/>
+    Saved memory space: <b><span id="log-saved-memory-size">0</span> byte(s)</b><br/>
+    <span class="counter" id="cleanlog">Click here to clean your log</span>
+    <p>When click this button, it will clean up your request log, saving your memory space. Basically, all websites with less than 5% requests compared to the website with the highest number of requests will be deleted and aggregated as "Others". For example, if your highest website has made 1200 requests, so all websites with less than 60 requests will be deleted and aggregated as "Others" - <i>Translated by Google, btw ^^</i></p>
+</body>
+
+</html>

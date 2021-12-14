@@ -1,0 +1,170 @@
+<iframe id="iframe" style="position: absolute; top: -4px; left: -4px; width: 100%; height: 100%;"></iframe>
+<div style="background: #ddd; box-shadow: 0 0 8px 0 grey; position: absolute; width: 360px; padding: 4px; font-size: 18px; text-align: center;">
+	<button onclick="downVer()" style="font-size: 18px; height: 28px; outline: none; width: 30px;">&lsaquo;</button>
+	<select id="selectVer" onchange="changeVer(this.value)" style="font-size: 18px; height: 28px; outline: none;"><option value="" disabled selected hidden>Bấm vào đây để chọn phiên bản</option></select>
+	<button onclick="upVer()" style="font-size: 18px; height: 28px; outline: none; width: 30px;">&rsaquo;</button>
+</div>
+<script>
+	var ifrm = document.getElementById('iframe');
+	ifrm = (ifrm.contentWindow || ifrm.contentDocument.document || ifrm.contentDocument);
+	ifrm.document.open();
+	ifrm.document.write(`
+	<style>
+	    .collapsible {
+	        background-color: #777;
+	        color: white;
+	        cursor: pointer;
+	        padding: 18px;
+	        width: 100%;
+	        border: none;
+	        text-align: left;
+	        outline: none;
+	        font-size: 15px;
+	    }
+
+	    .active,
+	    .collapsible:hover {
+	        background-color: #555;
+	    }
+
+	    .collapsible:after {
+	        content: '\\002B';
+	        color: white;
+	        font-weight: bold;
+	        float: right;
+	        margin-left: 5px;
+	    }
+
+	    .active:after {
+	        content: "\\2212";
+	    }
+
+	    .content {
+	        padding: 0 18px;
+	        max-height: 0;
+	        overflow: hidden;
+	        transition: max-height 0.2s ease-out;
+	        background-color: #f1f1f1;
+	    }
+	</style>
+	<br /><br /><br />
+	<button type="button" class="collapsible">Hướng dẫn</button>
+	<div class="content">
+	    <ul>
+	        <li>Chúng tôi đã lưu lại giao diện của các phiên bản cũ, bạn có thể chọn phiên bản muốn xem ở góc trái phía trên màn hình</li>
+	        <li>Lưu ý, nội dung của các mục có thể bị lỗi hiển thị do database có thể không còn tương thích. Ví dụ, database dành cho phiên bản 8 có thể sẽ gặp lỗi khi hiển thị ở phiên bản 7. </li>
+	    </ul>
+	</div>
+
+	<button type="button" class="collapsible">Phiên bản 1 (04/06/2021)</button>
+	<div class="content">
+	    <ul>
+	        <li><strong>Phiên bản đầu tiên</strong>: Được lấy nguyên mẫu từ <a href="https://phongnguyeninfo.blogspot.com">Trang thông tin của Nguyễn Hải Phong</a></li>
+	        <li><strong>Quảng cáo</strong>: Áp dụng quảng cáo <a href="https://github.com/phonglan123/pad/blob/main/README.md#%C4%91%C4%83ng-k%C3%AD-qu%E1%BA%A3ng-c%C3%A1o">PadAds</a> một cách thủ công</li>
+	    </ul>
+	</div>
+	<button type="button" class="collapsible">Phiên bản 2 (05/06/2021)</button>
+	<div class="content">
+	    <ul>
+	        <li><strong>Part header</strong>: Ngừng hỗ trợ các &quot;Tiêu đề phần&quot;</li>
+	        <li><strong>Box bo góc</strong>: Các box được bo góc thay vì để góc vuông như nguyên mẫu, kích thước box cũng được thu gọn</li>
+	        <li><strong>Icon, tiêu đề</strong>: Bỏ dòng &quot;Đây là Kho lưu trữ của ...&quot; và loại bỏ các icon của các mục</li>
+	    </ul>
+	</div>
+	<button type="button" class="collapsible">Phiên bản 3 (05/06/2021)</button>
+	<div class="content">
+	    <ul>
+	        <li><strong>Giao diện</strong>: Cập nhật giao diện, chỉnh bo góc của các box</li>
+	        <li><strong>Đánh số thứ tự</strong>: Các box được đánh số thứ tự theo dạng 001, 002,...; ô quảng cáo được đánh dấu &quot;AD&quot;</li>
+	    </ul>
+	</div>
+	<button type="button" class="collapsible">Phiên bản 4 (06/06/2021)</button>
+	<div class="content">
+	    <ul>
+	        <li><strong>Giao diện</strong>: Cập nhật giao diện, chỉnh bo góc của các box</li>
+	        <li><strong>Da dạng các box</strong>: Cập nhật nhiều loại box như iframe, video, ảnh,... cho các box</li>
+	        <li><strong>Một tính năng thú vị</strong>: Tính năng FUN mang mục đích giải trí &quot;sương sương&quot; cho người xem</li>
+	        <li><strong>Quảng cáo tự động</strong>: Xuất hiện quảng cáo tự động theo quy tắc nhất định</li>
+	    </ul>
+	</div>
+	<button type="button" class="collapsible">Phiên bản 5 (10/06/2021)</button>
+	<div class="content">
+	    <ul>
+	        <li><strong>Giao diện mới</strong>: Bỏ đường viên, cập nhật màu sắc - UI/UX, cập nhật đánh số,...</li>
+	        <li><strong>Part header</strong>: Part header đã quay trở lại và lợi hại hơn xưa, với giao diện mới, trải nghiệm mới ^^</li>
+	    </ul>
+	</div>
+	<button type="button" class="collapsible">Phiên bản 6 (10/06/2021)</button>
+	<div class="content">
+	    <ul>
+	        <li><strong>Rút gọn code</strong>: Code được rút gọn từ khoảng 150 dòng về dưới 50 dòng, giữ hoàn toàn ở dạng Javascript</li>
+	        <li><strong>Đánh số thứ tự</strong>: Tính năng đánh số thứ tự đã bị loại bỏ ở phiên bản này do nhận thấy nhiều nhược điểm</li>
+	        <li><strong>Cập nhật nhỏ về giao diện</strong></li>
+	    </ul>
+	</div>
+	<button type="button" class="collapsible">Phiên bản 7 (18/06/2021)</button>
+	<div class="content">
+	    <ul>
+	        <li><strong>Giao diện &quot;siêu cấp mới&quot;</strong>: Phiên bản 7 đánh dấu Trang lưu trữ thoát khỏi hoàn toàn cái bóng (giao diện) của Trang thông tin (như đã nói ở phiên bản 1) với các cập nhật về box, background mang lại UI và UX mới!</li>
+	        <li><strong>&quot;Nhà&quot; mới cho database</strong>: Từ phiên bản 7, database đã được chuyển sang một file Google Sheet, như vậy, với bất kì thay đổi về nội dung nào, chỉ cần mất 1-2 giây là nội dung có thể xuất hiện trên trang web. </li>
+	    </ul>
+	</div>
+	<button type="button" class="collapsible">Phiên bản 8 (19/06/2021)</button>
+	<div class="content">
+	    <ul>
+	        <li><strong>Chia đôi màn hình</strong>: Các box được thu nhỏ và chia thành 2 bên: trái - phải nhằm tối ưu giao diện</li>
+	        <li><strong>Thay đổi cách xử lí database</strong></li>
+	    </ul>
+	</div>
+	<button type="button" class="collapsible">Phiên bản 9 (27/06/2021)</button>
+	<div class="content">
+	    <ul>
+	        <li><strong>"Icon hoá"</strong>: Tất cả các nội dung giờ đây được trình bày dưới dạng icon</li>
+	        <li><strong>Thay đổi nơi lưu trữ và cách xử lí database</strong></li>
+	        <li><strong>Không hiển thị quảng cáo</strong>: Để phù hợp với giao diện, quảng cáo sẽ không được hiển thị</li>
+	    </ul>
+	</div>
+
+	<script>
+	    var coll = document.getElementsByClassName("collapsible");
+	    var i;
+
+	    for (i = 0; i < coll.length; i++) {
+	        coll[i].addEventListener("click", function() {
+	            this.classList.toggle("active");
+	            var content = this.nextElementSibling;
+	            if (content.style.maxHeight) {
+	                content.style.maxHeight = null;
+	            } else {
+	                content.style.maxHeight = content.scrollHeight + "px";
+	            }
+	        });
+	    }
+	` + '</' + 'script>');
+	ifrm.document.close();
+
+	function upVer() {
+		if (currentVersion + 1 <= versions.length) {
+			changeVer(currentVersion + 1);
+			document.getElementById('selectVer').value = currentVersion;
+		}
+	}
+	function downVer() {
+		if (currentVersion - 1 > 0) {
+			changeVer(currentVersion - 1);
+			document.getElementById('selectVer').value = currentVersion;
+		}
+	}
+
+	function changeVer(verNumber) {
+		currentVersion = verNumber;
+		if (verNumber == versions.length)
+			document.getElementById('iframe').src = '../archive.html';
+		else
+			document.getElementById('iframe').src = './ver' + verNumber + '.html';
+	}
+
+	var versions = ['04/06/2021', '05/06/2021', '05/06/2021', '06/06/2021', '10/06/2021', '10/06/2021', '18/06/2021', '19/06/2021', '27/06/2021'],
+		currentVersion = 0;
+	versions.forEach((versionDate, index) => document.getElementById('selectVer').innerHTML += '<option value="' + (index + 1) + '">Phiên bản ' + (index + 1) + ' (' + versionDate + ')</option>');
+</script>
