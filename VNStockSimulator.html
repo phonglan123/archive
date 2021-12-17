@@ -1,0 +1,153 @@
+<div class="box left_bar">
+    <h1 style="margin-block-start: 0; margin-block-end: 0; text-align: center;">P:Vistsim</h1>
+    <div class="box money_bar">0</div>
+    <div id="stocks"></div>
+    <div class="box action_box">
+        <div class="header">BUY/SELL</div>
+        <input id="action_stock_name" placeholder="ID" />
+        <input id="action_stock_amount" type="number" placeholder="Amount" />
+        <input id="action_stock_price" type="number" placeholder="Price" />
+        <button onclick="do_action();">Try it!</button>
+    </div>
+</div>
+
+<iframe src="http://liveboard.cafef.vn/" class="box liveboard"></iframe>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: #030303;
+        color: white;
+        font-family: Arial, Helvetica, sans-serif;
+        cursor: default;
+        overflow: hidden;
+    }
+
+    .box {
+        border: 1px solid #555;
+        border-radius: 5px;
+        display: inline-block;
+    }
+
+    .box:hover,
+    .action_box input:hover,
+    .action_box button:hover {
+        border-color: white;
+    }
+
+    .left_bar {
+        background-color: #333333;
+        padding: 10px;
+        width: 200px;
+        height: 100%;
+        overflow: auto;
+        margin-top: 0;
+    }
+
+    .liveboard {
+        width: calc(100% - 200px - 10px);
+        margin-left: 5px;
+        height: 100%;
+    }
+
+    .stock_bar {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0;
+    }
+
+    .money_bar {
+        width: 100%;
+        border-color: #d6db12;
+        color: #d6db12;
+        padding: 10px;
+        margin: 15px 0 15px 0;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .action_box {
+        width: 100%;
+        padding: 10px;
+        margin: 25px 0 5px 0;
+    }
+
+    .action_box .header {
+        font-weight: bold;
+        background-color: #333333;
+        margin: 0 auto;
+        width: fit-content;
+        margin-top: -20px;
+        padding: 0 10px;
+    }
+
+    .action_box input,
+    .action_box button {
+        width: 100%;
+        margin: 5px 0;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #555;
+        border-radius: 5px;
+        outline: none;
+        background-color: #333333;
+        color: white;
+        cursor: pointer;
+    }
+
+    .action_box button:active {
+        background-color: #414141;
+    }
+</style>
+
+<script>
+    let
+        user_data = {
+            current_money: 100000000,
+            stocks: {},
+            logs: []
+        };
+
+    function save_user_data() {
+        localStorage.setItem("vistsim_userdata", JSON.stringify(user_data));
+    }
+
+    function load_user_data() {
+        let temp = JSON.parse(localStorage.getItem("vistsim_userdata"));
+        if (temp) user_data = temp;
+    }
+
+    function do_action() {
+        let stock_name = document.querySelector("#action_stock_name").value,
+            stock_amount = parseInt(document.querySelector("#action_stock_amount").value),
+            stock_price = parseInt(parseFloat(document.querySelector("#action_stock_price").value) * 1000);
+
+        if (!user_data.stocks[stock_name]) user_data.stocks[stock_name] = 0;
+
+        user_data.current_money = user_data.current_money - stock_price * stock_amount;
+        user_data.stocks[stock_name] += stock_amount;
+        user_data.logs.push([new Date().toDateString().replace(/ /g, ""), stock_name, stock_amount]);
+
+        update_display();
+        save_user_data();
+    }
+
+    function update_display() {
+        const format_number = number => Number(number).toLocaleString();
+        document.querySelector(".money_bar").innerHTML = format_number(user_data.current_money);
+        document.querySelector("#stocks").innerHTML = "";
+        Object.entries(user_data.stocks).forEach(stock => {
+            document.querySelector("#stocks").innerHTML +=
+                `<div class="box stock_bar">`
+                + `<b>${stock[0]}</b>`
+                + `<span style="float: right;">${stock[1]}</span>`
+                + `</div>`;
+        });
+    }
+
+    load_user_data();
+    setTimeout(() => update_display(), 1000);
+</script>
