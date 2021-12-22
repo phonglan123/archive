@@ -11,7 +11,7 @@
     </div>
 </div>
 
-<iframe src="http://liveboard.cafef.vn/" class="box liveboard"></iframe>
+<iframe src="https://iboard.ssi.com.vn/bang-gia/vn30" class="box liveboard"></iframe>
 
 <style>
     * {
@@ -129,7 +129,7 @@
 
         user_data.current_money = user_data.current_money - stock_price * stock_amount;
         user_data.stocks[stock_name] += stock_amount;
-        user_data.logs.push([new Date().toDateString().replace(/ /g, ""), stock_name, stock_amount]);
+        user_data.logs.push([new Date().toDateString().replace(/ /g, ""), stock_name, stock_amount, stock_price]);
 
         update_display();
         save_user_data();
