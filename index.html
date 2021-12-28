@@ -1,0 +1,15 @@
+<div id="grad1" style="height: 30em; width: 30em; border-radius: 100%; margin: 50px;"></div>
+
+<script>
+    document.querySelector("#grad1").style.background = make_gradient_circle();
+
+    function make_gradient_circle(colors = "#C6FFDD, #FBD786, #F7797D") {
+        if (typeof colors == "string") colors = colors.replace(/ /g, "").split(",");
+        let return_result = [];
+        colors.forEach((color, index) => {
+            let color_deg = 360 / colors.length * index;
+            return_result.push(`linear-gradient(${color_deg}deg, ${color}, #FFFFFF00)`);
+        });
+        return return_result.join(", ");
+    }
+</script>
