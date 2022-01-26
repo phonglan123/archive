@@ -163,7 +163,7 @@
         function do_pal() {
             let stock_name = document.querySelector("#pal_stock_name").value,
                 stock_amount = user_data.stocks[stock_name],
-                stock_amount_ratio = user_data.stocks[stock_name] / parseInt(document.querySelector("#pal_stock_amount").value),
+                stock_amount_ratio = parseInt(document.querySelector("#pal_stock_amount").value) / user_data.stocks[stock_name],
                 stock_price = parseInt(parseFloat(document.querySelector("#pal_stock_price").value) * 1000),
                 result = document.querySelector("#pal_result"),
                 this_pal = 0;
