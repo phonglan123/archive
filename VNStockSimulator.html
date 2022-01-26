@@ -15,23 +15,23 @@
             <div class="box stock_bar"><b>VNM</b><span style="float: right;">100</span></div>
         </div>
         <div class="box action_box">
+            <div class="header">CALC PAL</div>
+            <input id="pal_stock_name" placeholder="ID">
+            <input id="pal_stock_amount" type="number" placeholder="Amount" value="0">
+            <input id="pal_stock_price" type="number" placeholder="Price" value="0">
+            <button onclick="do_pal();">Get PAL!</button>
+            <div id="pal_result" style="text-align: center; margin-top: 5px;">Your result here...</div>
+        </div>
+        <div class="box action_box">
             <div class="header">BUY/SELL</div>
             <input id="action_stock_name" placeholder="ID">
-            <input id="action_stock_amount" type="number" placeholder="Amount">
-            <input id="action_stock_price" type="number" placeholder="Price">
+            <input id="action_stock_amount" type="number" placeholder="Amount" value="0">
+            <input id="action_stock_price" type="number" placeholder="Price" value="0">
             <button onclick="do_action();">Try it!</button>
         </div>
         <div class="box action_box">
             <div class="header">LOGS</div>
             <div id="logs"></div>
-        </div>
-        <div class="box action_box">
-            <div class="header">CALC PAL</div>
-            <input id="pal_stock_name" placeholder="ID">
-            <input id="pal_stock_amount" type="number" placeholder="Amount">
-            <input id="pal_stock_price" type="number" placeholder="Price">
-            <button onclick="do_pal();">Get PAL!</button>
-            <div id="pal_result" style="text-align: center; margin-top: 5px;">Your result here...</div>
         </div>
     </div>
 
@@ -162,13 +162,13 @@
 
         function do_pal() {
             let stock_name = document.querySelector("#pal_stock_name").value,
-                stock_amount = parseInt(document.querySelector("#pal_stock_amount").value),
+                stock_amount = user_data.stocks[stock_name],
+                stock_amount_ratio = user_data.stocks[stock_name] / parseInt(document.querySelector("#pal_stock_amount").value),
                 stock_price = parseInt(parseFloat(document.querySelector("#pal_stock_price").value) * 1000),
                 result = document.querySelector("#pal_result"),
                 this_pal = 0;
 
-            if (document.querySelector("#pal_stock_amount").value == "") stock_amount = user_data.stocks[stock_name];
-            this_pal = pal[stock_name] + (stock_amount * stock_price);
+            this_pal = (pal[stock_name] + (stock_amount * stock_price)) * stock_amount_ratio;
 
             result.innerHTML = Number(this_pal).toLocaleString() + " VND";
             result.style.color = this_pal >= 0 ? "green" : "red";
