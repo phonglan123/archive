@@ -6,10 +6,12 @@
 
 <body>
     <div class="box left_bar">
-        <h1 style="margin-block-start: 0; margin-block-end: 0; text-align: center;"
-            onclick="document.querySelector('#log').style.display = 'block';">Vistsim 4</h1>
+        <h1 style="margin-block-start: 0; margin-block-end: 0; text-align: center;">Vistsim 5</h1>
         <div class="box money_bar"
-            onclick="do_action(prompt('Nhập mã cổ phiếu:', ''), prompt('Nhập số cổ phiếu muốn mua/bán:', ''));">0</div>
+            onclick="do_action(prompt('Nhập mã cổ phiếu:', ''), prompt('Nhập số cổ phiếu muốn mua/bán:', ''));"
+            title="Mua/bán cổ phiếu">0</div>
+        <div class="box money_bar" id="totalpal_bar" onclick="document.querySelector('#log').style.display = 'block';"
+            title="Xem nhật kí">0</div>
         <div id="stocks"></div>
         <div class="box action_box" style="display: none;">
             <div class="header" onclick="document.querySelector('#logs').style.display = 'block';">BUY/SELL</div>
@@ -23,8 +25,6 @@
             <div id="logs"></div>
         </div>
     </div>
-
-    <iframe src="https://banggia.vndirect.com.vn/chung-khoan/danh-muc" class="box liveboard"></iframe>
 
     <style>
         * {
@@ -54,7 +54,7 @@
         .left_bar {
             background-color: #333333;
             padding: 10px;
-            width: 220px;
+            width: 100%;
             height: 100%;
             overflow: auto;
             margin-top: 0;
@@ -67,17 +67,19 @@
         }
 
         .stock_bar {
-            width: 100%;
+            width: calc(50% - 2.3px);
+            display: inline-block;
             padding: 10px;
-            margin: 5px 0;
+            margin: 5px 0 0 0;
         }
 
         .money_bar {
-            width: 100%;
+            width: calc(50% - 2.3px);
+            display: inline-block;
             border-color: #d6db12;
             color: #d6db12;
             padding: 10px;
-            margin: 15px 0 15px 0;
+            margin: 15px 0 0 0;
             font-weight: bold;
             text-align: center;
         }
@@ -147,6 +149,9 @@
                 user_data.stocks[stock_name] += stock_amount;
                 user_data.logs.push([new Date().toDateString().replace(/ /g, ""), stock_name, stock_amount, stock_price]);
 
+                if (user_data.stocks[stock_name] == 0)
+                    delete user_data.stocks[stock_name];
+
                 update_display();
                 save_user_data();
                 update_stocks_price();
@@ -155,7 +160,7 @@
                 func(stocks_price[stock_name] * 1000)
             else
                 get_stock_price(stock_name, stock_price => {
-                    func(stock_price);
+                    func(stock_price * 1000);
                 })
 
         }
@@ -164,18 +169,21 @@
             const format_number = number => Number(number).toLocaleString();
             document.querySelector(".money_bar").innerHTML = format_number(user_data.current_money);
             document.querySelector("#stocks").innerHTML = "";
-            Object.entries(user_data.stocks).forEach(stock => {
+            pal.total = 0;
+            Object.entries(user_data.stocks).forEach((stock, index) => {
                 let price = stocks_price[stock[0]],
                     this_pal = (pal[stock[0]] + (user_data.stocks[stock[0]] * price * 1000));
+                pal.total += this_pal;
                 if (stock[1] > 0)
                     document.querySelector("#stocks").innerHTML +=
-                        `<div class="box stock_bar" id="${stock[0]}" onclick="do_action('${stock[0]}', prompt('Nhập số cổ phiếu muốn mua/bán:', ''));">`
+                        `<div class="box stock_bar" id="${stock[0]}" onclick="do_action('${stock[0]}', prompt('Nhập số cổ phiếu muốn mua/bán:', ''));" style="${(index + 1) % 2 == 0 ? "float: right;" : ""}">`
                         + `<b>${stock[0]} (<span id="price">${stocks_price[stock[0]] ? stocks_price[stock[0]] : "0"}</span>)</b>`
                         + `<span style="float: right;">${stock[1]}</span><br/>`
                         + `PAL each: <span id="paleach" style="color: ${this_pal >= 0 ? "green" : "red"};">${Number(this_pal / user_data.stocks[stock[0]]).toLocaleString()}</span><br/>`
                         + `PAL total: <span id="paltotal" style="color: ${this_pal >= 0 ? "green" : "red"};">${Number(this_pal).toLocaleString()}</span>`
                         + `</div>`;
             });
+            document.querySelector("#totalpal_bar").innerHTML = format_number(pal.total);
             update_logs();
         }
 
