@@ -6,25 +6,19 @@
 
 <body>
     <div class="box left_bar">
-        <h1 style="margin-block-start: 0; margin-block-end: 0; text-align: center;">Vistsim 3</h1>
-        <div class="box money_bar">68,460,000</div>
+        <h1 style="margin-block-start: 0; margin-block-end: 0; text-align: center;"
+            onclick="document.querySelector('#log').style.display = 'block';">Vistsim 4</h1>
+        <div class="box money_bar"
+            onclick="do_action(prompt('Nhập mã cổ phiếu:', ''), prompt('Nhập số cổ phiếu muốn mua/bán:', ''));">0</div>
         <div id="stocks"></div>
-        <div class="box action_box">
-            <div class="header">CALC PAL</div>
-            <input id="pal_stock_name" placeholder="ID" onchange="do_pal()" oninput="do_pal()">
-            <input id="pal_stock_amount" type="number" placeholder="Amount" value="1" style="display: none">
-            <input id="pal_stock_price" type="number" placeholder="Price" value="0" style="display: none">
-            <button onclick="do_pal();" style="display: none">Get PAL!</button>
-            <div id="pal_result" style="text-align: center; margin-top: 5px;">Your result here...</div>
-        </div>
-        <div class="box action_box">
-            <div class="header">BUY/SELL</div>
+        <div class="box action_box" style="display: none;">
+            <div class="header" onclick="document.querySelector('#logs').style.display = 'block';">BUY/SELL</div>
             <input id="action_stock_name" placeholder="ID">
             <input id="action_stock_amount" type="number" placeholder="Amount" value="0">
             <input id="action_stock_price" type="number" placeholder="Price" value="0" style="display: none">
             <button onclick="do_action();">Try it!</button>
         </div>
-        <div class="box action_box">
+        <div class="box action_box" id="log" style="display: none;">
             <div class="header">LOGS</div>
             <div id="logs"></div>
         </div>
@@ -141,33 +135,29 @@
             if (temp) user_data = temp;
         }
 
-        function do_action() {
-            let stock_name = document.querySelector("#action_stock_name").value,
-                stock_amount = parseInt(document.querySelector("#action_stock_amount").value),
-                stock_price = stocks_price[stock_name] * 1000; // parseInt(parseFloat(document.querySelector("#action_stock_price").value) * 1000);
+        function do_action(stock_name, stock_amount) {
+            //let stock_name = document.querySelector("#action_stock_name").value;
+            //stock_amount = parseInt(document.querySelector("#action_stock_amount").value);
+            if (stock_name == null || stock_amount == null || stock_name == "" || stock_amount == "") return null;
+            stock_amount = parseInt(stock_amount);
+            const func = stock_price => {
+                if (!user_data.stocks[stock_name]) user_data.stocks[stock_name] = 0;
 
-            if (!user_data.stocks[stock_name]) user_data.stocks[stock_name] = 0;
+                user_data.current_money = user_data.current_money - stock_price * stock_amount;
+                user_data.stocks[stock_name] += stock_amount;
+                user_data.logs.push([new Date().toDateString().replace(/ /g, ""), stock_name, stock_amount, stock_price]);
 
-            user_data.current_money = user_data.current_money - stock_price * stock_amount;
-            user_data.stocks[stock_name] += stock_amount;
-            user_data.logs.push([new Date().toDateString().replace(/ /g, ""), stock_name, stock_amount, stock_price]);
+                update_display();
+                save_user_data();
+                update_stocks_price();
+            };
+            if (stocks_price[stock_name])
+                func(stocks_price[stock_name] * 1000)
+            else
+                get_stock_price(stock_name, stock_price => {
+                    func(stock_price);
+                })
 
-            update_display();
-            save_user_data();
-        }
-
-        function do_pal() {
-            let stock_name = document.querySelector("#pal_stock_name").value,
-                stock_amount = user_data.stocks[stock_name],
-                //stock_amount_ratio = parseInt(document.querySelector("#pal_stock_amount").value) / user_data.stocks[stock_name],
-                stock_price = stocks_price[stock_name], // parseInt(parseFloat(document.querySelector("#pal_stock_price").value) * 1000)
-                result = document.querySelector("#pal_result"),
-                this_pal = 0;
-
-            this_pal = (pal[stock_name] + (stock_amount * stock_price * 1000)) / user_data.stocks[stock_name];
-
-            result.innerHTML = Number(this_pal).toLocaleString() + " VND";
-            result.style.color = this_pal >= 0 ? "green" : "red";
         }
 
         function update_display() {
@@ -175,11 +165,15 @@
             document.querySelector(".money_bar").innerHTML = format_number(user_data.current_money);
             document.querySelector("#stocks").innerHTML = "";
             Object.entries(user_data.stocks).forEach(stock => {
+                let price = stocks_price[stock[0]],
+                    this_pal = (pal[stock[0]] + (user_data.stocks[stock[0]] * price * 1000));
                 if (stock[1] > 0)
                     document.querySelector("#stocks").innerHTML +=
-                        `<div class="box stock_bar" id="${stock[0]}">`
-                        + `<b>${stock[0]} (<span>${stocks_price[stock[0]] ? stocks_price[stock[0]] : "0"}</span>)</b>`
-                        + `<span style="float: right;">${stock[1]}</span>`
+                        `<div class="box stock_bar" id="${stock[0]}" onclick="do_action('${stock[0]}', prompt('Nhập số cổ phiếu muốn mua/bán:', ''));">`
+                        + `<b>${stock[0]} (<span id="price">${stocks_price[stock[0]] ? stocks_price[stock[0]] : "0"}</span>)</b>`
+                        + `<span style="float: right;">${stock[1]}</span><br/>`
+                        + `PAL each: <span id="paleach" style="color: ${this_pal >= 0 ? "green" : "red"};">${Number(this_pal / user_data.stocks[stock[0]]).toLocaleString()}</span><br/>`
+                        + `PAL total: <span id="paltotal" style="color: ${this_pal >= 0 ? "green" : "red"};">${Number(this_pal).toLocaleString()}</span>`
                         + `</div>`;
             });
             update_logs();
@@ -187,6 +181,7 @@
 
         function update_logs() {
             document.querySelector("#logs").innerHTML = "";
+            pal = {};
             user_data.logs.reverse().forEach(log => {
                 document.querySelector("#logs").innerHTML += `<div class="box stock_bar" title="On ${log[0]} bought ${log[2]} ${log[1]} shares at the price of ${log[3]} VND"><b>${log[1]}</b><span style="float: right;"><font color="${log[2] >= 0 ? "green" : "red"}">${log[2]}</font> × <font color="blue">${log[3] / 1000}</font></span></div>`;
                 if (pal[log[1]] == undefined) pal[log[1]] = 0
@@ -206,8 +201,7 @@
             Object.keys(user_data.stocks).forEach(stock => {
                 get_stock_price(stock, price => {
                     stocks_price[stock] = Number(price);
-                    if (document.querySelector("#" + stock + " span"))
-                        document.querySelector("#" + stock + " span").innerHTML = Number(price);
+                    update_display();
                 });
             });
         }
