@@ -29,7 +29,7 @@
             console.log(article);
             if (full_whitelist[main_title] == article.title) flag = true;
             if (!flag)
-                document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"" + article.url + "\");'>" + (article.preview ? ("<img src='" + article.preview.images[0].source.url + "'/>") : "") + "<h3>" + article.title + "</h3><i><b>" + article.author + "</b> posted in <b>" + article.subreddit + "</b> - " + article.created + "</i></div><button onclick='set_whitelist(`" + encodeURIComponent_x(article.title) + "`, this)'>Xong!</button></div>");
+                document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"" + article.url + "\");'>" + (article.preview ? ("<img src='" + article.preview.images[0].source.url + "'/>") : "") + "<h3>" + article.title + "</h3><i><b>" + article.author + "</b> posted in <b>" + article.subreddit + "</b> - " + article.created + "</i></div><button style='display: none;' onclick='set_whitelist(`" + encodeURIComponent_x(article.title) + "`, this)'>Xong!</button></div>");
         });
         document.body.innerHTML += "<i>Đã tải xong!</i>";
         set_whitelist(JSON.parse(json.contents).data.children[0].data.title, main_title);
@@ -123,7 +123,7 @@
                 results.forEach(article => {
                     if (full_whitelist[main_title] == article.title) flag = true;
                     if (!flag)
-                        document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"" + article.link + "\");'><img src='" + article.image + "'/><div><h3>" + article.title + "</h3><i>" + article.source + " - " + article.time + "</i></div></div></div>")
+                        document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"" + article.link + "\");'>" + (article.image ? "<img src='" + article.image + "'/>" : "") + "<div><h3>" + article.title + "</h3><i>" + article.source + " - " + article.time + "</i></div></div></div>")
                 });
                 document.body.innerHTML += "<i>Đã tải xong!</i>";
                 set_whitelist(results.slice(0, 1)[0].title, main_title);
@@ -148,34 +148,50 @@
             else alert("Đã tải xong tất cả!");
         });
     }
+    function process_ytb(main_title, callback) {
+        youtube_sub_channelids.sort((a, b) => new Date(b.time) - new Date(a.time));
+        console.log(youtube_sub_channelids);
+        youtube_sub_channelids.forEach(article => {
+            if (new Date(article.time).getTime() - (full_whitelist[main_title] ? full_whitelist[main_title] : 0) >= 0)
+                document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"" + article.link + "\");'><img src='" + article.image + "'/><div><h3>" + article.title + "</h3><i>" + article.source + " - " + article.time + "</i></div></div><button style='display: none;' onclick='set_whitelist(`" + encodeURIComponent_x(article.title) + "`, this)'>Xong!</button></div>");
+        });
+        document.body.innerHTML += "<i>Đã tải xong!</i>";
+        set_whitelist(youtube_sub_channelids.slice(0, 1)[0].title, main_title);
+        full_whitelist[main_title] = new Date().getTime();
+        localStorage.setItem("whitelist", JSON.stringify(full_whitelist));
+        callback();
+    }
     const link_list = [
-        [(main_title, callback) => {
-            youtube_sub_channelids.sort((a, b) => new Date(b.time) - new Date(a.time));
-            console.log(youtube_sub_channelids);
-            let flag = false;
-            youtube_sub_channelids.forEach(article => {
-                if (full_whitelist[main_title] - new Date(article.time).getTime() > 0) flag = true;
-                if (!flag)
-                    document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"" + article.link + "\");'><img src='" + article.image + "'/><div><h3>" + article.title + "</h3><i>" + article.source + " - " + article.time + "</i></div></div><button onclick='set_whitelist(`" + encodeURIComponent_x(article.title) + "`, this)'>Xong!</button></div>");
-            });
-            document.body.innerHTML += "<i>Đã tải xong!</i>";
-            set_whitelist(youtube_sub_channelids.slice(0, 1)[0].title, main_title);
-            full_whitelist[main_title] = new Date().getTime();
-            localStorage.setItem("whitelist", JSON.stringify(full_whitelist));
-            callback();
-        }, "YouTube"],
+        [(main_title, callback) => process_ytb(main_title, callback), "YouTube"],
         [(main_title, callback) => fetch("https://api.allorigins.win/get?url=" + encodeURIComponent("https://www.reddit.com/.json?feed=7fdac8ab65101cd21a5d5e6e6f4dfad19071f347&user=phonghng")).then(res => res.json()).then(json => process_reddit(json, main_title, callback)), "Reddit"],
         [(main_title, callback) => process_fb("http://fetchrss.com/rss/61f8c4e41d2c61396121d08261f8c4b70bc83a6c8f771002.xml", main_title, callback), "Kinh tế học giản đơn"],
-        ["https://news.google.com/publications/CAAqBwgKMO3gkQsw4fGmAw?hl=vi&gl=VN&ceid=VN%3Avi", "Tinh tế"],
+        [(main_title, callback) => process_tinhte("https://tinhte.vn/rss", main_title, callback), "Tinh tế"],
         ["https://news.google.com/publications/CAAqJAgKIh5DQklTRUFnTWFnd0tDbU5oWm1WaWFYb3VkbTRvQUFQAQ?hl=vi&gl=VN&ceid=VN%3Avi", "Cafebiz"],
         ["https://news.google.com/publications/CAAqIQgKIhtDQklTRGdnTWFnb0tDR05oWm1WbUxuWnVLQUFQAQ?hl=vi&gl=VN&ceid=VN%3Avi", "CafeF"],
         ["https://news.google.com/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRFZxYUdjU0FuWnBHZ0pXVGlnQVAB?hl=vi&gl=VN&ceid=VN%3Avi", "Mới nhất"],
         ["https://news.google.com/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRFZxYUdjU0FuWnBHZ0pXVGlnQVAB/sections/CAQiTENCQVNNd29JTDIwdk1EVnFhR2NTQW5acEdnSldUaUlQQ0FRYUN3b0pMMjB2TURGamNtUTFLZzRLREJJS1Ztbmh1NGQwSUU1aGJTZ0EqKggAKiYICiIgQ0JBU0Vnb0lMMjB2TURWcWFHY1NBblpwR2dKV1RpZ0FQAVAB?hl=vi&gl=VN&ceid=VN%3Avi", "VN"],
         ["https://news.google.com/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRFZxYUdjU0FuWnBHZ0pXVGlnQVAB/sections/CAQiTkNCQVNOQW9JTDIwdk1EVnFhR2NTQW5acEdnSldUaUlPQ0FRYUNnb0lMMjB2TURsdWJWOHFFQW9PRWd4VWFPRzZ2eUJuYWVHN20ya29BQSoqCAAqJggKIiBDQkFTRWdvSUwyMHZNRFZxYUdjU0FuWnBHZ0pXVGlnQVABUAE?hl=vi&gl=VN&ceid=VN%3Avi", "TG"],
-        ["https://news.google.com/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRFZxYUdjU0FuWnBHZ0pXVGlnQVAB/sections/CAQiUENCQVNOZ29JTDIwdk1EVnFhR2NTQW5acEdnSldUaUlPQ0FRYUNnb0lMMjB2TURsek1XWXFFZ29RRWc1RWIyRnVhQ0J1WjJocDRidUhjQ2dBKioIAComCAoiIENCQVNFZ29JTDIwdk1EVnFhR2NTQW5acEdnSldUaWdBUAFQAQ?hl=vi&gl=VN&ceid=VN%3Avi", "Doang nghiệp"],
+        ["https://news.google.com/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRFZxYUdjU0FuWnBHZ0pXVGlnQVAB/sections/CAQiUENCQVNOZ29JTDIwdk1EVnFhR2NTQW5acEdnSldUaUlPQ0FRYUNnb0lMMjB2TURsek1XWXFFZ29RRWc1RWIyRnVhQ0J1WjJocDRidUhjQ2dBKioIAComCAoiIENCQVNFZ29JTDIwdk1EVnFhR2NTQW5acEdnSldUaWdBUAFQAQ?hl=vi&gl=VN&ceid=VN%3Avi", "Doanh nghiệp"],
         ["https://news.google.com/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRFZxYUdjU0FuWnBHZ0pXVGlnQVAB/sections/CAQiTENCQVNNd29JTDIwdk1EVnFhR2NTQW5acEdnSldUaUlPQ0FRYUNnb0lMMjB2TURKcWFuUXFEd29ORWd0SGFlRzZvMmtnZEhMRHJTZ0EqKggAKiYICiIgQ0JBU0Vnb0lMMjB2TURWcWFHY1NBblpwR2dKV1RpZ0FQAVAB?hl=vi&gl=VN&ceid=VN%3Avi", "Giải trí"],
         ["https://news.google.com/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRFZxYUdjU0FuWnBHZ0pXVGlnQVAB/sections/CAQiS0NCQVNNZ29JTDIwdk1EVnFhR2NTQW5acEdnSldUaUlPQ0FRYUNnb0lMMjB2TURadWRHb3FEZ29NRWdwVWFPRzdneUIwYUdGdktBQSoqCAAqJggKIiBDQkFTRWdvSUwyMHZNRFZxYUdjU0FuWnBHZ0pXVGlnQVABUAE?hl=vi&gl=VN&ceid=VN%3Avi", "Thể thao"]
     ];
+    function process_tinhte(url, main_title, callback) {
+        fetch("https://api.allorigins.win/get?url=" + url)
+            .then(res => res.json())
+            .then(json => {
+                let parsed = new X2JS().xml_str2json(json.contents).rss.channel.item;
+                console.log(parsed);
+                let flag = false;
+                parsed.forEach(article => {
+                    if (full_whitelist[main_title] == article.title) flag = true;
+                    if (!flag)
+                        document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"" + article.link + "\");'><div><h3>" + article.title + "</h3><i>" + article.creator.__text + " - " + article.pubDate + "</i></div></div></div>")
+                });
+                document.body.innerHTML += "<i>Đã tải xong!</i>";
+                set_whitelist(parsed.slice(0, 1)[0].title, main_title);
+                callback();
+            });
+    }
     function process_fb(url, main_title, callback) {
         fetch("https://api.allorigins.win/get?url=" + url)
             .then(res => res.json())
@@ -235,7 +251,7 @@
         api_key = "AIzaSyCUyUlEcT2eul0-_5k6X15WN_d3Mgu_jrM",
         client_id = "509723180239-df84foq7m5lc2g158sqdqnb9ummdphhl.apps.googleusercontent.com",
         client_secret = "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",
-        redirect_uri = "https://phonglan123.github.io/archive/dailynews.html",
+        redirect_uri = "http://127.0.0.1:5500", // http://127.0.0.1:5500 - https://phonglan123.github.io/archive/dailynews.html
         ytb_enabled = true;
 
     function send_gg_auth(code, callback) {
@@ -255,13 +271,13 @@
                         Authorization: "Bearer " + JSON.parse(xhr.responseText).access_token
                     }
                 }).then(res => res.json()).then(json => {
-                    let counter = 0
-                    json.items.forEach(channel => {
+                    let counter = 0;
+                    json.items.forEach((channel, index) => {
                         fetch("https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=" + channel.snippet.resourceId.channelId.replace("C", "U") + "&key=" + api_key)
                             .then(res => res.json())
-                            .then(json => {
+                            .then(new_json => {
                                 let temp = [];
-                                json.items.slice(0, channel.contentDetails.newItemCount <= 1 ? 1 : channel.contentDetails.newItemCount).forEach(item => {
+                                new_json.items.slice(0, channel.contentDetails.newItemCount <= 1 ? 1 : channel.contentDetails.newItemCount).forEach(item => {
                                     temp.push({
                                         title: item.snippet.title,
                                         source: item.snippet.channelTitle,
@@ -272,7 +288,6 @@
                                 });
                                 youtube_sub_channelids.push(temp);
                                 youtube_sub_channelids = youtube_sub_channelids.flat();
-
                                 counter++;
                                 if (counter == json.items.length) callback();
                             });
