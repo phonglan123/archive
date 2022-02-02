@@ -246,7 +246,7 @@
 
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4) {
-                window.history.pushState('page2', 'Title', '/archive/dailynews.html');
+                window.history.pushState('page2', 'Title', new URL(location.href).pathname);
                 fetch("https://youtube.googleapis.com/youtube/v3/subscriptions?part=snippet,contentDetails&maxResults=100&mine=true&key=" + api_key, {
                     headers: {
                         Accept: "application/json",
