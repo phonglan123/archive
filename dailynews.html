@@ -151,13 +151,23 @@
     function process_ytb(main_title, callback) {
         youtube_sub_channelids.sort((a, b) => new Date(b.time) - new Date(a.time));
         console.log(youtube_sub_channelids);
+        if(!full_whitelist[main_title] || typeof full_whitelist[main_title] != "object")
+            full_whitelist[main_title] = []
+        console.log(JSON.stringify(full_whitelist[main_title]));
+        full_whitelist[main_title].forEach((title, index) => {
+            if(!youtube_sub_channelids.map(article => article.title).includes(title))
+                delete full_whitelist[main_title][index];
+        });
+        console.log(JSON.stringify(full_whitelist[main_title]));
         youtube_sub_channelids.forEach(article => {
-            if (new Date(article.time).getTime() - (full_whitelist[main_title] ? full_whitelist[main_title] : 0) <= 0)
+            if (!full_whitelist[main_title].includes(article.title)) {
                 document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"" + article.link + "\");'><img src='" + article.image + "'/><div><h3>" + article.title + "</h3><i>" + article.source + " - " + article.time + "</i></div></div><button style='display: none;' onclick='set_whitelist(`" + encodeURIComponent_x(article.title) + "`, this)'>Xong!</button></div>");
+                full_whitelist[main_title].push(article.title);
+            }
         });
         document.body.innerHTML += "<i>Đã tải xong!</i>";
-        set_whitelist(youtube_sub_channelids.slice(0, 1)[0].title, main_title);
-        full_whitelist[main_title] = new Date().getTime();
+        full_whitelist[main_title] = full_whitelist[main_title].filter(n => n);
+        //set_whitelist(youtube_sub_channelids.slice(0, 1)[0].title, main_title);
         localStorage.setItem("whitelist", JSON.stringify(full_whitelist));
         callback();
     }
@@ -251,7 +261,7 @@
         api_key = "AIzaSyCUyUlEcT2eul0-_5k6X15WN_d3Mgu_jrM",
         client_id = "509723180239-df84foq7m5lc2g158sqdqnb9ummdphhl.apps.googleusercontent.com",
         client_secret = "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",
-        redirect_uri = "https://phonglan123.github.io/archive/dailynews.html", // http://127.0.0.1:5500 - https://phonglan123.github.io/archive/dailynews.html
+        redirect_uri = "http://127.0.0.1:5500", // http://127.0.0.1:5500 - https://phonglan123.github.io/archive/dailynews.html
         ytb_enabled = true;
 
     function send_gg_auth(code, callback) {
@@ -277,7 +287,7 @@
                             .then(res => res.json())
                             .then(new_json => {
                                 let temp = [];
-                                new_json.items.slice(0, channel.contentDetails.newItemCount <= 1 ? 1 : channel.contentDetails.newItemCount).forEach(item => {
+                                new_json.items.slice(0, channel.contentDetails.newItemCount <= 3 ? 3 : channel.contentDetails.newItemCount).forEach(item => {
                                     temp.push({
                                         title: item.snippet.title,
                                         source: item.snippet.channelTitle,
