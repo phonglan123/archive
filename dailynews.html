@@ -152,7 +152,7 @@
         youtube_sub_channelids.sort((a, b) => new Date(b.time) - new Date(a.time));
         console.log(youtube_sub_channelids);
         youtube_sub_channelids.forEach(article => {
-            if (new Date(article.time).getTime() - (full_whitelist[main_title] ? full_whitelist[main_title] : 0) >= 0)
+            if (new Date(article.time).getTime() - (full_whitelist[main_title] ? full_whitelist[main_title] : 0) <= 0)
                 document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"" + article.link + "\");'><img src='" + article.image + "'/><div><h3>" + article.title + "</h3><i>" + article.source + " - " + article.time + "</i></div></div><button style='display: none;' onclick='set_whitelist(`" + encodeURIComponent_x(article.title) + "`, this)'>Xong!</button></div>");
         });
         document.body.innerHTML += "<i>Đã tải xong!</i>";
