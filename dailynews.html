@@ -154,12 +154,14 @@
             console.log(youtube_sub_channelids);
             let flag = false;
             youtube_sub_channelids.forEach(article => {
-                if (full_whitelist["YouTube"] == article.title) flag = true;
+                if (full_whitelist[main_title] - new Date(article.time).getTime() > 0) flag = true;
                 if (!flag)
                     document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"" + article.link + "\");'><img src='" + article.image + "'/><div><h3>" + article.title + "</h3><i>" + article.source + " - " + article.time + "</i></div></div><button onclick='set_whitelist(`" + encodeURIComponent_x(article.title) + "`, this)'>Xong!</button></div>");
             });
             document.body.innerHTML += "<i>Đã tải xong!</i>";
             set_whitelist(youtube_sub_channelids.slice(0, 1)[0].title, main_title);
+            full_whitelist[main_title] = new Date().getTime();
+            localStorage.setItem("whitelist", JSON.stringify(full_whitelist));
             callback();
         }, "YouTube"],
         [(main_title, callback) => fetch("https://api.allorigins.win/get?url=" + encodeURIComponent("https://www.reddit.com/.json?feed=7fdac8ab65101cd21a5d5e6e6f4dfad19071f347&user=phonghng")).then(res => res.json()).then(json => process_reddit(json, main_title, callback)), "Reddit"],
