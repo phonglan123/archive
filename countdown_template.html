@@ -34,7 +34,7 @@
 
     .shadow {
         font-family: Arial, Helvetica, sans-serif;
-        font-size: 92px;
+        /*font-size: 92px;*/
         padding: 80px 50px;
         text-align: center;
         /*text-transform: uppercase;*/
@@ -221,7 +221,7 @@
         start_interval(
             time => {
                 document.querySelector(".counter").innerHTML = write_function(options.template, time);
-                document.querySelector(".counter").style.fontSize = "50px";
+                //document.querySelector(".counter").style.fontSize = "50px";
                 document.querySelector(".counter").click();
             },
             () => {
@@ -229,14 +229,14 @@
                 myAudio.play();
 
                 document.body.style.background = "#e7e5e4";
-                document.querySelector(".counter").style.fontSize = "92px";
+                //document.querySelector(".counter").style.fontSize = "100%";
                 document.querySelector(".counter").innerHTML = options.finished.text;
                 document.querySelector(".counter").classList.add("shadow");
                 startConfetti();
 
                 setTimeout(() => {
                     document.querySelector(".counter").style.textShadow = "unset";
-                    document.querySelector(".counter").style.fontSize = "50px";
+                    //document.querySelector(".counter").style.fontSize = "100%";
                     document.querySelector(".counter").innerHTML = options.post_finished.text;
                     stopConfetti();
                 }, options.post_finished.after_n_seconds * 1000);
