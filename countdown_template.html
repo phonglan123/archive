@@ -224,12 +224,14 @@
                 document.querySelector(".counter").style.fontSize = "20px";
                 document.querySelector(".counter").click();
             },
-            () => {
-                let myAudio = new Audio(options.finished.sound_url);
-                myAudio.play();
+            no_sound => {
+                if(!no_sound) {
+                    let myAudio = new Audio(options.finished.sound_url);
+                    myAudio.play();
+                }
 
                 document.body.style.background = "#e7e5e4";
-                document.querySelector(".counter").style.fontSize = "200%";
+                document.querySelector(".counter").style.fontSize = "300%";
                 document.querySelector(".counter").innerHTML = options.finished.text;
                 document.querySelector(".counter").classList.add("shadow");
                 startConfetti();
@@ -258,7 +260,7 @@
 
     function start_interval(write_callback, finish_callback) {
         if (counter <= 0) {
-            finish_callback();
+            finish_callback(true);
             return;
         }
         if (interval) clearInterval(interval);
