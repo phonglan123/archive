@@ -204,8 +204,8 @@
                     let price = undefined;
                     price = json.contents.replace(/\r|\n| /g, "").split("<td>Gi&#225;hiệntại</td><tdclass=\"text-right\"><fontcolor='").pop().split("</font>")[0].split("(")[0].split(">")[1].replace(",", ".");
                     if (price == "<!--[ifIE9]")
-                        price = json.contents.replace(/\r|\n| /g, "").split("<td>Gi&#225;hiệntại</td><tdclass=\"text-right\"><div>").pop().split("</div>")[0].split("(")[0].split(">")[1].replace(",", ".");
-                    callback();
+                        price = json.contents.replace(/\r|\n| /g, "").split("<td>Gi&#225;hiệntại</td><tdclass=\"text-right\"><div>").pop().split("</div>")[0].split("(")[0].replace(",", ".");
+                    callback(price);
                 });
         }
 
