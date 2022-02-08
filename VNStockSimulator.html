@@ -201,7 +201,11 @@
             fetch("https://api.allorigins.win/get?url=https://www.bsc.com.vn/Companies/Overview/" + code + "?timestamp=" + new Date().getTime())
                 .then(res => res.json())
                 .then(json => {
-                    callback(json.contents.replace(/\r|\n| /g, "").split("<td>Gi&#225;hiệntại</td><tdclass=\"text-right\"><fontcolor='").pop().split("</font>")[0].split("(")[0].split(">")[1].replace(",", "."));
+                    let price = undefined;
+                    price = json.contents.replace(/\r|\n| /g, "").split("<td>Gi&#225;hiệntại</td><tdclass=\"text-right\"><fontcolor='").pop().split("</font>")[0].split("(")[0].split(">")[1].replace(",", ".");
+                    if (price == "<!--[ifIE9]")
+                        price = json.contents.replace(/\r|\n| /g, "").split("<td>Gi&#225;hiệntại</td><tdclass=\"text-right\"><div>").pop().split("</div>")[0].split("(")[0].split(">")[1].replace(",", ".");
+                    callback();
                 });
         }
 
