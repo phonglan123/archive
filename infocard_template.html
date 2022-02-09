@@ -1,0 +1,94 @@
+<script>
+    let data = JSON.parse(new URL(location.href).searchParams.get("data"));
+    data.forEach(card_info => {
+        document.write(`<div class="infocard template${card_info[0]}"><div class="image"><img src="${card_info[1]}" /></div><div class="content">${card_info[2]}</div></div>`);
+    });
+</script>
+
+<style>
+    .infocard {
+        padding: 20px;
+        border: 1px solid grey;
+        border-radius: 10px;
+        margin-top: 20px;
+    }
+
+    .infocard .content {
+        overflow: auto;
+        word-wrap: break-word;
+        text-align: justify;
+    }
+
+    .infocard.template1 .image {
+        text-align: center;
+        margin: 0 0 20px 0;
+        width: 100%;
+    }
+
+    .infocard.template1 img {
+        border-radius: 100%;
+        width: 35%;
+    }
+
+    .infocard.template2 {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: 1fr;
+        grid-auto-rows: 1fr;
+        grid-template-columns: 0.5fr 1.5fr;
+        gap: 20px 20px;
+    }
+
+    .infocard.template2 .image {
+        grid-area: 1 / 1 / 2 / 2;
+        display: flex;
+        align-items: center;
+    }
+
+    .infocard.template2 img {
+        border-radius: 100%;
+        width: 100%;
+    }
+
+    .infocard.template2 .content {
+        grid-area: 1 / 2 / 2 / 3;
+        display: flex;
+        align-items: center;
+        height: 100%;
+    }
+
+    .infocard.template3 {
+        margin-top: 40px;
+    }
+
+    .infocard.template3 .image {
+        margin-top: -50px;
+        height: 50px;
+        margin-bottom: 10px;
+    }
+
+    .infocard.template3 img {
+        height: 100%;
+        border-radius: 100%;
+    }
+
+    .infocard.template4 {
+        height: 100px;
+    }
+
+    .infocard.template4 .image {
+        float: left;
+        height: calc(100% + 42px);
+        margin: -21px;
+        margin-right: 20px;
+    }
+
+    .infocard.template4 img {
+        border-radius: 10px 0 0 10px;
+        height: 100%;
+    }
+
+    .infocard.template4 .content {
+        height: 100%;
+    }
+</style>
