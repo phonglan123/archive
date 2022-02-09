@@ -1,7 +1,7 @@
 <script>
     let data = JSON.parse(new URL(location.href).searchParams.get("data"));
     data.forEach(card_info => {
-        document.write(`<div class="infocard template${card_info[0]}"><div class="image"><img src="${card_info[1]}" /></div><div class="content">${card_info[2]}</div></div>`);
+        document.write(`<div class="infocard template${card_info[0]}"><div class="image"><img src="${card_info[1]}" /></div><div class="content">${card_info[2].replace(/\n/g, "<br/>"}</div></div>`);
     });
 </script>
 
