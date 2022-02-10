@@ -1,4 +1,4 @@
-function extra_add_event_listener(dom) {
+function extra_add_event_listener(events, dom) {
     Object.entries(events).forEach(event => {
         let event_function = e => {
             let flag = false;
