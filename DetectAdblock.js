@@ -1,12 +1,12 @@
 /*
 * Method: DetectAdblock
-* Version: 1.1
+* Version: 1.2
 * Author: PhongHNg
 * Source: https://github.com/phonglan123/archive/blob/main/DetectAdblock.js
 */
 
 class DetectAdblock {
-   constructor(options) {
+   constructor(options = {}) {
        return new Promise(async (resolve, reject) => {
            let
                start_time = performance.now(),
