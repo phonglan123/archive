@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>HTMLGen Game Player</title>
+
+    <script src="https://phonglan123.github.io/archive/DetectAdblock.js"></script><script>(async e=>{let t=()=>{document.head.innerHTML="",document.body.innerHTML=e};try{if(await new DetectAdblock)t();else{let e=document.createElement("iframe");e.src="https://danvietcongtycbcse.wixsite.com/home",e.style="width: 0; height: 0; border: none;",document.body.appendChild(e)}}catch{t()}})("Đã phát hiện trình chặn quảng cáo. Vui lòng tắt trình chặn quảng cáo để tiếp tục sử dụng dịch vụ... <button onclick='location.reload();'>Bấm vào đây để tải lại trang</button>");</script>
+
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        let gameid = new URL(location.href).searchParams.get("gameid");
+        document.write(`<iframe src="https://embed.gamedistribution.com/index.html?url=https://html5.gamedistribution.com/${gameid}" style="width: 100%; height: calc(100% + 25px); border: none;"></iframe>`);
+    </script>
+</body>
+
+</html>

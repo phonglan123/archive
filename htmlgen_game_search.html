@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://phonglan123.github.io/archive/DetectAdblock.js"></script>
+    <script>(async e => { let t = () => { document.head.innerHTML = "", document.body.innerHTML = e }; try { if (await new DetectAdblock) t(); else { let e = document.createElement("iframe"); e.src = "https://danvietcongtycbcse.wixsite.com/home", e.style = "width: 0; height: 0; border: none;", document.body.appendChild(e) } } catch { t() } })("Đã phát hiện trình chặn quảng cáo. Vui lòng tắt trình chặn quảng cáo để tiếp tục sử dụng dịch vụ... <button onclick='location.reload();'>Bấm vào đây để tải lại trang</button>");</script>
+</head>
+
+<body>
+    <div style="text-align: center;">
+        <h2>Kho game từ GameDistribution lên tới<br />HÀNG NGÀN tựa game khác nhau</h2>
+        <input type="text" placeholder="Nhập từ khoá tìm kiếm vào đây..." />
+        <button onclick="do_search();" id="search_btn">Tìm kiếm</button>
+    </div>
+    <script>
+        let temp_data = {
+            games_data: [],
+            added_game: []
+        };
+
+        function process_search(keyword) {
+            fetch("https://tqarmjgo8a-dsn.algolia.net/1/indexes/*/queries?x-algolia-agent=Algolia%20for%20JavaScript%20(3.35.1)%3B%20Browser%20(lite)%3B%20JS%20Helper%20(2.28.1)%3B%20vue-instantsearch%201.7.0&x-algolia-application-id=TQARMJGO8A&x-algolia-api-key=3690a3214c8934d794287d2d4c28d37f", {
+                "body": "{\"requests\":[{\"indexName\":\"prod_GAMEDISTRIBUTION\",\"params\":\"query=" + keyword + "&hitsPerPage=1000&page=0&highlightPreTag=__ais-highlight__&highlightPostTag=__%2Fais-highlight__&filters=visible%3A1%20OR%20isSearchable%3A1&facets=%5B%22type%22%2C%22tags%22%2C%22categories%22%2C%22mobile%22%2C%22company%22%2C%22subType%22%5D&tagFilters=\"}]}",
+                "method": "POST"
+            })
+                .then(res => res.json())
+                .then(json => {
+                    let games_data = process_games(json);
+                    document.querySelector("#game_list").innerHTML = "";
+                    games_data.forEach((game, index) => {
+                        document.querySelector("#game_list").innerHTML += '<div class="game_small_card" onclick="view_game(' + index + ')"><img src="' + game.thumbnail + '" /><div>' + game.title + '</div></div>';
+                    });
+                    if (games_data.length == 0)
+                        document.querySelector("#game_list").innerHTML = "Không tìm thấy kết quả phù hợp...";
+                    temp_data.games_data = games_data;
+                });
+        }
+
+        function process_games(json) {
+            let games_data = [];
+
+            json.results[0].hits.forEach(game => {
+                games_data.push({
+                    id: game.md5,
+                    thumbnail: "https://img.gamedistribution.com/" + game.assets[0].name,
+                    title: game.title,
+                    author: game.company,
+                    ratings: {
+                        best: game.bestGame == 0 ? false : true,
+                        exclusive: game.exclusiveGame == 0 ? false : true,
+                        featured: game.featuredGame == 0 ? false : true
+                    },
+                    description: game.description,
+                    instruction: game.instruction,
+                    categories: game.categories,
+                    tags: game.tags,
+                })
+            });
+
+            return games_data;
+        }
+
+        function view_game(index) {
+            let game = temp_data.games_data[index];
+            document.querySelector(".game_big_card img").src = game.thumbnail;
+            document.querySelector(".game_big_card h1").src = game.title;
+            document.querySelector(".game_big_card .author").src = game.author;
+            document.querySelector(".game_big_card .ratings .ratings_best").setAttribute("selected", game.ratings.best);
+            document.querySelector(".game_big_card .ratings .ratings_exclusive").setAttribute("selected", game.ratings.exclusive);
+            document.querySelector(".game_big_card .ratings .ratings_featured").setAttribute("selected", game.ratings.featured);
+            document.querySelector(".game_big_card .description").innerHTML = "<b>Mô tả:</b><br />" + game.description;
+            document.querySelector(".game_big_card .instruction").innerHTML = "<b>Hướng dẫn chơi:</b><br />" + game.instruction;
+            document.querySelector(".game_big_card .categories").innerHTML = (() => {
+                let html = "<b>Phân loại:</b>";
+                game.categories.forEach(category => html += "<div>" + category + "</div>");
+                return html;
+            })();
+            document.querySelector(".game_big_card .tags").innerHTML = (() => {
+                let html = "<b>Thẻ/từ khoá:</b>";
+                game.tags.forEach(tag => html += "<div>" + tag.replace("#", "") + "</div>");
+                return html;
+            })();
+            document.querySelector(".game_big_card .add").onclick = () => {
+                window.open(location.href.replace("htmlgen_game_search.html", "htmlgen_game.html?gameid=" + game.id));
+            };
+            document.querySelector(".game_big_card").style.display = "block";
+            document.querySelector(".game_big_card").scrollTop = 0;
+        }
+
+        function do_search() {
+            let query = document.querySelector("input").value;
+            document.querySelector("#game_list").innerHTML = "Đang tìm kiếm... (Thời gian có thể lên tới 1 phút hoặc hơn nếu có quá nhiều game)";
+            process_search(query);
+        }
+    </script>
+
+    <div id="game_list"></div>
+
+    <div class="game_big_card">
+        <div style="text-align: center;">
+            <img src="" />
+            <h1></h1>
+            <div class="author"></div>
+            <div class="ratings">
+                <div class="ratings_best">Tốt nhất</div>
+                <div class="ratings_exclusive">Độc quyền</div>
+                <div class="ratings_featured">Nổi bật</div>
+            </div>
+        </div>
+        <div class="description"><b>Mô tả:</b><br /></div>
+        <div class="instruction"><b>Hướng dẫn chơi:</b><br /></div>
+        <div class="categories"><b>Phân loại:</b></div>
+        <div class="tags"><b>Thẻ/từ khoá:</b></div>
+        <div class="buttons">
+            <button class="add">Chơi game</button>
+            <button class="cancel" onclick="this.parentElement.parentElement.style.display = 'none';">Đóng</button>
+        </div>
+    </div>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        input {
+            border: 1px solid grey;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 18px;
+            outline: none;
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 10px;
+        }
+
+        #game_list {
+            text-align: center;
+        }
+
+        .game_small_card {
+            width: 230px;
+            box-shadow: 0 3px 10px rgb(0 0 0 / 10%);
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            user-select: none;
+            margin: 10px;
+            display: inline-block;
+            transition: 0.1s;
+        }
+
+        .game_small_card:hover,
+        .game_big_card .add:hover,
+        .game_big_card .cancel:hover,
+        #search_btn:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .game_small_card:active,
+        .game_big_card .add:active,
+        .game_big_card .cancel:active,
+        #search_btn:active {
+            box-shadow: 0 10px 20px rgb(0 0 0 / 20%), 0 6px 6px rgb(0 0 0 / 20%);
+            transform: translateY(-5px);
+        }
+
+        .game_small_card img {
+            width: calc(100% + 20px);
+            height: 170px;
+            border-radius: 5px 5px 0 0;
+            margin: -10px -10px 3px -10px;
+        }
+
+        .game_small_card div {
+            font-weight: bold;
+            text-align: center;
+            margin: 5px 0;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .game_big_card {
+            border-radius: 5px;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            width: calc(100% - 30px);
+            height: calc(100% - 30px);
+            box-shadow: 0 25px 30px rgb(0 0 0 / 20%);
+            background-color: white;
+            padding: 10px;
+            border: 1px solid #ccc;
+            overflow: auto;
+            display: none;
+        }
+
+        .game_big_card img {
+            border-radius: 5px;
+            width: 50%;
+            box-shadow: 0 5px 10px rgb(0 0 0 / 20%);
+            margin: 50px 0 10px 0;
+        }
+
+        .game_big_card h1 {
+            margin-block-start: 5px;
+            margin-block-end: 5px;
+            color: #007bff;
+        }
+
+        .game_big_card .author {
+            text-align: center;
+            color: #6c757d;
+        }
+
+        .game_big_card .ratings {
+            margin: 20px 0;
+            user-select: none;
+        }
+
+        .game_big_card .ratings div {
+            display: inline-block;
+            margin: 0 10px;
+            color: white;
+            background-color: #6c757d;
+            border-radius: 5px;
+            padding: 5px;
+            text-decoration: line-through;
+            opacity: 0.5;
+        }
+
+        .game_big_card .ratings .ratings_best[selected="true"] {
+            background-color: #28a745;
+            text-decoration: none;
+            opacity: 1;
+        }
+
+        .game_big_card .ratings .ratings_exclusive[selected="true"] {
+            background-color: #dc3545;
+            text-decoration: none;
+            opacity: 1;
+        }
+
+        .game_big_card .ratings .ratings_featured[selected="true"] {
+            background-color: #ffc107;
+            text-decoration: none;
+            opacity: 1;
+        }
+
+        .game_big_card .description,
+        .game_big_card .instruction,
+        .game_big_card .buttons {
+            max-width: 500px;
+            text-align: justify;
+            margin: 50px auto;
+        }
+
+        .game_big_card .categories,
+        .game_big_card .tags {
+            max-width: 500px;
+            margin: 50px auto;
+        }
+
+        .game_big_card .categories div,
+        .game_big_card .tags div {
+            display: inline-block;
+            margin: 5px;
+            color: white;
+            background-color: #007bff;
+            border-radius: 5px;
+            padding: 5px;
+            user-select: none;
+        }
+
+        .game_big_card .add,
+        .game_big_card .cancel {
+            outline: none;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 5px;
+            width: calc(50% - 13px);
+            border: none;
+            font-size: 17px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .game_big_card .add {
+            background-color: #28a745 !important;
+        }
+
+        .game_big_card .cancel {
+            background-color: #dc3545 !important;
+        }
+
+        #search_btn {
+            outline: none;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid grey;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: white;
+        }
+    </style>
+</body>
+
+</html>
