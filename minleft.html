@@ -1,0 +1,15 @@
+<body>
+  <script>
+  setInterval(() => {
+    const today = new Date()
+    const tomorrow = new Date(today)
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
+    let minutes_left = (tomorrow - today) / (1000 * 60);
+    document.body.innerHTML = 
+      "Ngày hôm nay chỉ còn lại <b>"
+      + minutes_left.toFixed(3)
+      + "</b> phút!";
+  }, 1000);
+  </script>
+</body>
