@@ -474,9 +474,10 @@
         });
     }
 
-    if (getCookie("ggauth"))
+    /*if (getCookie("ggauth"))
         send_ytb_sub(getCookie("ggauth"), loadmore_x);
-    else if (!new URL(location.href).searchParams.get("code") && ytb_enabled)
+    else */
+    if (!new URL(location.href).searchParams.get("code") && ytb_enabled)
         location.href = "https://accounts.google.com/o/oauth2/auth/oauthchooseaccount?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fyoutube.readonly&response_type=code&access_type=offline&redirect_uri=" + encodeURIComponent(redirect_uri) + "&client_id=" + client_id + "&flowName=GeneralOAuthFlow";
     else
         send_gg_auth(new URL(location.href).searchParams.get("code"), loadmore_x);
