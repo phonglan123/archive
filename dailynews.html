@@ -184,6 +184,7 @@
         callback();
     }
     const link_list = [
+        [(main_title, callback) => process_wikipedia("default", 0, main_title, callback, {}), "Wikipedia"],
         [(main_title, callback) => process_ytb(main_title, callback), "YouTube"],
         [(main_title, callback) => process_stackoverflow_podcast("https://stackoverflow.blog/podcast/feed/", main_title, callback), "Stack Overflow Podcast"],
         [(main_title, callback) => process_stackoverflow("https://stackoverflow.blog/newsletter/feed/", main_title, callback), "The Overflow"],
@@ -273,6 +274,57 @@
     function check_title_post(article, main_title, flag) {
         if (full_whitelist[main_title] >= new Date(article.pubDate).getTime()) flag = true;
         return flag;
+    }
+    function process_wikipedia(urls, current_index, main_title, callback, total_results) {
+        if (urls == "default")
+            urls = [
+                ["featured", "Bài viết chọn lọc"],
+                ["dyk", "Bạn có biết?"],
+                ["good", "Bài viết tốt"],
+                ["onthisday", "Ngày này năm xưa"],
+                ["potd", "Hình ảnh trong ngày"],
+            ];
+        if (!document.querySelector("#wikipedia_grid")) {
+            let main = document.createElement("div");
+            main.style = "--gap: 10px; --min-width: 600px; margin: auto 10px; display: -ms-grid; display: grid; grid-template-columns: repeat(auto-fit, minmax(var(--min-width), 1fr)); grid-gap: var(--gap);";
+            main.id = "wikipedia_grid";
+            //main.innerHTML = "<h1>" + main_title + "</h1>";
+            document.body.appendChild(main);
+        }
+        let type_name = urls[current_index][0];
+        fetch("https://api.allorigins.win/get?url=" + encodeURIComponent("https://vi.wikipedia.org//w/api.php?action=featuredfeed&feed=" + type_name + "&feedformat=atom"))
+            .then(res => res.json())
+            .then(json => {
+                let parsed = new X2JS().xml_str2json(json.contents).feed.entry,
+                    summary = parsed[parsed.length - 1].summary.__text,
+                    box = document.createElement("div");
+                box.style = "margin: 10px; border: 1px solid #ccc; border-radius: 10px; padding: 10px;";
+                let box_content = summary.replace(' width="50%" align="right"', ""),
+                    pubDate = new Date(parsed[parsed.length - 1].updated).getTime(),
+                    flag = true;
+                if (full_whitelist[main_title] && full_whitelist[main_title][type_name] && full_whitelist[main_title][type_name] >= pubDate)
+                    flag = false;
+                box.innerHTML = '<h2 style="margin-left: 8px;">' + urls[current_index][1] + '</h2>' + box_content;
+                box.querySelectorAll("a").forEach(link => {
+                    if (link.getAttribute("href").startsWith("/wiki"))
+                        link.href = "https://vi.wikipedia.org" + link.getAttribute("href");
+                    link.target = "_blank";
+                });
+                if (flag)
+                    document.querySelector("#wikipedia_grid").appendChild(box);
+                total_results[type_name] = parsed;
+                if (!full_whitelist[main_title])
+                    full_whitelist[main_title] = {};
+                full_whitelist[main_title][type_name] = pubDate;
+                localStorage.setItem("whitelist", JSON.stringify(full_whitelist));
+                if (current_index == urls.length - 1) {
+                    document.body.innerHTML += "<i>Đã tải xong!</i>";
+                    console.log(Object.entries(total_results));
+                    callback();
+                }
+                else
+                    process_wikipedia(urls, current_index + 1, main_title, callback, total_results);
+            });
     }
     function process_stackoverflow_podcast(url, main_title, callback, top_10 = true) {
         fetch("https://api.allorigins.win/get?url=" + url)
@@ -422,7 +474,7 @@
         });
     }
 
-    if(getCookie("ggauth"))
+    if (getCookie("ggauth"))
         send_ytb_sub(getCookie("ggauth"), loadmore_x);
     else if (!new URL(location.href).searchParams.get("code") && ytb_enabled)
         location.href = "https://accounts.google.com/o/oauth2/auth/oauthchooseaccount?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fyoutube.readonly&response_type=code&access_type=offline&redirect_uri=" + encodeURIComponent(redirect_uri) + "&client_id=" + client_id + "&flowName=GeneralOAuthFlow";
