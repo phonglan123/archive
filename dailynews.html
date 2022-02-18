@@ -60,7 +60,8 @@
         set_whitelist = (article, main_title) => {
             if (main_title == "Reddit")
                 article.pubDate = article.created;
-            full_whitelist[main_title] = new Date(article.pubDate).getTime();
+            if(new Date(article.pubDate).getTime() > full_whitelist[main_title])
+                full_whitelist[main_title] = new Date(article.pubDate).getTime();
             localStorage.setItem("whitelist", JSON.stringify(full_whitelist));
         },
         check_whitelist = title => {
