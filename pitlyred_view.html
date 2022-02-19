@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pitlyred - Chuyển hướng đường liên kết</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+
+    <!-- Version: 1.3.1 -->
+    <script src="https://phonglan123.github.io/archive/DetectAdblock.js"></script>
+    <script>(async e => { let t = () => { document.head.innerHTML = "", document.body.innerHTML = e }; try { if (await new DetectAdblock) t(); else { let e = document.createElement("iframe"); e.src = "https://danvietcongtycbcse.wixsite.com/home", e.style = "width: 0; height: 0; border: none;", document.body.appendChild(e) } } catch { t() } })("Đã phát hiện trình chặn quảng cáo. Vui lòng tắt trình chặn quảng cáo để tiếp tục sử dụng dịch vụ... <button onclick='location.reload();'>Bấm vào đây để tải lại trang</button>");</script>
+
+    <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="https://momentjs.com/downloads/moment-with-locales.min.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+        }
+
+        body,
+        .fullscreen_inner {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 10px;
+        }
+
+        #thumbnail_image_desktop,
+        #thumbnail_image_mobile,
+        #thumbnail_image_fullpage {
+            width: 100%;
+        }
+
+        #thumbnail_image_desktop img,
+        #thumbnail_image_mobile img {
+            width: 100%;
+            border-radius: 5px;
+            box-shadow: 0 5px 10px rgb(0 0 0 / 20%);
+            margin: 10px 0;
+        }
+
+        #thumbnail_image_fullpage img {
+            width: 100%;
+        }
+
+        #loading_steps .material-icons {
+            vertical-align: middle;
+            font-size: 14px;
+        }
+
+        table {
+            width: 100%;
+            margin-bottom: 1rem;
+            border-collapse: collapse;
+        }
+
+        table tr:nth-of-type(odd) {
+            background-color: #f8fafd;
+        }
+
+        table tr:hover {
+            background-color: rgba(231, 234, 243, .4);
+        }
+
+        table th,
+        table td {
+            border: 0;
+            padding: .75rem;
+            vertical-align: top;
+        }
+
+        table th {
+            text-align: left;
+        }
+
+        h1 {
+            margin-block-start: 20px;
+            margin-block-end: 20px;
+            font-size: 20px;
+        }
+
+        #loading_steps ol li {
+            margin: 10px 0;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            font-weight: 600;
+            color: #677788;
+            text-align: center;
+            vertical-align: middle;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            background-color: transparent;
+            border: .0625rem solid transparent;
+            padding: .75rem 1rem;
+            font-size: 1rem;
+            line-height: 1.6;
+            border-radius: .3125rem;
+            color: white;
+            border-color: #e7eaf3;
+            margin: 10px 0;
+        }
+
+        button.primary {
+            background-color: #377dff;
+            border-color: #377dff;
+        }
+
+        button.primary:hover {
+            box-shadow: 0 4px 11px rgb(55 125 255 / 35%);
+        }
+
+        button.primary:active {
+            color: #fff;
+            background-color: #045cff;
+            border-color: #0056f6;
+            box-shadow: none;
+        }
+
+        button.secondary {
+            color: #71869d;
+        }
+
+        button.secondary:hover {
+            color: #fff;
+            background-color: #71869d;
+            border-color: #71869d;
+        }
+
+        .header {
+            margin: 100px 0;
+            text-align: center;
+        }
+
+        .title {
+            font-size: 50px;
+        }
+
+        .description {
+            font-size: 1.25rem;
+            font-weight: 400;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            color: #677788;
+            font-weight: bold;
+        }
+
+        .fullscreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            overflow: auto;
+        }
+
+        #close_preview_link {
+            width: fit-content;
+    position: fixed;
+    left: 10px;
+        }
+    </style>
+</head>
+
+<body style="overflow: hidden;">
+    <!-- Có confirm có muốn truy cập link -> load -> confirm redirect new tab -->
+
+    <div class="fullscreen" id="confirm">
+        <div class="fullscreen_inner">
+            <div class="header">
+                <h1 class="title">Bạn có chắc chắn muốn truy cập?</h1>
+                <p class="description">Đường liên kết này không phải do chúng tôi tạo ra, bạn có toàn quyền quyết định
+                    lựa
+                    chọn việc truy cập này và chúng tôi sẽ không chịu bất kì trách nhiệm nào khi bạn bấm vào nút truy
+                    cập
+                    đường liên kết này!</p>
+            </div>
+            <button onclick="process_steps();" class="primary">Tôi chắc chắn muốn truy cập</button>
+            <button onclick="end();" class="secondary">Tôi không muốn truy cập</button>
+        </div>
+    </div>
+
+    <div class="fullscreen" id="loading" style="display: none;">
+        <div class="fullscreen_inner">
+            <h1>Đang tải thông tin đường liên kết...</h1>
+            <div id="loading_steps">
+                <ol></ol>
+            </div>
+        </div>
+    </div>
+
+    <div class="header">
+        <h1 class="title">Pitlyred</h1>
+        <!-- Phong's Bitly link redirect -->
+        <p class="description">Chuyển hướng đường liên kết</p>
+    </div>
+
+    <button onclick="view_link();" class="primary">Truy cập đường liên kết</button>
+    <button onclick="preview_link();" class="secondary">Sử dụng bản xem trước bằng hình ảnh</button>
+
+    <h1>Thông tin đường liên kết</h1>
+    <table>
+        <tr>
+            <th>Mã (Bitly)</th>
+            <td id="link_info_id"><br /></td>
+        </tr>
+        <tr>
+            <th>Mật khẩu</th>
+            <td id="link_info_password"><br /></td>
+        </tr>
+        <tr>
+            <th>Thời gian tạo</th>
+            <td id="link_info_created"><br /></td>
+        </tr>
+        <tr>
+            <th>Lượt truy cập</th>
+            <td id="link_info_analyse"><br /></td>
+        </tr>
+        <tr>
+            <th>Mã QR</th>
+            <td id="link_info_qrcode">
+                <script>
+                    document.write(`<img
+                src="https://chart.apis.google.com/chart?cht=qr&chs=200x200&chl=${encodeURIComponent(location.href)}&chld=|0" style="max-width: 100%;"/>`);
+                </script>
+            </td>
+        </tr>
+    </table>
+
+    <h1>Minh hoạ trên máy tính</h1>
+    <div id="thumbnail_image_desktop"></div>
+
+    <h1>Minh hoạ trên điện thoại</h1>
+    <div id="thumbnail_image_mobile"></div>
+
+    <br/><br/>
+
+    <div class="fullscreen" id="preview_link" style="display: none;">
+        <button onclick="close_preview_link();" class="primary" id="close_preview_link">Đóng bản xem trước</button>
+        <div id="thumbnail_image_fullpage"></div>
+    </div>
+
+    <div class="fullscreen" id="ending" style="display: none;">
+        <!-- Nothing here -->
+    </div>
+
+    <script>
+        let
+            temp_data = {
+                url: "",
+                id: "",
+                password: "Không có",
+                created: new Date(),
+                analyse: {
+                    total: 0,
+                    by_countries: {}
+                }
+            },
+            loading_steps = {
+                /*
+                 * status = 0 => loading
+                 * status = -1 => there's an error
+                 * status = 1 => loaded
+                 */
+
+                "decrypt_url": {
+                    name: "Giải mã URL (với mật khẩu - nếu có)",
+                    status: 0,
+                    timing: {
+                        start: undefined,
+                        end: undefined,
+                        load_time: undefined
+                    },
+                    function: callback => {
+                        const
+                            sha3_decrypt = (encrypted, secret_pasphrase) => {
+                                encrypted = decodeURIComponent(encrypted);
+                                let decrypted = CryptoJS.AES.decrypt(encrypted, secret_pasphrase);
+                                if (decrypted.sigBytes >= 0)
+                                    decrypted = decrypted.toString(CryptoJS.enc.Utf8);
+                                else
+                                    decrypted = false;
+                                return decrypted;
+                            },
+                            expand_bily_link = (bitly_id, successed_callback, error_callback) => {
+                                try {
+                                    fetch("https://api-ssl.bitly.com/v4/expand", {
+                                        method: "POST",
+                                        headers: {
+                                            "Authorization": "Bearer cee48c77ac8c2af98e88efc2079bd2004e173b37",
+                                            "Content-Type": "application/json"
+                                        },
+                                        body: JSON.stringify({ "bitlink_id": "bit.ly/" + bitly_id })
+                                    }).then(res => res.json()).then(json => {
+                                        successed_callback(json);
+                                    });
+                                } catch (error) {
+                                    error_callback(error);
+                                }
+                            };
+
+                        let bitly_id = new URL(location.href).searchParams.get("id") || "";
+                        bitly_id = sha3_decrypt(bitly_id, "");
+                        if (!bitly_id) {
+                            bitly_id = new URL(location.href).searchParams.get("id") || "";
+                            let password = prompt("Vui lòng nhập mật khẩu:");
+                            if (password == null) end();
+                            bitly_id = sha3_decrypt(bitly_id, password);
+                            temp_data.password = password;
+                        }
+                        if (!bitly_id) {
+                            callback(-1);
+                            return false;
+                        }
+
+                        temp_data.id = bitly_id;
+
+                        expand_bily_link(
+                            bitly_id,
+                            json => {
+                                temp_data.url = json.long_url;
+                                temp_data.created = new Date(json.created_at);
+                                callback(1);
+                            },
+                            error => {
+                                callback(-1);
+                            }
+                        );
+                    }
+                },
+
+                "thumb_desk": {
+                    name: "Hình ảnh minh hoạ trên máy tính",
+                    status: 0,
+                    timing: {
+                        start: undefined,
+                        end: undefined,
+                        load_time: undefined
+                    },
+                    function: callback => {
+                        let img = document.createElement("img");
+                        img.src = "https://thumbnail.ws/get/thumbnail/?apikey=ab45a17344aa033247137cf2d457fc39abcd7e16a464&url=" + encodeURIComponent(temp_data.url) + "&width=1000&mobile=false";
+                        document.querySelector("#thumbnail_image_desktop").appendChild(img);
+                        imagesLoaded(img, instance => {
+                            callback(instance.isComplete ? 1 : -1);
+                        });
+                    }
+                },
+
+                "thumb_mob": {
+                    name: "Hình ảnh minh hoạ trên điện thoại",
+                    status: 0,
+                    timing: {
+                        start: undefined,
+                        end: undefined,
+                        load_time: undefined
+                    },
+                    function: callback => {
+                        let img = document.createElement("img");
+                        img.src = "https://thumbnail.ws/get/thumbnail/?apikey=ab45a17344aa033247137cf2d457fc39abcd7e16a464&url=" + encodeURIComponent(temp_data.url) + "&width=1000&mobile=true";
+                        document.querySelector("#thumbnail_image_mobile").appendChild(img);
+                        imagesLoaded(img, instance => {
+                            callback(instance.isComplete ? 1 : -1);
+                        });
+                    }
+                },
+
+                "thumb_full": {
+                    name: "Hình ảnh minh hoạ toàn trang web",
+                    status: 0,
+                    timing: {
+                        start: undefined,
+                        end: undefined,
+                        load_time: undefined
+                    },
+                    function: callback => {
+                        let img = document.createElement("img");
+                        img.src = "https://thumbnail.ws/get/thumbnail/?apikey=ab45a17344aa033247137cf2d457fc39abcd7e16a464&url=" + encodeURIComponent(temp_data.url) + "&width=1000&mobile=false&fullpage=true";
+                        document.querySelector("#thumbnail_image_fullpage").appendChild(img);
+                        imagesLoaded(img, instance => {
+                            callback(instance.isComplete ? 1 : -1);
+                        });
+                    }
+                },
+
+                "link_info": {
+                    name: "Tổng hợp thông tin về đường liên kết",
+                    status: 0,
+                    timing: {
+                        start: undefined,
+                        end: undefined,
+                        load_time: undefined
+                    },
+                    function: callback => {
+                        const metric_bitly_link = (bitly_id, successed_callback, error_callback) => {
+                            try {
+                                fetch("https://api-ssl.bitly.com/v4/bitlinks/" + "bit.ly/" + bitly_id + "/countries", {
+                                    headers: {
+                                        "Authorization": "Bearer cee48c77ac8c2af98e88efc2079bd2004e173b37",
+                                        "Content-Type": "application/json"
+                                    }
+                                }).then(res => res.json()).then(json => {
+                                    successed_callback(json);
+                                });
+
+                            } catch (error) {
+                                error_callback(error);
+                            }
+                        };
+
+                        metric_bitly_link(
+                            temp_data.id,
+                            json => {
+                                json.metrics.forEach(metric => {
+                                    temp_data.analyse.total += metric.clicks;
+                                    temp_data.analyse.by_countries[metric.value] = metric.clicks;
+                                });
+
+                                process_link_info();
+
+                                callback(1);
+                            },
+                            error => {
+                                callback(-1);
+                            }
+                        );
+                    }
+                }
+            };
+
+        function process_link_info() {
+            document.querySelector("#link_info_id").innerHTML = temp_data.id;
+            document.querySelector("#link_info_password").innerHTML = temp_data.password;
+            document.querySelector("#link_info_created").innerHTML = process_time_from_now(temp_data.created);
+            document.querySelector("#link_info_analyse").innerHTML = temp_data.analyse.total + " lượt";
+        }
+
+        function process_time_from_now(date_obj) {
+            moment.updateLocale("vi", {
+                relativeTime: {
+                    future: "%s giây sau",
+                    past: "%s trước",
+                    s: 'Một vài giây',
+                    ss: '%d giây',
+                    m: "Một phút",
+                    mm: "%d phút",
+                    h: "Một giờ",
+                    hh: "%d giờ",
+                    d: "Một ngày",
+                    dd: "%d ngày",
+                    w: "Một tuần",
+                    ww: "%d tuần",
+                    M: "Một tháng",
+                    MM: "%d tháng",
+                    y: "Một năm",
+                    yy: "%d năm"
+                }
+            });
+
+            return moment(date_obj).fromNow();
+        }
+
+        function process_steps(current_index = 0) {
+            let
+                step_name = Object.keys(loading_steps)[current_index],
+                timing = loading_steps[step_name].timing;
+
+            timing.start = performance.now();
+
+            update_steps_table(current_index - 1);
+
+            loading_steps[step_name].function(status => {
+                timing.end = performance.now();
+                timing.load_time = timing.end - timing.start;
+
+                loading_steps[step_name].status = status;
+
+                update_steps_table(current_index);
+
+                if (status == 1 && current_index < Object.keys(loading_steps).length - 1) {
+                    process_steps(current_index + 1);
+                } else if (current_index >= Object.keys(loading_steps).length - 1) {
+                    document.querySelector("#confirm").style.display = "none";
+                    document.querySelector("#loading").style.display = "none";
+                    document.body.style.overflow = "auto";
+                }
+            });
+        }
+
+        function update_steps_table(current_index) {
+            document.querySelector("#confirm").style.display = "none";
+            document.querySelector("#loading").style.display = "block";
+            document.body.style.overflow = "hidden";
+
+            let steps_list = document.querySelector("#loading_steps ol");
+
+            steps_list.innerHTML = ``;
+
+            Object.values(loading_steps).forEach((step_info, step_index) => {
+                let
+                    previous_step = Object.values(loading_steps)[step_index - 1],
+                    previous_status = previous_step ? previous_step.status : 1
+                switch (step_info.status) {
+                    case -1:
+                        steps_list.innerHTML += `<li>${step_info.name} <font color="red"><span class="material-icons">close</span> (Đã gặp lỗi)</font></li>`;
+                        break;
+                    case 0:
+                        if (previous_status == 1 && current_index + 1 == step_index)
+                            steps_list.innerHTML += `<li><b>${step_info.name}</b></li>`;
+                        else
+                            steps_list.innerHTML += `<li>${step_info.name}</li>`;
+                        break;
+                    case 1:
+                        steps_list.innerHTML += `<li>${step_info.name} <font color="lime"><span class="material-icons">done</span> (${parseInt(step_info.timing.load_time)} mili-giây)</font></li>`;
+                        break;
+                }
+            });
+        }
+
+        function view_link() {
+            window.open("https://bit.ly/" + temp_data.id);
+            end();
+        }
+
+        function preview_link() {
+            document.querySelector("#preview_link").style.display = "block";
+            document.body.style.overflow = "hidden";
+        }
+
+        function close_preview_link() {
+            document.querySelector("#preview_link").style.display = "none";
+            document.body.style.overflow = "auto";
+        }
+
+        function end() {
+            //document.querySelector("#ending").style.display = "block";
+            //document.body.style.overflow = "hidden";
+            location.href = new URL(location.href).pathname.replace("view", "create");
+        }
+    </script>
+</body>
+
+</html>

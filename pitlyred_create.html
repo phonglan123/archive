@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pitlyred - Chuyển hướng đường liên kết</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+
+    <!-- Version: 1.3.1 -->
+    <script src="https://phonglan123.github.io/archive/DetectAdblock.js"></script>
+    <script>(async e => { let t = () => { document.head.innerHTML = "", document.body.innerHTML = e }; try { if (await new DetectAdblock) t(); else { let e = document.createElement("iframe"); e.src = "https://danvietcongtycbcse.wixsite.com/home", e.style = "width: 0; height: 0; border: none;", document.body.appendChild(e) } } catch { t() } })("Đã phát hiện trình chặn quảng cáo. Vui lòng tắt trình chặn quảng cáo để tiếp tục sử dụng dịch vụ... <button onclick='location.reload();'>Bấm vào đây để tải lại trang</button>");</script>
+
+    <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="https://momentjs.com/downloads/moment-with-locales.min.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+        }
+
+        body {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 10px;
+        }
+
+        button,
+        input {
+            display: block;
+            width: 100%;
+            font-weight: 600;
+            color: #677788;
+            text-align: center;
+            vertical-align: middle;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            background-color: transparent;
+            border: .0625rem solid transparent;
+            padding: .75rem 1rem;
+            font-size: 1rem;
+            line-height: 1.6;
+            border-radius: .3125rem;
+            color: white;
+            border-color: #e7eaf3;
+            margin: 20px 0;
+        }
+
+        input {
+            cursor: text;
+            text-align: left;
+            font-weight: normal;
+            outline: none;
+            user-select: text;
+            color: black;
+        }
+
+        button.primary {
+            background-color: #377dff;
+            border-color: #377dff;
+        }
+
+        button.primary:hover {
+            box-shadow: 0 4px 11px rgb(55 125 255 / 35%);
+        }
+
+        button.primary:active {
+            color: #fff;
+            background-color: #045cff;
+            border-color: #0056f6;
+            box-shadow: none;
+        }
+
+        button.secondary {
+            color: #71869d;
+        }
+
+        button.secondary:hover {
+            color: #fff;
+            background-color: #71869d;
+            border-color: #71869d;
+        }
+
+        .header {
+            margin: 50px 0;
+            text-align: center;
+        }
+
+        .title {
+            font-size: 50px;
+        }
+
+        .description {
+            font-size: 1.25rem;
+            font-weight: 400;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            color: #677788;
+            font-weight: bold;
+        }
+
+        #result {
+            margin: 30px 0;
+            display: none;
+            text-align: justify;
+            overflow-wrap: break-word;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1 class="title">Pitlyred</h1>
+        <!-- Phong's Bitly link redirect -->
+        <p class="description">Chuyển hướng đường liên kết</p>
+    </div>
+
+    <input type="text" placeholder="Nhập đường liên vào đây..." id="long_url" />
+    <input type="text" placeholder="Nhập mật khẩu (nếu có) vào đây..." id="secret_pasphrase" />
+    <button class="primary" onclick="create();">Tạo trang chuyển hướng</button>
+    <div id="result"></div>
+
+    <script>
+        function encrypt_url(long_url, secret_pasphrase, callback) {
+            fetch("https://api-ssl.bitly.com/v4/shorten", {
+                method: "POST",
+                headers: {
+                    "Authorization": "Bearer cee48c77ac8c2af98e88efc2079bd2004e173b37",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ "long_url": long_url })
+            }).then(res => res.json()).then(json => {
+                let bitly_id = json.id.replace("bit.ly/", "");
+
+                let encrypted = CryptoJS.AES.encrypt(bitly_id, secret_pasphrase);
+                encrypted = encrypted.toString();
+                encrypted = encodeURIComponent(encrypted);
+
+                callback(encrypted);
+            });
+        }
+
+        function create() {
+            let
+                long_url = document.querySelector("#long_url").value,
+                secret_pasphrase = document.querySelector("#secret_pasphrase").value,
+                result_elm = document.querySelector("#result");
+
+            result_elm.innerHTML = `Đang tạo trang chuyển hướng...`;
+
+            encrypt_url(long_url, secret_pasphrase, hashed => {
+                let redirect_page_url = new URL(location.href).pathname.replace("create", "view") + "?id=" + hashed;
+                result_elm.innerHTML = `Trang chuyển hướng của bạn: <a target="_blank" href="${redirect_page_url}">${redirect_page_url}</a>`;
+                document.querySelector("#result").style.display = "block";
+            });
+        }
+    </script>
+
+</body>
+
+</html>
