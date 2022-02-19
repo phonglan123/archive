@@ -274,6 +274,7 @@
     }
     function check_title_post(article, main_title, flag) {
         if (full_whitelist[main_title] >= new Date(article.pubDate).getTime()) flag = true;
+        else flag = false;
         return flag;
     }
     function process_wikipedia(urls, current_index, main_title, callback, total_results) {
