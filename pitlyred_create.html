@@ -158,7 +158,7 @@
 
             encrypt_url(long_url, secret_pasphrase, hashed => {
                 let redirect_page_url = new URL(location.href).origin + new URL(location.href).pathname.replace("create", "view") + "?id=" + hashed;
-                result_elm.innerHTML = `Trang chuyển hướng của bạn: <a target="_blank" href="${redirect_page_url}">${redirect_page_url}</a>`;
+                result_elm.innerHTML = `<b>Trang chuyển hướng của bạn:</b><br/><br/><a target="_blank" href="${redirect_page_url}">${redirect_page_url}</a>`;
                 document.querySelector("#result").style.display = "block";
             });
         }
