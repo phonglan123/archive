@@ -60,7 +60,7 @@
         set_whitelist = (article, main_title) => {
             if (main_title == "Reddit")
                 article.pubDate = article.created;
-            if(new Date(article.pubDate).getTime() > full_whitelist[main_title])
+            if (new Date(article.pubDate).getTime() > full_whitelist[main_title])
                 full_whitelist[main_title] = new Date(article.pubDate).getTime();
             localStorage.setItem("whitelist", JSON.stringify(full_whitelist));
         },
@@ -193,6 +193,7 @@
         [(main_title, callback) => fetch("https://api.allorigins.win/get?url=" + encodeURIComponent("https://www.reddit.com/.json?feed=7fdac8ab65101cd21a5d5e6e6f4dfad19071f347&user=phonghng")).then(res => res.json()).then(json => process_reddit(json, main_title, callback)), "Reddit"],
         [(main_title, callback) => process_tinhte("https://tinhte.vn/rss", main_title, callback), "Tinh tế"],
         [(main_title, callback) => process_lostbird("https://api.lostbird.vn/lostbird/public/v1/posts?per_page=50", main_title, callback), "Lost bird"],
+        [(main_title, callback) => process_spiderum("https://spiderum.com/api/v1/feed/getAllPosts?type=new&page=1", main_title, callback), "Spiderum"],
         ["https://news.google.com/publications/CAAqBwgKMI-apgsw96S-Aw?hl=vi&gl=VN&ceid=VN%3Avi", "VnEconomy"],
         ["https://news.google.com/publications/CAAqJAgKIh5DQklTRUFnTWFnd0tDbU5oWm1WaWFYb3VkbTRvQUFQAQ?hl=vi&gl=VN&ceid=VN%3Avi", "Cafebiz"],
         //["https://news.google.com/publications/CAAqIQgKIhtDQklTRGdnTWFnb0tDR05oWm1WbUxuWnVLQUFQAQ?hl=vi&gl=VN&ceid=VN%3Avi", "CafeF"],
@@ -214,7 +215,7 @@
                     article.pubDate = article.date;
                     flag = check_title_post(article, main_title, flag);
                     if (!flag)
-                        document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"" + article.permalink + "\");'><div><h3>" + article.title + "</h3><i>" + article.pubDate + "</i></div></div></div>")
+                        document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"" + article.permalink + "\");'>" + (article.thumbnails.featured ? "<img src='" + article.thumbnails.featured + "'/>" : "") + "<div><h3>" + article.title + "</h3><i>" + article.pubDate + "</i></div></div></div>")
                 });
                 document.body.innerHTML += "<i>Đã tải xong!</i>";
                 set_whitelist(parsed.slice(0, 1)[0], main_title);
@@ -232,6 +233,24 @@
                     flag = check_title_post(article, main_title, flag);
                     if (!flag)
                         document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"" + article.link + "\");'><div><h3>" + article.title + "</h3><i>" + article.creator.__text + " - " + article.pubDate + "</i></div></div></div>")
+                });
+                document.body.innerHTML += "<i>Đã tải xong!</i>";
+                set_whitelist(parsed.slice(0, 1)[0], main_title);
+                callback();
+            });
+    }
+    function process_spiderum(url, main_title, callback) {
+        fetch(url)
+            .then(res => res.json())
+            .then(json => {
+                let parsed = json.posts.items;
+                console.log(parsed);
+                let flag = false;
+                parsed.forEach(article => {
+                    article.pubDate = article.created_at;
+                    flag = check_title_post(article, main_title, flag);
+                    if (!flag)
+                        document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"https://spiderum.com/bai-dang/" + article.slug + "\");'><div>" + (article.og_image_url ? "<img src='" + article.og_image_url + "'/>" : "") + "<h3>" + article.title + "</h3><i>" + article.creator_id.display_name + " - " + article.pubDate + "</i></div></div></div>")
                 });
                 document.body.innerHTML += "<i>Đã tải xong!</i>";
                 set_whitelist(parsed.slice(0, 1)[0], main_title);
