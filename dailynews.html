@@ -224,20 +224,14 @@
         //["https://news.google.com/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRFZxYUdjU0FuWnBHZ0pXVGlnQVAB/sections/CAQiS0NCQVNNZ29JTDIwdk1EVnFhR2NTQW5acEdnSldUaUlPQ0FRYUNnb0lMMjB2TURadWRHb3FEZ29NRWdwVWFPRzdneUIwYUdGdktBQSoqCAAqJggKIiBDQkFTRWdvSUwyMHZNRFZxYUdjU0FuWnBHZ0pXVGlnQVABUAE?hl=vi&gl=VN&ceid=VN%3Avi", "Thể thao"]
     ];
     function process_weather(callback) {
-        document.body.innerHTML += `<div id="ww_cd01e0259e2dc" v='1.20' loc='auto' a='{"t":"horizontal","lang":"vi","ids":[],"cl_bkg":"image","cl_font":"#FFFFFF","cl_cloud":"#FFFFFF","cl_persp":"#81D4FA","cl_sun":"#FFC107","cl_moon":"#FFC107","cl_thund":"#FF5722","sl_sot":"celsius","sl_ics":"one","font":"Arial"}' style="max-width: 100%;">Weather for the Following Location: <a href="https://2ua.org/fra/paris/map/" id="ww_cd01e0259e2dc_u" target="_blank">Paris on Map</a></div><br/><br/><div id="ww_f0329eafc322d" v='1.20' loc='auto' a='{"t":"responsive","lang":"vi","ids":[],"cl_bkg":"image","cl_font":"#FFFFFF","cl_cloud":"#FFFFFF","cl_persp":"#81D4FA","cl_sun":"#FFC107","cl_moon":"#FFC107","cl_thund":"#FF5722","sl_sot":"celsius","sl_ics":"one","font":"Arial"}'>Weather for the Following Location: <a href="https://2ua.org/usa/los_angeles/map/" id="ww_f0329eafc322d_u" target="_blank">Los Angeles on Map</a></div>`;
         let script_tag;
-        script_tag = document.createElement("script");
-        script_tag.src = "https://srv2.weatherwidget.org/js/?id=ww_cd01e0259e2dc";
+        script_tag = document.createElement("iframe");
+        script_tag.src = "https://www.tomorrow.io/weather/vi/daily/";
+        script_tag.style = "width: 100%; height: 100%; border: none; border-radius: 10px;";
         document.body.appendChild(script_tag);
-        script_tag = document.createElement("script");
-        script_tag.src = "https://srv2.weatherwidget.org/js/?id=ww_f0329eafc322d";
-        document.body.appendChild(script_tag);
-        let interval = setInterval(() => {
-            if (document.querySelectorAll(".ww-box").length == 2) {
-                clearInterval(interval);
-                callback();
-            }
-        }, 1000);
+        script_tag.onload = function() {
+            callback();
+        }
     }
     function process_quote(quotes, main_title, callback) {
         let
