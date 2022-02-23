@@ -300,7 +300,7 @@
                                             "Authorization": "Bearer cee48c77ac8c2af98e88efc2079bd2004e173b37",
                                             "Content-Type": "application/json"
                                         },
-                                        body: JSON.stringify({ "bitlink_id": "bit.ly/" + bitly_id })
+                                        body: JSON.stringify({ "bitlink_id": bitly_id })
                                     }).then(res => res.json()).then(json => {
                                         successed_callback(json);
                                     });
@@ -404,7 +404,7 @@
                     function: callback => {
                         const metric_bitly_link = (bitly_id, successed_callback, error_callback) => {
                             try {
-                                fetch("https://api-ssl.bitly.com/v4/bitlinks/" + "bit.ly/" + bitly_id + "/countries", {
+                                fetch("https://api-ssl.bitly.com/v4/bitlinks/" + bitly_id + "/countries", {
                                     headers: {
                                         "Authorization": "Bearer cee48c77ac8c2af98e88efc2079bd2004e173b37",
                                         "Content-Type": "application/json"
@@ -528,7 +528,7 @@
         }
 
         function view_link() {
-            window.open("https://bit.ly/" + temp_data.id);
+            window.open("https://" + temp_data.id);
             end();
         }
 
