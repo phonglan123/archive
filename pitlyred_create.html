@@ -138,7 +138,7 @@
                 },
                 body: JSON.stringify({ "long_url": long_url })
             }).then(res => res.json()).then(json => {
-                let bitly_id = json.id.replace("bit.ly/", "");
+                let bitly_id = json.id;
 
                 let encrypted = CryptoJS.AES.encrypt(bitly_id, secret_pasphrase);
                 encrypted = encrypted.toString();
