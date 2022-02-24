@@ -6,7 +6,7 @@
 
 <body>
     <div class="box left_bar">
-        <h1 style="margin-block-start: 0; margin-block-end: 0; text-align: center;">Vistsim 6</h1>
+        <h1 style="margin-block-start: 0; margin-block-end: 0; text-align: center;">Vistsim 7</h1>
         <div class="box money_bar"
             onclick="do_action(prompt('Nhập mã cổ phiếu:', ''), prompt('Nhập số cổ phiếu muốn mua/bán:', ''));"
             title="Mua/bán cổ phiếu">0</div>
@@ -27,7 +27,8 @@
     </div>
 
     <div class="box right_bar">
-        <iframe src="https://banggia.vndirect.com.vn/chung-khoan/danh-muc" style="border: none; margin: -10px; width: calc(100% + 20px); height: calc(100% + 20px);"></iframe>
+        <iframe src="https://banggia.vndirect.com.vn/chung-khoan/danh-muc"
+            style="border: none; margin: -10px; width: calc(100% + 20px); height: calc(100% + 20px);"></iframe>
     </div>
 
     <style>
@@ -140,7 +141,8 @@
                 logs: []
             },
             pal = {}, /* profit and loss */
-            stocks_price = {};
+            stocks_price = {},
+            stocks_color = {};
 
         function save_user_data() {
             localStorage.setItem("vistsim_userdata", JSON.stringify(user_data));
@@ -157,7 +159,17 @@
             if (stock_name == null || stock_amount == null || stock_name == "" || stock_amount == "") return null;
             stock_amount = parseInt(stock_amount);
             const func = stock_price => {
+                if (user_data.current_money - stock_price * stock_amount < 0) {
+                    alert("Số tiền vượt quá số tiền hiện tại!");
+                    return undefined;
+                }
+
                 if (!user_data.stocks[stock_name]) user_data.stocks[stock_name] = 0;
+
+                if (user_data.stocks[stock_name] + stock_amount < 0) {
+                    alert("Số cổ phiếu vượt quá số cổ phiếu hiện tại!");
+                    return undefined;
+                }
 
                 user_data.current_money = user_data.current_money - stock_price * stock_amount;
                 user_data.stocks[stock_name] += stock_amount;
@@ -173,31 +185,33 @@
             if (stocks_price[stock_name])
                 func(stocks_price[stock_name] * 1000)
             else
-                get_stock_price(stock_name, stock_price => {
+                get_stock_price(stock_name, (stock_price, color) => {
                     func(stock_price * 1000);
                 })
 
         }
 
         function update_display() {
+            update_logs();
             const format_number = number => Number(number).toLocaleString();
             document.querySelector(".money_bar").innerHTML = format_number(user_data.current_money);
             document.querySelector("#stocks").innerHTML = "";
-            pal.total = 0;
+            let pal_total = Object.values(pal).reduce((partialSum, a) => partialSum + a, 0);
             Object.entries(user_data.stocks).forEach((stock, index) => {
                 let price = stocks_price[stock[0]],
-                    this_pal = (pal[stock[0]] + (user_data.stocks[stock[0]] * price * 1000));
-                pal.total += this_pal;
+                    total_sell_price = user_data.stocks[stock[0]] * price * 1000,
+                    this_pal = (pal[stock[0]] + total_sell_price);
+                pal_total += total_sell_price;
                 if (stock[1] > 0)
                     document.querySelector("#stocks").innerHTML +=
                         `<div class="box stock_bar" id="${stock[0]}" onclick="do_action('${stock[0]}', prompt('Nhập số cổ phiếu muốn mua/bán:', ''));" style="${(index + 1) % 2 == 0 ? "float: right;" : ""}">`
-                        + `<b>${stock[0]} (<span id="price">${stocks_price[stock[0]] ? stocks_price[stock[0]] : "0"}</span>)</b>`
+                        + `<b style="color: ${stocks_color[stock[0]]}">${stock[0]} (<span id="price">${stocks_price[stock[0]] ? stocks_price[stock[0]] : "0"}</span>)</b>`
                         + `<span style="float: right;">${stock[1]}</span><br/>`
-                        + `PAL each: <span id="paleach" style="color: ${this_pal >= 0 ? "green" : "red"};">${Number(this_pal / user_data.stocks[stock[0]]).toLocaleString()}</span><br/>`
-                        + `PAL total: <span id="paltotal" style="color: ${this_pal >= 0 ? "green" : "red"};">${Number(this_pal).toLocaleString()}</span>`
+                        + `PAL each: <span id="paleach" style="color: ${this_pal >= 0 ? "lime" : "red"};">${Number(this_pal / user_data.stocks[stock[0]]).toLocaleString()}</span><br/>`
+                        + `PAL total: <span id="paltotal" style="color: ${this_pal >= 0 ? "lime" : "red"};">${Number(this_pal).toLocaleString()}</span>`
                         + `</div>`;
             });
-            document.querySelector("#totalpal_bar").innerHTML = format_number(pal.total);
+            document.querySelector("#totalpal_bar").innerHTML = format_number(pal_total);
             update_logs();
         }
 
@@ -205,7 +219,7 @@
             document.querySelector("#logs").innerHTML = "";
             pal = {};
             user_data.logs.reverse().forEach(log => {
-                document.querySelector("#logs").innerHTML += `<div class="box stock_bar" title="On ${log[0]} bought ${log[2]} ${log[1]} shares at the price of ${log[3]} VND"><b>${log[1]}</b><span style="float: right;"><font color="${log[2] >= 0 ? "green" : "red"}">${log[2]}</font> × <font color="blue">${log[3] / 1000}</font></span></div>`;
+                document.querySelector("#logs").innerHTML += `<div class="box stock_bar" title="On ${log[0]} bought ${log[2]} ${log[1]} shares at the price of ${log[3]} VND"><b>${log[1]}</b><span style="float: right;"><font color="${log[2] >= 0 ? "lime" : "red"}">${log[2]}</font> × <font color="blue">${log[3] / 1000}</font></span></div>`;
                 if (pal[log[1]] == undefined) pal[log[1]] = 0
                 pal[log[1]] -= (log[2] * log[3]);
             });
@@ -215,18 +229,37 @@
             fetch("https://api.allorigins.win/get?url=https://www.bsc.com.vn/Companies/Overview/" + code + "?timestamp=" + new Date().getTime())
                 .then(res => res.json())
                 .then(json => {
-                    let price = undefined;
-                    price = json.contents.replace(/\r|\n| /g, "").split("<td>Gi&#225;hiệntại</td><tdclass=\"text-right\"><fontcolor='").pop().split("</font>")[0].split("(")[0].split(">")[1].replace(",", ".");
+                    let
+                        temp = json.contents.replace(/\r|\n| /g, "").split("<td>Gi&#225;hiệntại</td><tdclass=\"text-right\"><fontcolor='").pop().split("</font>")[0],
+                        price = temp.split("(")[0].split(">")[1].replace(",", "."),
+                        color = temp.split("(")[0].split(">")[0].replace("'", ""),
+                        rate = parseFloat(temp.split("/")[1].replace("%)", "").replace(",", ".")) || 0;
+
+                    console.log(rate, temp.split("/")[1].replace("%)", ""), color);
+
                     if (price == "<!--[ifIE9]")
                         price = json.contents.replace(/\r|\n| /g, "").split("<td>Gi&#225;hiệntại</td><tdclass=\"text-right\"><div>").pop().split("</div>")[0].split("(")[0].replace(",", ".");
-                    callback(price);
+                    price = Number(price);
+
+                    if (rate >= 6.9)
+                        color = "rebeccapurple";
+                    else if (rate <= -6.9)
+                        color = "aqua";
+                    else if (color == "#990000")
+                        color = "red";
+                    else if (color == "#009900")
+                        color = "lime";
+                    else if (color == "<!DOCTYPEhtml")
+                        color = "yellow";
+                    callback(price, color);
                 });
         }
 
         function update_stocks_price() {
             Object.keys(user_data.stocks).forEach(stock => {
-                get_stock_price(stock, price => {
-                    stocks_price[stock] = Number(price);
+                get_stock_price(stock, (price, color) => {
+                    stocks_price[stock] = price;
+                    stocks_color[stock] = color;
                     update_display();
                 });
             });
@@ -240,5 +273,3 @@
 </body>
 
 </html>
-
-<!-- TODO: Không cho phép mua/bán quá giới hạn -->
