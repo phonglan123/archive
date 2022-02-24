@@ -205,7 +205,7 @@
                 if (stock[1] > 0)
                     document.querySelector("#stocks").innerHTML +=
                         `<div class="box stock_bar" id="${stock[0]}" onclick="do_action('${stock[0]}', prompt('Nhập số cổ phiếu muốn mua/bán:', ''));" style="${(index + 1) % 2 == 0 ? "float: right;" : ""}">`
-                        + `<b style="color: ${stocks_color[stock[0]]}">${stock[0]} (<span id="price">${stocks_price[stock[0]] ? stocks_price[stock[0]] : "0"}</span>)</b>`
+                        + `<b>${stock[0]} (<span id="price" style="color: ${stocks_color[stock[0]]}">${stocks_price[stock[0]] ? stocks_price[stock[0]] : "0"}</span>)</b>`
                         + `<span style="float: right;">${stock[1]}</span><br/>`
                         + `PAL each: <span id="paleach" style="color: ${this_pal >= 0 ? "lime" : "red"};">${Number(this_pal / user_data.stocks[stock[0]]).toLocaleString()}</span><br/>`
                         + `PAL total: <span id="paltotal" style="color: ${this_pal >= 0 ? "lime" : "red"};">${Number(this_pal).toLocaleString()}</span>`
