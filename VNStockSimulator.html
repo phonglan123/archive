@@ -6,7 +6,8 @@
 
 <body>
     <div class="box left_bar">
-        <h1 style="margin-block-start: 0; margin-block-end: 0; text-align: center;">Vistsim 7.2</h1>
+        <h1 style="margin-block-start: 0; margin-block-end: 0; text-align: center;"
+            onclick="get_stock_info(prompt('Nhập mã cổ phiếu:', ''));" title="Xem thông tin cổ phiếu">Vistsim 8</h1>
         <div class="box money_bar"
             onclick="do_action(prompt('Nhập mã cổ phiếu:', ''), prompt('Nhập số cổ phiếu muốn mua/bán:', ''));"
             title="Mua/bán cổ phiếu">0</div>
@@ -75,6 +76,19 @@
             float: right;
         }
 
+        .stock_info {
+            background-color: #333333;
+            padding: 20px;
+            width: 400px;
+            height: calc(100% - 16px);
+            overflow: auto;
+            float: right;
+            position: fixed;
+            bottom: 8px;
+            left: 8px;
+            text-align: justify;
+        }
+
         .liveboard {
             width: calc(100% - 220px - 10px);
             margin-left: 5px;
@@ -131,7 +145,67 @@
         .action_box button:active {
             background-color: #414141;
         }
+
+        table {
+            border: none !important;
+        }
+
+        tr,
+        td {
+            padding: 5px;
+        }
+
+        .mainheader {
+            font-size: 25px;
+        }
+
+        .margin-top-30 {
+            margin-top: 30px;
+        }
+
+        .margin-top-20 {
+            margin-top: 20px;
+        }
+
+        .margin-top-10 {
+            margin-top: 10px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 15px;
+            height: 15px;
+            background-color: transparent;
+        }
+
+        ::-webkit-scrollbar-track {
+            background-color: transparent;
+            border-radius: 0 20px 20px 0;
+            /*border-left: 1px solid #ccc;*/
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #ddd;
+            border-radius: 20px;
+            border: 4px solid transparent;
+            background-clip: content-box;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: grey;
+        }
+
+        .button {
+            cursor: pointer;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+            border-color: red;
+        }
     </style>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
         let
@@ -142,7 +216,8 @@
             },
             pal = {}, /* profit and loss */
             stocks_price = {},
-            stocks_color = {};
+            stocks_color = {},
+            stocks_rate = {};
 
         function save_user_data() {
             localStorage.setItem("vistsim_userdata", JSON.stringify(user_data));
@@ -185,7 +260,7 @@
             if (stocks_price[stock_name])
                 func(stocks_price[stock_name] * 1000)
             else
-                get_stock_price(stock_name, (stock_price, color) => {
+                get_stock_price(stock_name, (stock_price) => {
                     func(stock_price * 1000);
                 })
 
@@ -205,7 +280,7 @@
                 if (stock[1] > 0)
                     document.querySelector("#stocks").innerHTML +=
                         `<div class="box stock_bar" id="${stock[0]}" onclick="do_action('${stock[0]}', prompt('Nhập số cổ phiếu muốn mua/bán:', ''));" style="${(index + 1) % 2 == 0 ? "float: right;" : ""}">`
-                        + `<b>${stock[0]} (<span id="price" style="color: ${stocks_color[stock[0]]}">${stocks_price[stock[0]] ? stocks_price[stock[0]] : "0"}</span>)</b>`
+                        + `<b>${stock[0]} (<span id="price" style="color: ${stocks_color[stock[0]]}" title="${stocks_rate[stock[0]]}%">${stocks_price[stock[0]] ? stocks_price[stock[0]] : "0"}</span>)</b>`
                         + `<span style="float: right;">${stock[1]}</span><br/>`
                         + `PAL each: <span id="paleach" style="color: ${this_pal >= 0 ? "lime" : "red"};">${Number(this_pal / user_data.stocks[stock[0]]).toLocaleString()}</span><br/>`
                         + `PAL total: <span id="paltotal" style="color: ${this_pal >= 0 ? "lime" : "red"};">${Number(this_pal).toLocaleString()}</span>`
@@ -225,15 +300,34 @@
             });
         }
 
+        function get_stock_info(code) {
+            if (code != null && code != "")
+                fetch("https://api.allorigins.win/get?url=https://www.bsc.com.vn/Companies/Overview/" + code + "?timestamp=" + new Date().getTime())
+                    .then(res => res.json())
+                    .then(json => {
+                        $.parseHTML(json.contents).forEach(elm => {
+                            if (elm.className == "container") {
+                                let popup = document.createElement("div");
+                                popup.classList.add("stock_info", "box");
+                                popup.innerHTML = "<div class='button box' onclick='this.parentElement.style.display = \"none\";'>Đóng hộp thoại này</div>";
+                                popup.innerHTML += elm.querySelector("div.content-page > div.row.margin-0 > div.col-md-9.col-sm-8.col-xs-12.content-right > div:nth-child(1)").innerHTML;
+                                document.body.appendChild(popup);
+                            }
+                        });
+                    });
+        }
+
         function get_stock_price(code, callback) {
             fetch("https://api.allorigins.win/get?url=https://www.bsc.com.vn/Companies/Overview/" + code + "?timestamp=" + new Date().getTime())
                 .then(res => res.json())
                 .then(json => {
                     let
+                        stock_ex = json.contents.replace(/\r|\n| /g, "").split("<td>S&#224;n</td><tdclass=\"text-right\">").pop().split("</td>")[0],
                         temp = json.contents.replace(/\r|\n| /g, "").split("<td>Gi&#225;hiệntại</td><tdclass=\"text-right\"><fontcolor='").pop().split("</font>")[0],
                         price = temp.split("(")[0].split(">")[1].replace(",", "."),
                         color = temp.split("(")[0].split(">")[0].replace("'", ""),
-                        rate = parseFloat(temp.split("/")[1].replace("%)", "").replace(",", ".")) || 0;
+                        rate = parseFloat(temp.split("/")[1].replace("%)", "").replace(",", ".")) || 0,
+                        min_max_rate = (stock_ex == "HOSE" ? 6.9 : (stock_ex == "HNX" ? 9.5 : 14));
 
                     if (price == "<!--[ifIE9]")
                         price = json.contents.replace(/\r|\n| /g, "").split("<td>Gi&#225;hiệntại</td><tdclass=\"text-right\"><div>").pop().split("</div>")[0].split("(")[0].replace(",", ".");
@@ -249,15 +343,17 @@
                         color = "lime";
                     else if (color == "<!DOCTYPEhtml")
                         color = "yellow";
-                    callback(price, color);
+
+                    callback(price, color, rate);
                 });
         }
 
         function update_stocks_price() {
             Object.keys(user_data.stocks).forEach(stock => {
-                get_stock_price(stock, (price, color) => {
+                get_stock_price(stock, (price, color, rate) => {
                     stocks_price[stock] = price;
                     stocks_color[stock] = color;
+                    stocks_rate[stock] = rate;
                     update_display();
                 });
             });
