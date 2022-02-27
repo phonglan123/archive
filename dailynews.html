@@ -646,7 +646,7 @@
                 window.history.pushState('page2', 'Title', new URL(location.href).pathname);
                 let token = JSON.parse(xhr.responseText).access_token,
                     refresh_token = JSON.parse(xhr.responseText).refresh_token;
-                //console.log(getCookie("ggauth_refresh_token"), xhr.responseText, token, refresh_token);
+                console.log(getCookie("ggauth_refresh_token"), xhr.responseText, token, refresh_token);
                 callback(token, refresh_token);
             }
         };
@@ -659,7 +659,6 @@
     function refresh_token(type, callback) {
         let code = (type == "authorization_code" ? new URL(location.href).searchParams.get("code") : getCookie("ggauth_refresh_token"));
         send_gg_auth(code, (token, refresh_token) => {
-            console.log(token, refresh_token);
             if (refresh_token)
                 setCookie("ggauth_refresh_token", refresh_token, access_token_cookie_exdays);
             callback(token);
