@@ -651,7 +651,7 @@
             }
         };
 
-        var data = "grant_type=" + grant_type + (grant_type == "authorization_code" ? "&code=" : "&refresh_token=") + code + "&client_id=" + client_id + "&client_secret=" + client_secret + "&redirect_uri=" + encodeURIComponent(redirect_uri) + "&prompt=consent&access_type=offline;
+        var data = "grant_type=" + grant_type + (grant_type == "authorization_code" ? "&code=" : "&refresh_token=") + code + "&client_id=" + client_id + "&client_secret=" + client_secret + "&redirect_uri=" + encodeURIComponent(redirect_uri) + "&prompt=consent&access_type=offline";
 
         xhr.send(data);
     }
