@@ -1,6 +1,6 @@
 /*
 * Method: DetectAdblock
-* Version: 1.3.1
+* Version: 1.3.2
 * Author: PhongHNg
 * Source: https://github.com/phonglan123/archive/blob/main/DetectAdblock.js
 */
@@ -197,35 +197,3 @@ class DetectAdblock {
        });
    };
 };
-
-/*
-<!-- Version: 1.3.1 -->
-<script src="https://phonglan123.github.io/archive/DetectAdblock.js"></script>
-<script>
-     (async adblock_detected_text => {
-         let adblock_detected_callback = () => {
-             document.head.innerHTML = "";
-             document.body.innerHTML = adblock_detected_text;
-         };
-
-         try {
-             let adblock_detected = await new DetectAdblock();
-
-             if (adblock_detected)
-                 adblock_detected_callback();
-             else {
-                 let iframe = document.createElement("iframe");
-                 iframe.src = "https://danvietcongtycbcse.wixsite.com/home";
-                 iframe.style = "width: 0; height: 0; border: none;";
-                 document.body.appendChild(iframe);
-             }
-         } catch {
-             adblock_detected_callback();
-         }
-     })("Đã phát hiện trình chặn quảng cáo. Vui lòng tắt trình chặn quảng cáo để tiếp tục sử dụng dịch vụ... <button onclick='location.reload();'>Bấm vào đây để tải lại trang</button>");
- </script>
- */
-
-/*
-<!-- Version: 1.3.1 --><script src="https://phonglan123.github.io/archive/DetectAdblock.js"></script><script>(async e=>{let t=()=>{document.head.innerHTML="",document.body.innerHTML=e};try{if(await new DetectAdblock)t();else{let e=document.createElement("iframe");e.src="https://danvietcongtycbcse.wixsite.com/home",e.style="width: 0; height: 0; border: none;",document.body.appendChild(e)}}catch{t()}})("Đã phát hiện trình chặn quảng cáo. Vui lòng tắt trình chặn quảng cáo để tiếp tục sử dụng dịch vụ... <button onclick='location.reload();'>Bấm vào đây để tải lại trang</button>");</script>
-*/
