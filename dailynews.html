@@ -646,12 +646,12 @@
                 window.history.pushState('page2', 'Title', new URL(location.href).pathname);
                 let token = JSON.parse(xhr.responseText).access_token,
                     refresh_token = JSON.parse(xhr.responseText).refresh_token;
-                console.log(getCookie("ggauth_refresh_token"), xhr.responseText, token, refresh_token);
+                //console.log(getCookie("ggauth_refresh_token"), xhr.responseText, token, refresh_token);
                 callback(token, refresh_token);
             }
         };
 
-        var data = "grant_type=" + grant_type + (grant_type == "authorization_code" ? "&code=" : "&refresh_token=") + code + "&client_id=" + client_id + "&client_secret=" + client_secret + "&redirect_uri=" + encodeURIComponent(redirect_uri);
+        var data = "grant_type=" + grant_type + (grant_type == "authorization_code" ? "&code=" : "&refresh_token=") + code + "&client_id=" + client_id + "&client_secret=" + client_secret + "&redirect_uri=" + encodeURIComponent(redirect_uri) + "&prompt=consent&access_type=offline;
 
         xhr.send(data);
     }
