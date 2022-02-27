@@ -171,8 +171,6 @@
 </head>
 
 <body style="overflow: hidden;">
-    <!-- Có confirm có muốn truy cập link -> load -> confirm redirect new tab -->
-
     <div class="fullscreen" id="confirm">
         <div class="fullscreen_inner">
             <div class="header">
@@ -209,7 +207,7 @@
     <h1>Thông tin đường liên kết</h1>
     <table>
         <tr>
-            <th>Mã (Bitly)</th>
+            <th>Mã liên kết</th>
             <td id="link_info_id"><br /></td>
         </tr>
         <tr>
@@ -435,7 +433,7 @@
             };
 
         function process_link_info() {
-            document.querySelector("#link_info_id").innerHTML = temp_data.id;
+            document.querySelector("#link_info_id").innerHTML = decodeURIComponent(new URL(location.href).searchParams.get("id")); //temp_data.id
             document.querySelector("#link_info_password").innerHTML = temp_data.password;
             document.querySelector("#link_info_created").innerHTML = process_time_from_now(temp_data.created);
             document.querySelector("#link_info_analyse").innerHTML = temp_data.analyse.total + " lượt";
