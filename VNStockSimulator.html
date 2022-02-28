@@ -336,7 +336,7 @@
                         price = temp.split("(")[0].split(">")[1].replace(",", "."),
                         color = temp.split("(")[0].split(">")[0].replace("'", ""),
                         rate = undefined,
-                        min_max_rate = (stock_ex == "HOSE" ? 6.9 : (stock_ex == "HNX" ? 9.5 : 14));
+                        min_max_rate = (stock_ex == "HOSE" ? 6.5 : (stock_ex == "HNX" ? 9.5 : 14));
 
                     rate = parseFloat(temp.split("/")[1].replace("%)", "").replace(",", ".")) || 0;
                     rate = parseFloat(rate.toFixed(1));
