@@ -7,7 +7,7 @@
 <body>
     <div class="box left_bar">
         <h1 style="margin-block-start: 0; margin-block-end: 0; text-align: center;"
-            onclick="get_stock_info(prompt('Nhập mã cổ phiếu:', ''));" title="Xem thông tin cổ phiếu">Vistsim 8</h1>
+            onclick="get_stock_info(prompt('Nhập mã cổ phiếu:', ''));" title="Xem thông tin cổ phiếu">Vistsim 9</h1>
         <div class="box money_bar"
             onclick="do_action(prompt('Nhập mã cổ phiếu:', ''), prompt('Nhập số cổ phiếu muốn mua/bán:', ''));"
             title="Mua/bán cổ phiếu">0</div>
@@ -268,15 +268,24 @@
 
         function update_display() {
             update_logs();
-            const format_number = number => Number(number).toLocaleString();
+            const
+                format_number = number => Number(number).toLocaleString(),
+                calculate_pal = stock_name => {
+                    let price = stocks_price[stock_name],
+                        total_sell_price = user_data.stocks[stock_name] * price * 1000,
+                        this_pal = (pal[stock_name] + total_sell_price);
+                    return { price, total_sell_price, this_pal };
+                };
             document.querySelector(".money_bar").innerHTML = format_number(user_data.current_money);
             document.querySelector("#stocks").innerHTML = "";
             let pal_total = Object.values(pal).reduce((partialSum, a) => partialSum + a, 0);
-            Object.entries(user_data.stocks).forEach((stock, index) => {
-                let price = stocks_price[stock[0]],
-                    total_sell_price = user_data.stocks[stock[0]] * price * 1000,
-                    this_pal = (pal[stock[0]] + total_sell_price);
-                pal_total += total_sell_price;
+            let stocks = Object.entries(user_data.stocks);
+            stocks = stocks.sort((a, b) => calculate_pal(b[0]).this_pal - calculate_pal(a[0]).this_pal);
+            stocks.forEach((stock, index) => {
+                let
+                    pal = calculate_pal(stock[0]),
+                    this_pal = pal.this_pal;
+                pal_total += pal.total_sell_price;
                 if (stock[1] > 0)
                     document.querySelector("#stocks").innerHTML +=
                         `<div class="box stock_bar" id="${stock[0]}" onclick="do_action('${stock[0]}', prompt('Nhập số cổ phiếu muốn mua/bán:', ''));" style="${(index + 1) % 2 == 0 ? "float: right;" : ""}">`
@@ -326,8 +335,11 @@
                         temp = json.contents.replace(/\r|\n| /g, "").split("<td>Gi&#225;hiệntại</td><tdclass=\"text-right\"><fontcolor='").pop().split("</font>")[0],
                         price = temp.split("(")[0].split(">")[1].replace(",", "."),
                         color = temp.split("(")[0].split(">")[0].replace("'", ""),
-                        rate = parseFloat(temp.split("/")[1].replace("%)", "").replace(",", ".")) || 0,
+                        rate = undefined,
                         min_max_rate = (stock_ex == "HOSE" ? 6.9 : (stock_ex == "HNX" ? 9.5 : 14));
+
+                    rate = parseFloat(temp.split("/")[1].replace("%)", "").replace(",", ".")) || 0;
+                    rate = parseFloat(rate.toFixed(1));
 
                     if (price == "<!--[ifIE9]")
                         price = json.contents.replace(/\r|\n| /g, "").split("<td>Gi&#225;hiệntại</td><tdclass=\"text-right\"><div>").pop().split("</div>")[0].split("(")[0].replace(",", ".");
