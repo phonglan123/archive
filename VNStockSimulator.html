@@ -269,7 +269,7 @@
         }
 
         function update_display() {
-            update_logs(); update_logs();
+            update_logs();
             const
                 format_number = number => Number(number).toLocaleString(),
                 calculate_pal = stock_name => {
@@ -310,7 +310,6 @@
                         + `</div>`;
             });
             document.querySelector("#totalpal_bar").innerHTML = format_number(real_pal);
-            update_logs(); update_logs();
         }
 
         function update_logs() {
