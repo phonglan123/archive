@@ -7,7 +7,7 @@
 <body>
     <div class="box left_bar">
         <h1 style="margin-block-start: 0; margin-block-end: 0; text-align: center;"
-            onclick="get_stock_info(prompt('Nhập mã cổ phiếu:', ''));" title="Xem thông tin cổ phiếu">VNS 10</h1>
+            onclick="get_stock_info(prompt('Nhập mã cổ phiếu:', ''));" title="Xem thông tin cổ phiếu">VNS 10+</h1>
         <!-- VNS = Vistsim = Vietnam Stock Simulator -->
         <div class="box money_bar"
             onclick="do_action(prompt('Nhập mã cổ phiếu:', ''), prompt('Nhập số cổ phiếu muốn mua/bán:', ''));"
@@ -55,7 +55,7 @@
         .box:hover,
         .action_box input:hover,
         .action_box button:hover {
-            border-color: white;
+            border-color: white !important;
         }
 
         .left_bar {
@@ -269,7 +269,7 @@
         }
 
         function update_display() {
-            update_logs();
+            update_logs(); update_logs(); update_logs();
             const
                 format_number = number => Number(number).toLocaleString(),
                 calculate_pal = stock_name => {
@@ -277,6 +277,12 @@
                         total_sell_price = user_data.stocks[stock_name] * price * 1000,
                         this_pal = (pal[stock_name] + total_sell_price);
                     return { price, total_sell_price, this_pal };
+                },
+                stock_bar_border_color = (this_pal, real_pal) => {
+                    let rate = this_pal / real_pal;
+                    if(rate >= 0.3) return "lime";
+                    else if (rate <= -0.3) return "red";
+                    else return "#555";
                 };
             document.querySelector(".money_bar").innerHTML = format_number(user_data.current_money);
             document.querySelector("#stocks").innerHTML = "";
@@ -288,27 +294,38 @@
                     pal = calculate_pal(stock[0]),
                     this_pal = pal.this_pal;
                 stocks_total_sell_price += pal.total_sell_price;
+            });
+            let real_pal = 0 - start_money + user_data.current_money + stocks_total_sell_price;
+            stocks.forEach((stock, index) => {
+                let
+                    pal = calculate_pal(stock[0]),
+                    this_pal = pal.this_pal;
                 if (stock[1] > 0)
                     document.querySelector("#stocks").innerHTML +=
-                        `<div class="box stock_bar" id="${stock[0]}" onclick="do_action('${stock[0]}', prompt('Nhập số cổ phiếu muốn mua/bán:', ''));" style="${(index + 1) % 2 == 0 ? "float: right;" : ""}">`
+                        `<div class="box stock_bar" id="${stock[0]}" onclick="do_action('${stock[0]}', prompt('Nhập số cổ phiếu muốn mua/bán:', ''));" style="${(index + 1) % 2 == 0 ? "float: right;" : ""}; border: 1px solid ${stock_bar_border_color(this_pal, real_pal)}">`
                         + `<b>${stock[0]} (<span id="price" style="color: ${stocks_color[stock[0]]}" title="${stocks_rate[stock[0]]}%">${stocks_price[stock[0]] ? stocks_price[stock[0]] : "0"}</span>)</b>`
                         + `<span style="float: right;">${stock[1]}</span><br/>`
                         + `PAL each: <span id="paleach" style="color: ${this_pal >= 0 ? "lime" : "red"};">${parseInt(this_pal / user_data.stocks[stock[0]]).toLocaleString()}</span><br/>`
                         + `PAL total: <span id="paltotal" style="color: ${this_pal >= 0 ? "lime" : "red"};">${parseInt(this_pal).toLocaleString()}</span>`
                         + `</div>`;
             });
-            document.querySelector("#totalpal_bar").innerHTML = format_number(0 - start_money + user_data.current_money + stocks_total_sell_price);
-            update_logs();
+            document.querySelector("#totalpal_bar").innerHTML = format_number(real_pal);
+            update_logs(); update_logs(); update_logs();
         }
 
         function update_logs() {
+            let stocks_amount = {}
             document.querySelector("#logs").innerHTML = "";
             pal = {};
             user_data.logs.reverse().forEach(log => {
                 document.querySelector("#logs").innerHTML += `<div class="box stock_bar" title="On ${log[0]} bought ${log[2]} ${log[1]} shares at the price of ${log[3]} VND"><b>${log[1]}</b><span style="float: right;"><font color="${log[2] >= 0 ? "lime" : "red"}">${log[2]}</font> × <font color="blue">${log[3] / 1000}</font></span></div>`;
+                if (stocks_amount[log[1]] == undefined) stocks_amount[log[1]] = 0;
+                stocks_amount[log[1]] += log[2];
                 if (pal[log[1]] == undefined) pal[log[1]] = 0;
                 pal[log[1]] -= (log[2] * log[3]);
+                if (stocks_amount[log[1]] == 0) pal[log[1]] = 0;
             });
+            console.log(1);
         }
 
         function get_stock_info(code) {
@@ -362,20 +379,28 @@
                 });
         }
 
+        function update_logs_and_display() {
+            update_logs();
+            update_display();
+        }
+
         function update_stocks_price() {
+            update_logs_and_display();
             Object.keys(user_data.stocks).forEach(stock => {
                 get_stock_price(stock, (price, color, rate) => {
                     stocks_price[stock] = price;
                     stocks_color[stock] = color;
                     stocks_rate[stock] = rate;
-                    update_display();
+                    update_logs_and_display();
                 });
             });
+            update_logs_and_display();
         }
 
         load_user_data();
-        setTimeout(() => update_display(), 1000);
+        setTimeout(() => update_logs_and_display(), 1000);
         update_stocks_price();
+        update_logs_and_display();
         setInterval(() => update_stocks_price(), 10000);
     </script>
 </body>
