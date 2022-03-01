@@ -280,8 +280,8 @@
                 },
                 stock_bar_border_color = (this_pal, real_pal) => {
                     let rate = this_pal / real_pal;
-                    if(rate >= 0.3) return "lime";
-                    else if (rate <= -0.3) return "red";
+                    if(rate >= 0.2) return "lime";
+                    else if (rate <= -0.2) return "red";
                     else return "#555";
                 };
             document.querySelector(".money_bar").innerHTML = format_number(user_data.current_money);
