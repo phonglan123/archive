@@ -269,7 +269,7 @@
         }
 
         function update_display() {
-            update_logs(); update_logs(); update_logs();
+            update_logs(); update_logs();
             const
                 format_number = number => Number(number).toLocaleString(),
                 calculate_pal = stock_name => {
@@ -310,7 +310,7 @@
                         + `</div>`;
             });
             document.querySelector("#totalpal_bar").innerHTML = format_number(real_pal);
-            update_logs(); update_logs(); update_logs();
+            update_logs(); update_logs();
         }
 
         function update_logs() {
@@ -325,7 +325,6 @@
                 pal[log[1]] -= (log[2] * log[3]);
                 if (stocks_amount[log[1]] == 0) pal[log[1]] = 0;
             });
-            console.log(1);
         }
 
         function get_stock_info(code) {
