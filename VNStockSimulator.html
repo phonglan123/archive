@@ -7,7 +7,7 @@
 <body>
     <div class="box left_bar">
         <h1 style="margin-block-start: 0; margin-block-end: 0; text-align: center;"
-            onclick="get_stock_info(prompt('Nhập mã cổ phiếu:', ''));" title="Xem thông tin cổ phiếu">Vistsim 9</h1>
+            onclick="get_stock_info(prompt('Nhập mã cổ phiếu:', ''));" title="Xem thông tin cổ phiếu">Vistsim 10 (Alpha)</h1>
         <div class="box money_bar"
             onclick="do_action(prompt('Nhập mã cổ phiếu:', ''), prompt('Nhập số cổ phiếu muốn mua/bán:', ''));"
             title="Mua/bán cổ phiếu">0</div>
@@ -209,8 +209,9 @@
 
     <script>
         let
+            start_money = 100000000,
             user_data = {
-                current_money: 100000000,
+                current_money: start_money,
                 stocks: {},
                 logs: []
             },
@@ -253,6 +254,7 @@
                 if (user_data.stocks[stock_name] == 0)
                     delete user_data.stocks[stock_name];
 
+                update_logs();
                 update_display();
                 save_user_data();
                 update_stocks_price();
@@ -268,6 +270,7 @@
 
         function update_display() {
             update_logs();
+            update_logs();
             const
                 format_number = number => Number(number).toLocaleString(),
                 calculate_pal = stock_name => {
@@ -278,14 +281,14 @@
                 };
             document.querySelector(".money_bar").innerHTML = format_number(user_data.current_money);
             document.querySelector("#stocks").innerHTML = "";
-            let pal_total = Object.values(pal).reduce((partialSum, a) => partialSum + a, 0);
+            let stocks_total_sell_price = 0;
             let stocks = Object.entries(user_data.stocks);
             stocks = stocks.sort((a, b) => calculate_pal(b[0]).this_pal - calculate_pal(a[0]).this_pal);
             stocks.forEach((stock, index) => {
                 let
                     pal = calculate_pal(stock[0]),
                     this_pal = pal.this_pal;
-                pal_total += pal.total_sell_price;
+                stocks_total_sell_price += pal.total_sell_price;
                 if (stock[1] > 0)
                     document.querySelector("#stocks").innerHTML +=
                         `<div class="box stock_bar" id="${stock[0]}" onclick="do_action('${stock[0]}', prompt('Nhập số cổ phiếu muốn mua/bán:', ''));" style="${(index + 1) % 2 == 0 ? "float: right;" : ""}">`
@@ -295,17 +298,21 @@
                         + `PAL total: <span id="paltotal" style="color: ${this_pal >= 0 ? "lime" : "red"};">${Number(this_pal).toLocaleString()}</span>`
                         + `</div>`;
             });
-            document.querySelector("#totalpal_bar").innerHTML = format_number(pal_total);
+            document.querySelector("#totalpal_bar").innerHTML = format_number(0 - start_money + user_data.current_money + stocks_total_sell_price);
+            update_logs();
             update_logs();
         }
 
         function update_logs() {
+            let current_stocks_amount = {};
             document.querySelector("#logs").innerHTML = "";
             pal = {};
             user_data.logs.reverse().forEach(log => {
                 document.querySelector("#logs").innerHTML += `<div class="box stock_bar" title="On ${log[0]} bought ${log[2]} ${log[1]} shares at the price of ${log[3]} VND"><b>${log[1]}</b><span style="float: right;"><font color="${log[2] >= 0 ? "lime" : "red"}">${log[2]}</font> × <font color="blue">${log[3] / 1000}</font></span></div>`;
-                if (pal[log[1]] == undefined) pal[log[1]] = 0
-                pal[log[1]] -= (log[2] * log[3]);
+                if (current_stocks_amount[log[1]] == undefined) current_stocks_amount[log[1]] = 0;
+                current_stocks_amount[log[1]] += log[2];
+                if (pal[log[1]] == undefined) pal[log[1]] = 0;
+                pal[log[1]] = (current_stocks_amount[log[1]] == 0) ? 0 : (pal[log[1]] - log[2] * log[3]);
             });
         }
 
@@ -366,13 +373,19 @@
                     stocks_price[stock] = price;
                     stocks_color[stock] = color;
                     stocks_rate[stock] = rate;
+                    update_logs();
                     update_display();
+                    update_logs();
                 });
             });
         }
 
         load_user_data();
-        setTimeout(() => update_display(), 1000);
+        setTimeout(() => {
+            update_logs();
+            update_display();
+            update_logs();
+        }, 1000);
         update_stocks_price();
         setInterval(() => update_stocks_price(), 10000);
     </script>
