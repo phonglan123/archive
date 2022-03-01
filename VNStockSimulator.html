@@ -7,7 +7,8 @@
 <body>
     <div class="box left_bar">
         <h1 style="margin-block-start: 0; margin-block-end: 0; text-align: center;"
-            onclick="get_stock_info(prompt('Nhập mã cổ phiếu:', ''));" title="Xem thông tin cổ phiếu">Vistsim 10 (Alpha)</h1>
+            onclick="get_stock_info(prompt('Nhập mã cổ phiếu:', ''));" title="Xem thông tin cổ phiếu">VNS 10</h1>
+        <!-- VNS = Vistsim = Vietnam Stock Simulator -->
         <div class="box money_bar"
             onclick="do_action(prompt('Nhập mã cổ phiếu:', ''), prompt('Nhập số cổ phiếu muốn mua/bán:', ''));"
             title="Mua/bán cổ phiếu">0</div>
@@ -254,7 +255,6 @@
                 if (user_data.stocks[stock_name] == 0)
                     delete user_data.stocks[stock_name];
 
-                update_logs();
                 update_display();
                 save_user_data();
                 update_stocks_price();
@@ -269,7 +269,6 @@
         }
 
         function update_display() {
-            update_logs();
             update_logs();
             const
                 format_number = number => Number(number).toLocaleString(),
@@ -300,19 +299,15 @@
             });
             document.querySelector("#totalpal_bar").innerHTML = format_number(0 - start_money + user_data.current_money + stocks_total_sell_price);
             update_logs();
-            update_logs();
         }
 
         function update_logs() {
-            let current_stocks_amount = {};
             document.querySelector("#logs").innerHTML = "";
             pal = {};
             user_data.logs.reverse().forEach(log => {
                 document.querySelector("#logs").innerHTML += `<div class="box stock_bar" title="On ${log[0]} bought ${log[2]} ${log[1]} shares at the price of ${log[3]} VND"><b>${log[1]}</b><span style="float: right;"><font color="${log[2] >= 0 ? "lime" : "red"}">${log[2]}</font> × <font color="blue">${log[3] / 1000}</font></span></div>`;
-                if (current_stocks_amount[log[1]] == undefined) current_stocks_amount[log[1]] = 0;
-                current_stocks_amount[log[1]] += log[2];
                 if (pal[log[1]] == undefined) pal[log[1]] = 0;
-                pal[log[1]] = (current_stocks_amount[log[1]] == 0) ? 0 : (pal[log[1]] - log[2] * log[3]);
+                pal[log[1]] -= (log[2] * log[3]);
             });
         }
 
@@ -343,18 +338,18 @@
                         price = temp.split("(")[0].split(">")[1].replace(",", "."),
                         color = temp.split("(")[0].split(">")[0].replace("'", ""),
                         rate = undefined,
-                        min_max_rate = (stock_ex == "HOSE" ? 6.5 : (stock_ex == "HNX" ? 9.5 : 14));
+                        min_max_rate = (stock_ex == "HOSE" ? 7 : (stock_ex == "HNX" ? 9 : 14));
 
                     rate = parseFloat(temp.split("/")[1].replace("%)", "").replace(",", ".")) || 0;
-                    rate = parseFloat(rate.toFixed(1));
+                    rate = parseFloat(rate.toFixed(0));
 
                     if (price == "<!--[ifIE9]")
                         price = json.contents.replace(/\r|\n| /g, "").split("<td>Gi&#225;hiệntại</td><tdclass=\"text-right\"><div>").pop().split("</div>")[0].split("(")[0].replace(",", ".");
                     price = Number(price);
 
-                    if (rate >= 6.9)
+                    if (rate >= min_max_rate)
                         color = "rebeccapurple";
-                    else if (rate <= -6.9)
+                    else if (rate <= 0 - min_max_rate)
                         color = "aqua";
                     else if (color == "#990000")
                         color = "red";
@@ -373,19 +368,13 @@
                     stocks_price[stock] = price;
                     stocks_color[stock] = color;
                     stocks_rate[stock] = rate;
-                    update_logs();
                     update_display();
-                    update_logs();
                 });
             });
         }
 
         load_user_data();
-        setTimeout(() => {
-            update_logs();
-            update_display();
-            update_logs();
-        }, 1000);
+        setTimeout(() => update_display(), 1000);
         update_stocks_price();
         setInterval(() => update_stocks_price(), 10000);
     </script>
