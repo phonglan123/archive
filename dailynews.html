@@ -167,7 +167,7 @@
                 alert_box.style = "box-shadow: 0 10px 18px rgb(0 0 0 / 30%); position: fixed; top: 10px; right: 10px; padding: 10px; width: fit-content; box-sizing: border-box; background: white; border-radius: 10px; color: red; font-size: 20px; font-weight: bold; cursor: pointer;";
                 alert_box.innerHTML = "Đã tải xong tất cả!";
                 alert_box.id = "alert_box";
-                alert_box.setAttribute('onclick', "this.style.display = 'none';");
+                //alert_box.setAttribute('onclick', "this.style.display = 'none';");
                 document.body.appendChild(alert_box);
                 if (!is_active)
                     alert("Đã tải xong tất cả!");
@@ -274,26 +274,30 @@
     })();
     function process_morningbrew(main_title, callback) {
         let issues_alias = ["daily", "money-scoop", "sidekick", "emerging-tech", "hr", "marketing", "retail", "money-with-katie"],
-            articles = [];
+            articles = [],
+            whitelist_morningbrew = full_whitelist[main_title] || {};
+        if (!full_whitelist[main_title][issues_alias[0]]) whitelist_morningbrew = {};
         issues_alias.forEach(issue => {
-            process_morningbrew_issue("https://www.morningbrew.com/" + issue + "/issues/latest", main_title, article => {
-                let flag = false;
-                flag = check_title_post(article, main_title, flag);
-                if (!flag) {
+            process_morningbrew_issue(issue, main_title, article => {
+                //let flag = false;
+                //flag = check_title_post(article, main_title, flag);
+                if (whitelist_morningbrew[issue] != article.title) {
                     document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"" + article.link + "\");'><div><img src='" + article.image + "'/><h3>" + article.title + "</h3><i>" + article.pubdate_text + "</i></div></div></div>")
                 }
                 articles.push(article);
+                whitelist_morningbrew[issue] = article.title;
                 if (articles.length == issues_alias.length) {
                     articles = articles.sortBy(o => o.pubDate);
                     console.log(articles);
                     document.body.innerHTML += "<i>Đã tải xong!</i>";
-                    set_whitelist(JSON.parse(JSON.stringify(articles)).pop(), main_title);
+                    set_whitelist(JSON.parse(JSON.stringify(articles)).pop(), main_title, whitelist_morningbrew);
                     callback();
                 }
             });
         });
     }
-    function process_morningbrew_issue(url, main_title, callback) {
+    function process_morningbrew_issue(issue, main_title, callback) {
+        let url = "https://www.morningbrew.com/" + issue + "/issues/latest";
         fetch("https://api.allorigins.win/get?url=" + url)
             .then(res => res.json())
             .then(json => {
