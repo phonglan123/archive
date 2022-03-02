@@ -167,7 +167,7 @@
                 alert_box.style = "box-shadow: 0 10px 18px rgb(0 0 0 / 30%); position: fixed; top: 10px; right: 10px; padding: 10px; width: fit-content; box-sizing: border-box; background: white; border-radius: 10px; color: red; font-size: 20px; font-weight: bold; cursor: pointer;";
                 alert_box.innerHTML = "Đã tải xong tất cả!";
                 alert_box.id = "alert_box";
-                //alert_box.setAttribute('onclick', "this.style.display = 'none';");
+                alert_box.setAttribute('onclick', "this.style.display = 'none';");
                 document.body.appendChild(alert_box);
                 if (!is_active)
                     alert("Đã tải xong tất cả!");
