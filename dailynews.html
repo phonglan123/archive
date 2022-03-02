@@ -294,7 +294,7 @@
         });
     }
     function process_morningbrew_issue(url, main_title, callback) {
-        fetch("https://api.allorigins.win/get?url=" + encodeURIComponent(url))
+        fetch("https://api.allorigins.win/get?url=" + url)
             .then(res => res.json())
             .then(json => {
                 let parsed = $.parseHTML(json.contents);
@@ -317,6 +317,7 @@
                             || (elm.tagName == "META")
                             || (elm.tagName == "LINK"))
                         && elm.innerHTML.match(/\w+ \d{2}, \d{4}/g) == null
+                        && (elm.querySelector("a") ? elm.querySelector("a").innerHTML : "") != "View Online"
                     )
                         parsed = remove_from_dom(parsed, elm);
                 });
@@ -334,16 +335,18 @@
                 pubdate = pubdate[0];
                 let link = undefined;
                 parsed.querySelectorAll("a").forEach(elm => {
-                    if (elm.innerText == pubdate)
+                    if (elm.innerText == pubdate || elm.innerText == "View Online")
                         link = elm.href;
                 })
+                //if(!link) link = url;
                 let image = undefined;
                 parsed.querySelectorAll("img").forEach(elm => {
                     if (new URL(elm.src).hostname == "cdn.sanity.io")
                         image = elm.src;
                 })
+                let date = new Date(new Date(pubdate).getTime() + 60 * 60 * 24 * 1000);
                 let article = {
-                    pubDate: new Date(pubdate),
+                    pubDate: date,
                     title: title,
                     image: image,
                     link: link,
