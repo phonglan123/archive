@@ -1,6 +1,6 @@
 <script>
     const
-        app_title = "Dailynews 55",
+        app_title = "Dailynews 56",
         api_key = "AIzaSyCUyUlEcT2eul0-_5k6X15WN_d3Mgu_jrM",
         client_id = "509723180239-df84foq7m5lc2g158sqdqnb9ummdphhl.apps.googleusercontent.com",
         client_secret = "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",
@@ -270,7 +270,8 @@
                 alert_box.style = "/* box-shadow: 0 10px 18px rgb(0 0 0 / 30%); */ border: 1px solid red; position: fixed; top: 10px; right: 10px; padding: 10px; width: fit-content; box-sizing: border-box; background: white; border-radius: 10px; color: red; font-size: 20px; font-weight: bold; cursor: pointer;";
                 alert_box.innerHTML = "Đã tải xong tất cả!";
                 alert_box.id = "alert_box";
-                alert_box.setAttribute('onclick', "console.log({loaded_datas, full_whitelist, ggauth_refresh_token: getCookie('ggauth_refresh_token'), execute_time: new Event('').timeStamp});this.style.display = 'none';");
+                let exe_time = new Event('').timeStamp;
+                alert_box.setAttribute('onclick', "console.log({loaded_datas, full_whitelist, ggauth_refresh_token: getCookie('ggauth_refresh_token'), execute_time: " + exe_time + "});this.style.display = 'none';");
                 document.body.appendChild(alert_box);
                 if (!is_active)
                     alert("Đã tải xong tất cả!");
@@ -625,7 +626,7 @@
         else flag = false;
         return flag;
     }
-    function process_wikipedia(main_title, callback, urls = "default", current_index = 0, total_results = {}) {
+    function process_wikipedia(main_title, callback, urls = "default", current_index = 0, total_results = {}, main = undefined) {
         if (urls == "default")
             urls = [
                 ["featured", "Bài viết chọn lọc"],
@@ -634,8 +635,7 @@
                 ["onthisday", "Ngày này năm xưa"],
                 ["potd", "Hình ảnh trong ngày"],
             ];
-        let main = undefined;
-        if (!document.querySelector("#wikipedia_grid")) {
+        if (!main && !document.querySelector("#wikipedia_grid")) {
             main = document.createElement("div");
             main.style = "--gap: 20px; --min-width: 100%; margin: 20px 10px 0 10px; display: -ms-grid; display: grid; grid-template-columns: repeat(auto-fit, minmax(var(--min-width), 1fr)); grid-gap: var(--gap);/* border: 1px solid #ccc; border-radius: 10px; padding: 10px; */";
             main.id = "wikipedia_grid";
@@ -672,10 +672,14 @@
                 if (current_index == urls.length - 1) {
                     document.body.innerHTML += ""; // "<i>Đã tải xong!</i>";
                     loaded_datas[main_title] = (Object.entries(total_results));
+                    if (main.innerHTML == "")
+                        main.style.display = "none !important";
+                    if ($("#wikipedia_grid")[0].innerHTML == "")
+                        $("#wikipedia_grid").css("display", "none");
                     callback();
                 }
                 else
-                    process_wikipedia(main_title, callback, urls, current_index + 1, total_results);
+                    process_wikipedia(main_title, callback, urls, current_index + 1, total_results, main);
             });
     }
     function process_stackoverflow_podcast(url, main_title, callback, top_10 = true) {
