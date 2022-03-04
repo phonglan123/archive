@@ -1,6 +1,6 @@
 <script>
     const
-        app_title = "Dailynews 52",
+        app_title = "Dailynews 53",
         api_key = "AIzaSyCUyUlEcT2eul0-_5k6X15WN_d3Mgu_jrM",
         client_id = "509723180239-df84foq7m5lc2g158sqdqnb9ummdphhl.apps.googleusercontent.com",
         client_secret = "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",
@@ -447,10 +447,20 @@
                 let parsed = new X2JS().xml_str2json(json.contents).rss.channel.item;
                 loaded_datas[main_title] = (parsed);
                 let flag = false;
-                parsed.forEach(article => {
+                parsed.forEach((article, index) => {
                     flag = check_title_post(article, main_title, flag);
                     if (!flag)
-                        document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"" + article.link + "\");'><div><h3>" + article.title + "</h3><i>" + main_title + " - " + format_subtitle_date(article.pubDate) + "</i></div></div></div>")
+                        fetch("https://api.allorigins.win/get?url=" + article.link)
+            .then(res => res.json())
+            .then(json => {
+                let url_parsed = $.parseHTML(json.contents);
+                url_parsed.forEach(elm => {
+                    if (elm.tagName == "MAIN")
+                        url_parsed = elm;
+                    article.image = url_parsed.querySelector("img.w-full.h-auto").src);
+                    loaded_datas[main_title][index] = article;
+                        document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"" + article.link + "\");'><div>" + (article.image ? "<img src='" + article.image._href + "'/>" : "") + "<h3>" + article.title + "</h3><i>" + main_title + " - " + format_subtitle_date(article.pubDate) + "</i></div></div></div>");
+                });
                 });
                 document.body.innerHTML += ""; // "<i>Đã tải xong!</i>";
                 set_whitelist(parsed.slice(0, 1)[0], main_title);
