@@ -1,6 +1,6 @@
 <script>
     const
-        app_title = "Dailynews 54",
+        app_title = "Dailynews 55",
         api_key = "AIzaSyCUyUlEcT2eul0-_5k6X15WN_d3Mgu_jrM",
         client_id = "509723180239-df84foq7m5lc2g158sqdqnb9ummdphhl.apps.googleusercontent.com",
         client_secret = "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",
@@ -270,7 +270,7 @@
                 alert_box.style = "/* box-shadow: 0 10px 18px rgb(0 0 0 / 30%); */ border: 1px solid red; position: fixed; top: 10px; right: 10px; padding: 10px; width: fit-content; box-sizing: border-box; background: white; border-radius: 10px; color: red; font-size: 20px; font-weight: bold; cursor: pointer;";
                 alert_box.innerHTML = "Đã tải xong tất cả!";
                 alert_box.id = "alert_box";
-                alert_box.setAttribute('onclick', "console.log({loaded_datas, full_whitelist, ggauth_refresh_token: getCookie('ggauth_refresh_token')});this.style.display = 'none';");
+                alert_box.setAttribute('onclick', "console.log({loaded_datas, full_whitelist, ggauth_refresh_token: getCookie('ggauth_refresh_token'), execute_time: new Event('').timeStamp});this.style.display = 'none';");
                 document.body.appendChild(alert_box);
                 if (!is_active)
                     alert("Đã tải xong tất cả!");
@@ -478,6 +478,11 @@
                             });
                     }
                 });
+                if (need_counter == 0) {
+                    document.body.innerHTML += ""; // "<i>Đã tải xong!</i>";
+                    set_whitelist(parsed.slice(0, 1)[0], main_title);
+                    callback();
+                }
             });
     }
     function process_weather(callback) {
