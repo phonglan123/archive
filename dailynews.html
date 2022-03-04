@@ -1,5 +1,6 @@
 <script>
     const
+        app_title = "Dailynews 50",
         api_key = "AIzaSyCUyUlEcT2eul0-_5k6X15WN_d3Mgu_jrM",
         client_id = "509723180239-df84foq7m5lc2g158sqdqnb9ummdphhl.apps.googleusercontent.com",
         client_secret = "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",
@@ -28,7 +29,7 @@
             ["Bạn sẽ trở nên nguy hiểm nếu như học được cách [kiểm soát cảm xúc của mình]. Và khi đó, chẳng kẻ nào có thể [hiểu và nắm bắt được con người bạn]!", "Dale Carnegie"]
         ], main_title, callback), "Trích dẫn hay"],
         [process_wikipedia, "Wikipedia"],
-        [main_title, callback, "YouTube"],
+        [process_ytb, "YouTube"],
         [process_stackoverflow, "The Overflow"],
         [ process_manhhomienbienthuy, "Blog manhhomienbienthuy"],
         [(main_title, callback) => process_fb("http://fetchrss.com/rss/61f8c4e41d2c61396121d08261f8c4b70bc83a6c8f771002.xml", main_title, callback), "Kinh tế học giản đơn"],
@@ -86,7 +87,7 @@
         display: none;
     }
 </style><!-- <h1 style="text-align: center">DAILYNEWS</h1> -->`);
-    document.title = "Dailynews";
+    document.title = app_title;
     function loadScript(path, callback) {
 
         var done = false;
