@@ -1,6 +1,6 @@
 <script>
     const
-        app_title = "Dailynews",
+        app_title = "Dailynews 52",
         api_key = "AIzaSyCUyUlEcT2eul0-_5k6X15WN_d3Mgu_jrM",
         client_id = "509723180239-df84foq7m5lc2g158sqdqnb9ummdphhl.apps.googleusercontent.com",
         client_secret = "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",
@@ -440,7 +440,7 @@
     function process_reddit_subfunc(url, main_title, callback) {
         fetch("https://api.allorigins.win/get?url=" + encodeURIComponent(url)).then(res => res.json()).then(json => process_reddit(json, main_title, callback));
     }
-    function process_manhhomienbienthuy(url, main_title, callback) {
+    function process_manhhomienbienthuy(main_title, callback) {
         fetch("https://api.allorigins.win/get?url=https://manhhomienbienthuy.github.io/feeds/rss.xml")
             .then(res => res.json())
             .then(json => {
