@@ -1,6 +1,6 @@
 /*
 * Method: DetectAdblock
-* Version: 1.3.2
+* Version: 1.4
 * Author: PhongHNg
 * Source: https://github.com/phonglan123/archive/blob/main/DetectAdblock.js
 */
@@ -134,7 +134,8 @@ class DetectAdblock {
            let adblock_detected = false;
 
            let fetch_list = ["adwordstracking.js", "ads.js", "ads.txt", "prebid-ads.js", "ads", "adsbygoogle.js", "adframe.js"];
-           fetch_list.forEach(async (fetch_url, index) => {
+           fetch_list.forEach(async (fetch_path, index) => {
+               let fetch_url = new URL(location.href).origin + "/" + fetch_path;
                try {
                    await fetch(new Request(fetch_url)).catch(_ => adblock_detected = true);
                } catch (e) {
