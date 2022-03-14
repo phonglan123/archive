@@ -1,6 +1,6 @@
 <script>
     const
-        app_title = "Dailynews 66",
+        app_title = "Dailynews 68",
         api_key = "AIzaSyCUyUlEcT2eul0-_5k6X15WN_d3Mgu_jrM",
         client_id = "509723180239-df84foq7m5lc2g158sqdqnb9ummdphhl.apps.googleusercontent.com",
         client_secret = "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",
@@ -35,11 +35,11 @@
             [process_ytb, "YouTube"],
             [process_morningbrew, "Morning Brew"],
             [process_stackoverflow, "The Overflow"],
-            [process_manhhomienbienthuy, "Blog manhhomienbienthuy"],
             ["publications/CAAqBwgKMI-apgsw96S-Aw", "VnEconomy"],
             ["topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRFZxYUdjU0FuWnBHZ0pXVGlnQVAB", "Tin tức chung"],
         ];
-    
+
+    //[process_manhhomienbienthuy, "Blog manhhomienbienthuy"],
     //[(main_title, callback) => process_weather(callback), "Dự báo thời tiết"],
     //[(main_title, callback) => process_tinhte("https://tinhte.vn/rss", main_title, callback), "Tinh tế"],
     //["https://news.google.com/publications/CAAqIQgKIhtDQklTRGdnTWFnb0tDR05oWm1WbUxuWnVLQUFQAQ?hl=vi&gl=VN&ceid=VN%3Avi", "CafeF"],
@@ -169,6 +169,7 @@
         },
         whitelist = get_wl(),
         full_whitelist = get_wl(true),
+        old_full_whitelist = get_wl(true),
         curent_index = 0,
         set_whitelist = (article, main_title, value = new Date().getTime()) => {
             if (main_title == "Reddit")
@@ -180,7 +181,8 @@
         check_whitelist = title => {
 
         },
-        loaded_datas = {};
+        loaded_datas = {},
+        showed_datas = {};
     function process_gg_news(link, main_title, callback) {
         fetch("https://api.allorigins.win/get?url=" + encodeURIComponent_x("https://news.google.com/" + link.replace("?hl=vi&gl=VN&ceid=VN%3Avi", "") + "?hl=vi&gl=VN&ceid=VN%3Avi") + "?ts=" + new Date().getTime())
             .then(res => res.json())
@@ -227,8 +229,11 @@
                 let flag = false;
                 results.forEach(article => {
                     flag = check_title_post(article, main_title, flag);
-                    if (!flag)
+                    if (!flag) {
                         document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"" + article.link + "\");'>" + (article.image ? "<img src='" + article.image + "'/>" : "<img src='https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930'/>") + "<div><h3>" + article.title + "</h3><i>" + (article.source || main_title) + " - " + format_subtitle_date(article.time) + "</i></div></div></div>")
+                        if (!showed_datas[main_title]) showed_datas[main_title] = [];
+                        showed_datas[main_title].push(article);
+                    }
                 });
                 document.body.innerHTML += ""; // "<i>Đã tải xong!</i>";
                 set_whitelist(results.slice(0, 1)[0], main_title);
@@ -241,8 +246,11 @@
             article = article.data;
             article.pubDate = article.created;
             flag = check_title_post(article, main_title, flag);
-            if (!flag)
+            if (!flag) {
                 document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"https://reddit.com" + article.permalink + "\");'>" + (article.preview ? ("<img src='" + article.preview.images[0].source.url + "'/>") : "") + "<h3>" + article.title + "</h3><i><b>" + article.author + "</b> posted in <b>" + article.subreddit + "</b> - " + article.created + "</i></div><button style='display: none;' onclick='set_whitelist(`" + encodeURIComponent_x(article.title) + "`, this)'>Xong!</button></div>");
+                if (!showed_datas[main_title]) showed_datas[main_title] = [];
+                showed_datas[main_title].push(article);
+            }
         });
         document.body.innerHTML += ""; // "<i>Đã tải xong!</i>";
         set_whitelist(JSON.parse(json.contents).data.children[0].data, main_title);
@@ -275,6 +283,8 @@
                 alert_box.id = "alert_box";
                 window.dailynews_logs = {
                     loaded_datas,
+                    showed_datas,
+                    old_full_whitelist,
                     full_whitelist,
                     ggauth_refresh_token: getCookie("ggauth_refresh_token"),
                     execute_time: new Event("").timeStamp,
@@ -303,6 +313,8 @@
             if (!full_whitelist[main_title].includes(article.title)) {
                 document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"" + article.link + "\");'><img src='" + article.image + "'/><div><h3>" + article.title + "</h3><i>" + article.source + " - " + format_subtitle_date(article.time) + "</i></div></div><button style='display: none;' onclick='set_whitelist(`" + encodeURIComponent_x(article.title) + "`, this)'>Xong!</button></div>");
                 full_whitelist[main_title].push(article.title);
+                if (!showed_datas[main_title]) showed_datas[main_title] = [];
+                showed_datas[main_title].push(article);
             }
         });
         document.body.innerHTML += ""; // "<i>Đã tải xong!</i>";
@@ -348,7 +360,9 @@
                 //let flag = false;
                 //flag = check_title_post(article, main_title, flag);
                 if (article && whitelist_morningbrew[issue] != article.title) {
-                    document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"" + article.link + "\");'><div><img src='" + article.image + "'/><h3>" + article.title.replace("☕ ", "") + "</h3><i>" + main_title + " - " + format_subtitle_date(article.pubdate_text) + "</i></div></div></div>")
+                    document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"" + article.link + "\");'><div><img src='" + article.image + "'/><h3>" + article.title.replace("☕ ", "") + "</h3><i>" + main_title + " - " + format_subtitle_date(article.pubdate_text) + "</i></div></div></div>");
+                    if (!showed_datas[main_title]) showed_datas[main_title] = [];
+                    showed_datas[main_title].push(article);
                 }
                 articles.push(article);
                 if (article)
@@ -441,8 +455,11 @@
                     if ((Array.isArray(article.title) ? article.title[0] : article.title).startsWith("Bonus"))
                         return undefined;
                     flag = check_title_post(article, main_title, flag);
-                    if (!flag)
+                    if (!flag) {
                         document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"" + article.enclosure._url + "\");'><div>" + (article.image ? "<img src='" + article.image._href + "'/>" : "") + "<h3>" + (Array.isArray(article.title) ? article.title[0] : article.title) + "</h3><i>" + new Date(article.pubDate) + "</i></div></div></div>")
+                        if (!showed_datas[main_title]) showed_datas[main_title] = [];
+                        showed_datas[main_title].push(article);
+                    }
                 });
                 document.body.innerHTML += ""; // "<i>Đã tải xong!</i>";
                 set_whitelist(parsed.slice(0, 1)[0], main_title);
@@ -477,6 +494,9 @@
                                 loaded_datas[main_title][index] = article;
 
                                 document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"" + article.link + "\");'><div>" + (article.image ? "<img src='" + article.image + "'/>" : "") + "<h3>" + article.title + "</h3><i>" + main_title + " - " + format_subtitle_date(article.pubDate) + "</i></div></div></div>");
+
+                                if (!showed_datas[main_title]) showed_datas[main_title] = [];
+                                showed_datas[main_title].push(article);
 
                                 loaded_counter++;
                                 if (loaded_counter == need_counter) {
@@ -518,6 +538,8 @@
         saved_quotes.push(random_quote);
         set_whitelist(undefined, main_title, saved_quotes);
         loaded_datas[main_title] = quotes[random_quote];
+        if (!showed_datas[main_title]) showed_datas[main_title] = [];
+        showed_datas[main_title] = quotes[random_quote];
         callback();
     }
     function process_sputniknews(url, main_title, callback) {
@@ -532,8 +554,11 @@
                     article.title = article.a.span.span[1].__text;
                     article.pubDate = parseInt(article.a.span.span[0]["_data-unixtime"]) * 1000;
                     flag = check_title_post(article, main_title, flag);
-                    if (!flag)
-                        document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"https://vn.sputniknews.com/" + article.link + "\");'><div><h3>" + article.title + "</h3><i>" + new Date(article.pubDate) + "</i></div></div></div>")
+                    if (!flag) {
+                        document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"https://vn.sputniknews.com/" + article.link + "\");'><div><h3>" + article.title + "</h3><i>" + new Date(article.pubDate) + "</i></div></div></div>");
+                        if (!showed_datas[main_title]) showed_datas[main_title] = [];
+                        showed_datas[main_title].push(article);
+                    }
                 });
                 document.body.innerHTML += ""; // "<i>Đã tải xong!</i>";
                 set_whitelist(parsed.slice(0, 1)[0], main_title);
@@ -550,8 +575,11 @@
                 parsed.forEach(article => {
                     article.pubDate = article.date;
                     flag = check_title_post(article, main_title, flag);
-                    if (!flag)
-                        document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"" + article.permalink + "\");'>" + (article.thumbnails.featured ? "<img src='" + article.thumbnails.featured + "'/>" : "") + "<div><h3>" + article.title + "</h3><i>" + article.pubDate + "</i></div></div></div>")
+                    if (!flag) {
+                        document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"" + article.permalink + "\");'>" + (article.thumbnails.featured ? "<img src='" + article.thumbnails.featured + "'/>" : "") + "<div><h3>" + article.title + "</h3><i>" + article.pubDate + "</i></div></div></div>");
+                        if (!showed_datas[main_title]) showed_datas[main_title] = [];
+                        showed_datas[main_title].push(article);
+                    }
                 });
                 document.body.innerHTML += ""; // "<i>Đã tải xong!</i>";
                 set_whitelist(parsed.slice(0, 1)[0], main_title);
@@ -567,8 +595,11 @@
                 let flag = false;
                 parsed.forEach(article => {
                     flag = check_title_post(article, main_title, flag);
-                    if (!flag)
-                        document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"" + article.link + "\");'><div><h3>" + article.title + "</h3><i>" + article.creator.__text + " - " + article.pubDate + "</i></div></div></div>")
+                    if (!flag) {
+                        document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"" + article.link + "\");'><div><h3>" + article.title + "</h3><i>" + article.creator.__text + " - " + article.pubDate + "</i></div></div></div>");
+                        if (!showed_datas[main_title]) showed_datas[main_title] = [];
+                        showed_datas[main_title].push(article);
+                    }
                 });
                 document.body.innerHTML += ""; // "<i>Đã tải xong!</i>";
                 set_whitelist(parsed.slice(0, 1)[0], main_title);
@@ -585,8 +616,11 @@
                 parsed.forEach(article => {
                     article.pubDate = article.created_at;
                     flag = check_title_post(article, main_title, flag);
-                    if (!flag)
-                        document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"https://spiderum.com/bai-dang/" + article.slug + "\");'><div>" + (article.og_image_url ? "<img src='" + article.og_image_url + "'/>" : "") + "<h3>" + article.title + "</h3><i>" + article.creator_id.display_name + " - " + article.pubDate + "</i></div></div></div>")
+                    if (!flag) {
+                        document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"https://spiderum.com/bai-dang/" + article.slug + "\");'><div>" + (article.og_image_url ? "<img src='" + article.og_image_url + "'/>" : "") + "<h3>" + article.title + "</h3><i>" + article.creator_id.display_name + " - " + article.pubDate + "</i></div></div></div>");
+                        if (!showed_datas[main_title]) showed_datas[main_title] = [];
+                        showed_datas[main_title].push(article);
+                    }
                 });
                 document.body.innerHTML += ""; // "<i>Đã tải xong!</i>";
                 set_whitelist(parsed.slice(0, 1)[0], main_title);
@@ -605,8 +639,11 @@
                 let flag = false;
                 parsed.forEach(article => {
                     flag = check_title_post(article, main_title, flag);
-                    if (!flag)
-                        document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"" + article.link + "\");'><div><img src='" + default_thumbnail + "' /><h3>" + article.title + "</h3><i>" + main_title + " - " + format_subtitle_date(article.pubDate) + "</i></div></div></div>")
+                    if (!flag) {
+                        document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"" + article.link + "\");'><div><img src='" + default_thumbnail + "' /><h3>" + article.title + "</h3><i>" + main_title + " - " + format_subtitle_date(article.pubDate) + "</i></div></div></div>");
+                        if (!showed_datas[main_title]) showed_datas[main_title] = [];
+                        showed_datas[main_title].push(article);
+                    }
                 });
                 document.body.innerHTML += ""; // "<i>Đã tải xong!</i>";
                 set_whitelist(parsed.slice(0, 1)[0], main_title);
@@ -622,8 +659,11 @@
                 let flag = false;
                 parsed.slice(0, 10).forEach(article => {
                     flag = check_title_post(article, main_title, flag);
-                    if (!flag)
-                        document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"" + article.link + "\");'><div><img src='https://i1.sndcdn.com/avatars-000708374642-k6d7gm-t500x500.jpg'/><h3>" + article.title + "</h3><i>" + main_title + " - " + format_subtitle_date(article.pubDate) + "</i></div></div></div>")
+                    if (!flag) {
+                        document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"" + article.link + "\");'><div><img src='https://i1.sndcdn.com/avatars-000708374642-k6d7gm-t500x500.jpg'/><h3>" + article.title + "</h3><i>" + main_title + " - " + format_subtitle_date(article.pubDate) + "</i></div></div></div>");
+                        if (!showed_datas[main_title]) showed_datas[main_title] = [];
+                        showed_datas[main_title].push(article);
+                    }
                 });
                 document.body.innerHTML += ""; // "<i>Đã tải xong!</i>";
                 set_whitelist(parsed.slice(0, 1)[0], main_title);
@@ -671,8 +711,11 @@
                         link.href = "https://vi.wikipedia.org" + link.getAttribute("href");
                     link.target = "_blank";
                 });
-                if (flag)
+                if (flag) {
                     document.querySelector("#wikipedia_grid").appendChild(box);
+                    if (!showed_datas[main_title]) showed_datas[main_title] = [];
+                    showed_datas[main_title].push(parsed);
+                }
                 total_results[type_name] = parsed;
                 if (!full_whitelist[main_title])
                     full_whitelist[main_title] = {};
@@ -703,8 +746,11 @@
                 let flag = false;
                 (top_10 ? parsed.slice(0, 11) : parsed).forEach(article => {
                     flag = check_title_post(article, main_title, flag);
-                    if (!flag)
-                        document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"" + article.link + "\");'><div><h3>" + article.title + "</h3><i>" + article.creator.__cdata + " - " + article.pubDate + "</i></div></div></div>")
+                    if (!flag) {
+                        document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"" + article.link + "\");'><div><h3>" + article.title + "</h3><i>" + article.creator.__cdata + " - " + article.pubDate + "</i></div></div></div>");
+                        if (!showed_datas[main_title]) showed_datas[main_title] = [];
+                        showed_datas[main_title].push(article);
+                    }
                 });
                 document.body.innerHTML += ""; // "<i>Đã tải xong!</i>";
                 set_whitelist(parsed.slice(0, 1)[0], main_title);
