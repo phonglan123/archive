@@ -1,6 +1,6 @@
 <script>
     const
-        app_title = "Dailynews 69",
+        app_title = "Dailynews 70",
         api_key = "AIzaSyCUyUlEcT2eul0-_5k6X15WN_d3Mgu_jrM",
         client_id = "509723180239-df84foq7m5lc2g158sqdqnb9ummdphhl.apps.googleusercontent.com",
         client_secret = "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",
@@ -30,7 +30,7 @@
             ["[Sắp xếp ưu tiên] và tiến tới những mục tiêu [quan trọng nhất], thay vì liên tục phản ứng với những [điều cấp bách]", "7 thói quen thành đạt"]
         ],
         link_list = [
-            [process_quote, "Trích dẫn hay"],
+            [process_quote, "Trích dẫn hằng ngày"],
             [process_wikipedia, "Wikipedia"],
             [process_ytb, "YouTube"],
             [process_morningbrew, "Morning Brew"],
@@ -290,7 +290,7 @@
                     execute_time: new Event("").timeStamp,
                     html: document.body.innerHTML
                 };
-                alert_box.setAttribute('onclick', "console.log(dailynews_logs);this.style.display = 'none';");
+                alert_box.setAttribute('onclick', "console.log(dailynews_logs);this.parentNode.removeChild(this);");
                 document.body.appendChild(alert_box);
                 if (!is_active)
                     alert("Đã tải xong tất cả!");
@@ -305,17 +305,24 @@
             full_whitelist[main_title] = []
         //console_log(JSON.stringify(full_whitelist[main_title]));
         full_whitelist[main_title].forEach((title, index) => {
-            if (!youtube_sub_channelids.map(article => article.title).includes(title))
+            if (!youtube_sub_channelids.map(article => {
+                return new URL(article.link).searchParams.get("v");
+            }).includes(title))
                 delete full_whitelist[main_title][index];
         });
         //console_log(JSON.stringify(full_whitelist[main_title]));
         youtube_sub_channelids.forEach(article => {
-            if (!full_whitelist[main_title].includes(article.title)) {
+            let video_id = new URL(article.link).searchParams.get("v");
+            if (!full_whitelist[main_title].includes(video_id)) {
                 document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"" + article.link + "\");'><img src='" + article.image + "'/><div><h3>" + article.title + "</h3><i>" + article.source + " - " + format_subtitle_date(article.time) + "</i></div></div><button style='display: none;' onclick='set_whitelist(`" + encodeURIComponent_x(article.title) + "`, this)'>Xong!</button></div>");
-                full_whitelist[main_title].push(article.title);
+                full_whitelist[main_title].push(video_id);
                 if (!showed_datas[main_title]) showed_datas[main_title] = [];
                 showed_datas[main_title].push(article);
             }
+        });
+        full_whitelist[main_title].forEach((entry, index) => {
+            if (entry.length > 11)
+                delete full_whitelist[main_title][index];
         });
         document.body.innerHTML += ""; // "<i>Đã tải xong!</i>";
         full_whitelist[main_title] = full_whitelist[main_title].filter(n => n);
@@ -351,27 +358,45 @@
         }
     })();
     function process_morningbrew(main_title, callback) {
+        const short_month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        let
+            base_date = new Date("Jan 01 1970"),
+            today = new Date(),
+            today_date = new Date(`${short_month[today.getMonth()]} ${today.getDate()} ${today.getFullYear()}`);
+
         let issues_alias = ["daily", /*"money-scoop", "sidekick", "emerging-tech", "hr", "marketing", "retail", "money-with-katie"*/],
             articles = [],
             whitelist_morningbrew = full_whitelist[main_title] || {};
-        if (!full_whitelist[main_title] || !full_whitelist[main_title][issues_alias[0]]) whitelist_morningbrew = {};
+        if (!full_whitelist[main_title] || (typeof full_whitelist[main_title] == "object" && !full_whitelist[main_title][issues_alias[0]])) {
+            whitelist_morningbrew = {};
+        }
         issues_alias.forEach(issue => {
             process_morningbrew_issue(issue, main_title, article => {
                 //let flag = false;
                 //flag = check_title_post(article, main_title, flag);
-                if (article && whitelist_morningbrew[issue] != article.title) {
+                let condition = false;
+                if (typeof whitelist_morningbrew == "object") condition = article && whitelist_morningbrew[issue] != article.title;
+                else if (typeof whitelist_morningbrew == "string") condition = article && whitelist_morningbrew != article.title;
+                else condition = true;
+                if (condition) {
                     document.body.innerHTML += ("<div class='article'><div onclick='window.open(\"" + article.link + "\");'><div><img src='" + article.image + "'/><h3>" + article.title.replace("☕ ", "") + "</h3><i>" + main_title + " - " + format_subtitle_date(article.pubdate_text) + "</i></div></div></div>");
                     if (!showed_datas[main_title]) showed_datas[main_title] = [];
                     showed_datas[main_title].push(article);
                 }
                 articles.push(article);
-                if (article)
+                if (article) {
+                    if (typeof whitelist_morningbrew == "number")
+                        whitelist_morningbrew = whitelist_morningbrew = {};
                     whitelist_morningbrew[issue] = article.title;
+                }
                 if (articles.length == issues_alias.length) {
-                    loaded_datas[main_title] = (articles);
+                    loaded_datas[main_title] = articles.length == 1 ? articles[0] : (articles);
                     document.body.innerHTML += ""; // "<i>Đã tải xong!</i>";
                     //if (article)
-                    set_whitelist(JSON.parse(JSON.stringify(articles)).pop(), main_title, whitelist_morningbrew);
+                    let whitelist_morningbrew_update = JSON.parse(JSON.stringify(whitelist_morningbrew));
+                    if (issues_alias.length == 1 && typeof whitelist_morningbrew == "object")
+                        whitelist_morningbrew_update = Object.values(whitelist_morningbrew)[0];
+                    set_whitelist(JSON.parse(JSON.stringify(articles)).pop(), main_title, whitelist_morningbrew_update);
                     callback();
                 }
             });
@@ -525,21 +550,42 @@
         }
     }
     function process_quote(main_title, callback) {
+        function get_today_format() {
+            const short_month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            let
+                today = new Date(),
+                today_date = new Date(`${short_month[today.getMonth()]} ${today.getDate()} ${today.getFullYear()}`);
+            return today_date;
+        }
+        function get_quote_by_date(quotes) {
+            const short_month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            let
+                base_date = new Date("Jan 01 1970"),
+                today = new Date(),
+                today_date = new Date(`${short_month[today.getMonth()]} ${today.getDate()} ${today.getFullYear()}`),
+                difference_days = parseInt((today - base_date) / (1000 * 60 * 60 * 24)) + 1,
+                quote_index = difference_days % quotes.length,
+                quote = quotes[quote_index];
+            return [quote, quote_index];
+        }
         let quotes = quotes_list;
-        let
+        let quote = get_quote_by_date(quotes)[0];
+        /* let
             random_arr = items => Math.floor(Math.random() * items.length),
             saved_quotes = full_whitelist[main_title] || [],
             random_quote = random_arr(quotes);
         if (saved_quotes.length == quotes.length)
             saved_quotes = [];
         while (saved_quotes.includes(random_quote))
-            random_quote = random_arr(quotes);
-        document.body.innerHTML += `<div class="blockquote-wrapper"><style>.blockquote-bold { color: #e74848; font-weight: bold; } /* center the blockquote in the page */ .blockquote-wrapper { display: flex; /*height: 100vh;*/ padding: 0 20px; margin: 20px 10px 0 10px; border-radius: 10px; border: 1px solid #ccc; } /* Blockquote main style */ .blockquote { position: relative; font-family: 'Barlow Condensed', sans-serif; max-width: calc(100% - 100px); margin: 50px auto; align-self: center; } /* Blockquote header */ .blockquote h1 { /*font-family: 'Abril Fatface', cursive;*/ position: relative; /* for pseudos */ font-size: 2.8rem; font-weight: normal; line-height: 1; margin: 0; border: 2px solid; border: solid 2px; border-radius:20px; padding: 25px; text-align: justify; } /* Blockquote right double quotes */ .blockquote h1:after { content:""; position: absolute; border: 2px solid; border-radius: 0 50px 0 0; width: 60px; height: 60px; bottom: -62px; left: 50px; border-bottom: none; border-left: none; z-index: 3; } .blockquote h1:before { content:""; position: absolute; width: 80px; border: 6px solid white; bottom: -3px; left: 50px; z-index: 2; } /* increase header size after 600px */ @media all and (min-width: 600px) { .blockquote h1 { font-size: 3rem; line-height: 1.2; } } /* Blockquote subheader */ .blockquote h4 { position: relative; font-size: 1.3rem; font-weight: 400; line-height: 1.2; margin: 0; padding-top: 15px; z-index: 1; margin-left:150px; padding-left:12px; margin-top: 5px; font-style: italic; } .blockquote h4:first-letter { margin-left:-12px; }</style><div class="blockquote"> <h1> ${quotes[random_quote][0].replace(/\[/g, "<span class='blockquote-bold'>").replace(/\]/g, "</span>")} </h1> <h4>${quotes[random_quote][1]}<!--<br><em>Web Site Usability: A Designer's Guide</em>--></h4> </div> </div>`;
-        saved_quotes.push(random_quote);
-        set_whitelist(undefined, main_title, saved_quotes);
+            random_quote = random_arr(quotes); */
+        if (!full_whitelist[main_title] || get_today_format().getTime() > full_whitelist[main_title]) {
+            document.body.innerHTML += `<div class="blockquote-wrapper"><style>.blockquote-bold { color: #e74848; font-weight: bold; } /* center the blockquote in the page */ .blockquote-wrapper { display: flex; /*height: 100vh;*/ padding: 0 20px; margin: 20px 10px 0 10px; border-radius: 10px; border: 1px solid #ccc; } /* Blockquote main style */ .blockquote { position: relative; font-family: 'Barlow Condensed', sans-serif; max-width: calc(100% - 100px); margin: 50px auto; align-self: center; } /* Blockquote header */ .blockquote h1 { /*font-family: 'Abril Fatface', cursive;*/ position: relative; /* for pseudos */ font-size: 2.8rem; font-weight: normal; line-height: 1; margin: 0; border: 2px solid; border: solid 2px; border-radius:20px; padding: 25px; text-align: justify; } /* Blockquote right double quotes */ .blockquote h1:after { content:""; position: absolute; border: 2px solid; border-radius: 0 50px 0 0; width: 60px; height: 60px; bottom: -62px; left: 50px; border-bottom: none; border-left: none; z-index: 3; } .blockquote h1:before { content:""; position: absolute; width: 80px; border: 6px solid white; bottom: -3px; left: 50px; z-index: 2; } /* increase header size after 600px */ @media all and (min-width: 600px) { .blockquote h1 { font-size: 3rem; line-height: 1.2; } } /* Blockquote subheader */ .blockquote h4 { position: relative; font-size: 1.3rem; font-weight: 400; line-height: 1.2; margin: 0; padding-top: 15px; z-index: 1; margin-left:150px; padding-left:12px; margin-top: 5px; font-style: italic; } .blockquote h4:first-letter { margin-left:-12px; }</style><div class="blockquote"> <h1> ${quote[0].replace(/\[/g, "<span class='blockquote-bold'>").replace(/\]/g, "</span>")} </h1> <h4>${quote[1]}<!--<br><em>Web Site Usability: A Designer's Guide</em>--></h4> </div> </div>`;
+            if (!showed_datas[main_title]) showed_datas[main_title] = [];
+            showed_datas[main_title] = quote;
+        }
+        //saved_quotes.push(random_quote);
+        set_whitelist(undefined, main_title, get_today_format().getTime());
         loaded_datas[main_title] = quotes;
-        if (!showed_datas[main_title]) showed_datas[main_title] = [];
-        showed_datas[main_title] = quotes[random_quote];
         callback();
     }
     function process_sputniknews(url, main_title, callback) {
