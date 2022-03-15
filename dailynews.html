@@ -1,6 +1,6 @@
 <script>
     const
-        app_title = "Dailynews 68",
+        app_title = "Dailynews 69",
         api_key = "AIzaSyCUyUlEcT2eul0-_5k6X15WN_d3Mgu_jrM",
         client_id = "509723180239-df84foq7m5lc2g158sqdqnb9ummdphhl.apps.googleusercontent.com",
         client_secret = "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",
@@ -537,7 +537,7 @@
         document.body.innerHTML += `<div class="blockquote-wrapper"><style>.blockquote-bold { color: #e74848; font-weight: bold; } /* center the blockquote in the page */ .blockquote-wrapper { display: flex; /*height: 100vh;*/ padding: 0 20px; margin: 20px 10px 0 10px; border-radius: 10px; border: 1px solid #ccc; } /* Blockquote main style */ .blockquote { position: relative; font-family: 'Barlow Condensed', sans-serif; max-width: calc(100% - 100px); margin: 50px auto; align-self: center; } /* Blockquote header */ .blockquote h1 { /*font-family: 'Abril Fatface', cursive;*/ position: relative; /* for pseudos */ font-size: 2.8rem; font-weight: normal; line-height: 1; margin: 0; border: 2px solid; border: solid 2px; border-radius:20px; padding: 25px; text-align: justify; } /* Blockquote right double quotes */ .blockquote h1:after { content:""; position: absolute; border: 2px solid; border-radius: 0 50px 0 0; width: 60px; height: 60px; bottom: -62px; left: 50px; border-bottom: none; border-left: none; z-index: 3; } .blockquote h1:before { content:""; position: absolute; width: 80px; border: 6px solid white; bottom: -3px; left: 50px; z-index: 2; } /* increase header size after 600px */ @media all and (min-width: 600px) { .blockquote h1 { font-size: 3rem; line-height: 1.2; } } /* Blockquote subheader */ .blockquote h4 { position: relative; font-size: 1.3rem; font-weight: 400; line-height: 1.2; margin: 0; padding-top: 15px; z-index: 1; margin-left:150px; padding-left:12px; margin-top: 5px; font-style: italic; } .blockquote h4:first-letter { margin-left:-12px; }</style><div class="blockquote"> <h1> ${quotes[random_quote][0].replace(/\[/g, "<span class='blockquote-bold'>").replace(/\]/g, "</span>")} </h1> <h4>${quotes[random_quote][1]}<!--<br><em>Web Site Usability: A Designer's Guide</em>--></h4> </div> </div>`;
         saved_quotes.push(random_quote);
         set_whitelist(undefined, main_title, saved_quotes);
-        loaded_datas[main_title] = quotes[random_quote];
+        loaded_datas[main_title] = quotes;
         if (!showed_datas[main_title]) showed_datas[main_title] = [];
         showed_datas[main_title] = quotes[random_quote];
         callback();
