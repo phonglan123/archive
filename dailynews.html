@@ -1,6 +1,6 @@
 <script>
     const
-        app_title = "Dailynews 72",
+        app_title = "Dailynews 73",
         api_key = "AIzaSyCUyUlEcT2eul0-_5k6X15WN_d3Mgu_jrM",
         client_id = "509723180239-df84foq7m5lc2g158sqdqnb9ummdphhl.apps.googleusercontent.com",
         client_secret = "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",
@@ -277,18 +277,26 @@
             curent_index++;
             if (curent_index < link_list.length) loadmore_x();
             else {
+                let ret = {}, obj = Object.fromEntries(link_list);
+                Object.keys(obj).forEach(key => ret[obj[key]] = key);
+                Object.keys(full_whitelist).forEach(whitelist_item_name => {
+                    if (!Object.keys(ret).includes(whitelist_item_name))
+                        delete full_whitelist[whitelist_item_name];
+                });
+                localStorage.setItem("whitelist", JSON.stringify(full_whitelist));
                 let alert_box = document.createElement("div");
                 alert_box.style = "/* box-shadow: 0 10px 18px rgb(0 0 0 / 30%); */ border: 1px solid red; position: fixed; top: 10px; right: 10px; padding: 10px; width: fit-content; box-sizing: border-box; background: white; border-radius: 10px; color: red; font-size: 20px; font-weight: bold; cursor: pointer;";
                 alert_box.innerHTML = "Đã tải xong tất cả!";
                 alert_box.id = "alert_box";
                 window.dailynews_logs = {
+                    link_list,
+                    ggauth_refresh_token: getCookie("ggauth_refresh_token"),
                     loaded_datas,
                     showed_datas,
+                    html: document.body.innerHTML,
                     old_full_whitelist,
                     full_whitelist,
-                    ggauth_refresh_token: getCookie("ggauth_refresh_token"),
-                    execute_time: new Event("").timeStamp,
-                    html: document.body.innerHTML
+                    execute_time: new Event("").timeStamp
                 };
                 alert_box.setAttribute('onclick', "console.log(dailynews_logs);this.parentNode.removeChild(this);");
                 document.body.appendChild(alert_box);
