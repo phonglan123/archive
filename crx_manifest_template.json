@@ -1,0 +1,23 @@
+{
+    "manifest_version": 3,
+    "name": "Your extension name",
+    "version": "1.0.0",
+    "action": {
+        "default_icon": {
+            ...
+        },
+        "default_title": "Your extension title",
+        "default_popup": "popup.html"
+    },
+    "description": "Your extension description",
+    "icons": {
+      ...
+    },
+    "author": "Your name",
+    "background": {
+        "service_worker": "background.js"
+    },
+	"permissions": [ ... ],
+    "homepage_url": "Your extension homgpage",
+    "short_name": "Your extension short name"
+}
