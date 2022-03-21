@@ -17,7 +17,9 @@
     "background": {
         "service_worker": "background.js"
     },
-	"permissions": [ ... ],
-    "homepage_url": "Your extension homgpage",
+	"permissions": [
+        ...
+    ],
+	"homepage_url": "Your extension homgpage",
     "short_name": "Your extension short name"
 }
